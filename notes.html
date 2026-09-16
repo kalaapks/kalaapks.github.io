@@ -4,11 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>Notes & Resources | Kalaap Sadhu</title>
-  
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
-  <!-- Web fallbacks matching the typewriter/code aesthetic of algolrevived -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
@@ -34,23 +30,25 @@
       --text-muted: #8b949e;
       --green: #3fb950;
       --accent: #58a6ff;
-      --overlay-bg: rgba(3, 7, 14, 0.85);
+      --yellow-dot: #e6a008;
       --card-shadow: rgba(0, 0, 0, 0.6);
     }
 
     body.light-mode {
-      --page-bg-top: #fbfbfa;
-      --page-bg-bottom: #f2f1ec;
-      --card-bg: #e8e3d5;
-      --terminal-header: #ded7c5;
-      --inner-card-bg: #f4f0e6;
-      --border: #c8c0ae;
+      --page-bg-top: #f7f5ef;
+      --page-bg-bottom: #e5dfce;
+      --card-bg: #ece7db;
+      --terminal-header: #ddd7c7;
+      --inner-card-bg: #f5f2e9;
+      --border: #c4bcab;
       --text: #23272d;
       --text-muted: #69655b;
       --green: #2b7a3e;
       --accent: #1e6091;
-      --overlay-bg: rgba(245, 243, 237, 0.9);
-      --card-shadow: rgba(80, 75, 60, 0.15);
+      --yellow-dot: #b8860b;
+      --card-shadow: rgba(80, 75, 60, 0.16);
+      background: radial-gradient(circle at 50% 15%, #eae4d3 0%, var(--page-bg-top) 55%, var(--page-bg-bottom) 100%);
+      background-attachment: fixed;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -66,22 +64,18 @@
       color: var(--text);
       font-family: 'AlgolRevived', 'Courier Prime', 'Fira Code', Courier, monospace;
       line-height: 1.6;
-      padding-bottom: 80px;
+      padding-bottom: 90px;
       min-height: 100vh;
       transition: background 0.3s ease, color 0.3s ease;
       overflow-x: hidden;
+      position: relative;
     }
 
-    body.light-mode {
-      background: radial-gradient(circle at 50% 15%, #ede9dc 0%, var(--page-bg-top) 60%, var(--page-bg-bottom) 100%);
-      background-attachment: fixed;
-    }
-
-    /* Sticky Top Navigation Bar */
+    /* Sticky Top Navigation Bar - elevated z-index so KS stays visible */
     .top-nav {
       position: sticky;
       top: 0;
-      z-index: 1000;
+      z-index: 2100;
       background: rgba(5, 11, 20, 0.85);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
@@ -92,7 +86,7 @@
       transition: background 0.3s ease, border-color 0.3s ease;
     }
 
-    body.light-mode .top-nav { background: rgba(251, 251, 250, 0.85); }
+    body.light-mode .top-nav { background: rgba(247, 245, 239, 0.85); }
 
     .nav-left { display: flex; align-items: center; gap: 10px; }
 
@@ -143,11 +137,7 @@
       transform: rotate(12deg) scale(1.05);
     }
 
-    .nav-links { 
-      display: flex; 
-      gap: 6px; 
-      align-items: center; 
-    }
+    .nav-links { display: flex; gap: 6px; align-items: center; }
 
     .nav-btn {
       color: var(--text-muted);
@@ -157,7 +147,7 @@
       padding: 6px 10px;
       border-radius: 4px;
       border: 1px solid transparent;
-      transition: all 0.2s ease;
+      transition: all 0.25s ease;
       white-space: nowrap;
       cursor: pointer;
       background: transparent;
@@ -170,7 +160,13 @@
       background: rgba(63, 185, 80, 0.08);
     }
 
-    /* "The Fun" Dropdown */
+    .nav-btn.active {
+      color: var(--green);
+      border-color: rgba(63, 185, 80, 0.4);
+      background: rgba(63, 185, 80, 0.12);
+      box-shadow: 0 0 10px rgba(63, 185, 80, 0.25);
+    }
+
     .dropdown { position: relative; display: inline-block; }
 
     .dropdown-content {
@@ -183,7 +179,7 @@
       min-width: 145px;
       border-radius: 6px;
       box-shadow: 0 8px 24px var(--card-shadow);
-      z-index: 1100;
+      z-index: 2200;
       overflow: hidden;
     }
 
@@ -198,25 +194,21 @@
     }
 
     .dropdown-content a:last-child { border-bottom: none; }
-
     .dropdown-content a:hover {
       background: var(--inner-card-bg);
       color: var(--green);
     }
-
     .dropdown.show .dropdown-content { display: block; }
 
-    /* Page Container */
     .container {
-      max-width: 860px;
+      max-width: 820px;
       margin: 35px auto 0 auto;
       padding: 0 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 40px;
+      position: relative;
+      z-index: 10;
+      transition: filter 0.35s ease;
     }
 
-    /* Unboxed Introductory Text on Background */
     .notes-intro h1 {
       color: var(--green);
       font-size: 2.2rem;
@@ -230,146 +222,196 @@
       margin-bottom: 16px;
     }
 
-    /* Terminal Box Styling for Separate Subject Cards */
-    .terminal-window {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      box-shadow: 0 10px 30px var(--card-shadow);
-      overflow: hidden;
-      transition: all 0.25s ease;
-    }
-
-    .terminal-header {
-      background: var(--terminal-header);
-      border-bottom: 1px solid var(--border);
-      padding: 10px 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .dot { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
-    .dot-red { background: #ff5f56; }
-    .dot-yellow { background: #ffbd2e; }
-    .dot-green { background: #27c93f; }
-
-    .terminal-header-title {
-      color: var(--text-muted);
-      font-size: 0.78rem;
-      margin-left: auto;
-    }
-
-    .terminal-body { padding: 26px; }
-
-    h2 { color: var(--accent); font-size: 1.15rem; margin-bottom: 16px; border-bottom: 1px dashed var(--border); padding-bottom: 6px; }
-    .prompt { color: var(--green); font-weight: bold; }
-    ul { list-style: none; padding-left: 0; }
-    li { margin-bottom: 20px; }
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-
-    .tag {
-      font-size: 0.75rem;
-      background: var(--inner-card-bg);
-      border: 1px solid var(--border);
-      padding: 2px 8px;
-      border-radius: 4px;
-      margin-left: 6px;
-      color: var(--text-muted);
-    }
-
-    .card {
-      background: var(--inner-card-bg);
-      border: 1px solid var(--border);
-      padding: 16px 20px;
-      border-radius: 6px;
-      margin-top: 8px;
-      color: var(--text);
-    }
-
-    /* Task View Styles for Notes */
-    body.task-view-active { overflow: hidden; }
-
-    .task-view-overlay {
-      position: fixed;
-      top: 60px;
-      left: 0;
-      width: 100vw;
-      height: calc(100vh - 60px);
-      background: var(--overlay-bg);
-      backdrop-filter: blur(16px);
-      z-index: 1500;
-      display: none;
-      overflow-y: auto;
-      padding: 30px 20px 80px 20px;
-    }
-
-    .task-view-overlay.active { display: block; }
-
-    .task-view-grid {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 24px;
-    }
-
-    .task-preview-card {
-      background: var(--card-bg);
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      overflow: hidden;
-      cursor: pointer;
-      box-shadow: 0 12px 30px var(--card-shadow);
-      transition: transform 0.2s ease, border-color 0.2s ease;
-      height: 250px;
+    /* 5x1 Vertical Stack */
+    .notes-stack {
       display: flex;
       flex-direction: column;
-      position: relative;
+      gap: 34px;
+      margin-top: 25px;
     }
 
-    .task-preview-card:hover {
-      transform: translateY(-4px) scale(1.02);
+    .topic-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      text-decoration: none;
+      color: var(--text);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 10px 30px var(--card-shadow);
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .topic-card:hover {
+      transform: translateY(-4px);
       border-color: var(--green);
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.75), 0 0 16px rgba(63, 185, 80, 0.25);
     }
 
-    .preview-header {
-      background: var(--terminal-header);
-      padding: 8px 12px;
+    .topic-dp {
+      width: 100%;
+      height: 240px;
+      background: var(--inner-card-bg);
       display: flex;
       align-items: center;
-      gap: 8px;
+      justify-content: center;
+      overflow: hidden;
       border-bottom: 1px solid var(--border);
-      font-size: 0.8rem;
-      color: var(--text-muted);
+    }
+
+    .topic-dp img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+
+    .topic-card:hover .topic-dp img { transform: scale(1.02); }
+
+    .topic-footer {
+      padding: 16px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--terminal-header);
+    }
+
+    .topic-title-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .dot-yellow {
+      width: 10px;
+      height: 10px;
+      background-color: var(--yellow-dot);
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    .topic-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: 0.4px;
+    }
+
+    .topic-arrow-link {
+      font-size: 0.85rem;
+      color: var(--accent);
       font-weight: bold;
     }
 
-    .preview-body-content {
-      padding: 14px;
-      overflow: hidden;
-      font-size: 0.75rem;
-      line-height: 1.35;
+    /* Floating KS 3+2 Grid with Blurred Background */
+    body.wall-mode .container {
+      filter: blur(8px);
       pointer-events: none;
-      opacity: 0.85;
-      flex: 1;
-      position: relative;
+      user-select: none;
     }
 
-    .preview-body-content::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 50px;
-      background: linear-gradient(transparent, var(--card-bg));
-    }
-
-    .task-view-hint {
+    .floating-wall-overlay {
       position: fixed;
-      bottom: 20px;
+      top: 60px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 1500;
+      background: rgba(5, 11, 20, 0.78);
+      backdrop-filter: blur(10px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      overflow-y: auto;
+    }
+
+    body.light-mode .floating-wall-overlay {
+      background: rgba(245, 242, 233, 0.84);
+    }
+
+    body.wall-mode .floating-wall-overlay { display: flex; }
+
+    .floating-wall-wrapper {
+      width: 100%;
+      max-width: 950px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin: auto;
+    }
+
+    .floating-row-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .floating-row-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      max-width: 630px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .floating-card {
+      background: var(--card-bg);
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      text-decoration: none;
+      color: var(--text);
+      overflow: hidden;
+      box-shadow: 0 14px 32px var(--card-shadow);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .floating-card:hover {
+      transform: translateY(-5px) scale(1.02);
+      border-color: var(--green);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.85), 0 0 18px rgba(63, 185, 80, 0.35);
+    }
+
+    .floating-card-dp {
+      width: 100%;
+      height: 150px;
+      background: var(--inner-card-bg);
+      overflow: hidden;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .floating-card-dp img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .floating-card-footer {
+      padding: 12px 14px;
+      background: var(--terminal-header);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .floating-card-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+      text-align: center;
+    }
+
+    .wall-hint {
+      position: fixed;
+      bottom: 24px;
       left: 50%;
       transform: translateX(-50%);
       background: var(--terminal-header);
@@ -379,8 +421,62 @@
       border-radius: 20px;
       font-size: 0.8rem;
       z-index: 2000;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+      display: none;
       pointer-events: none;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+
+    body.wall-mode .wall-hint { display: block; }
+
+    #sinkCanvas {
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      width: 360px;
+      height: 360px;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .sim-portal-switch {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--card-bg);
+      border: 1.5px solid var(--border);
+      color: var(--green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-size: 1.45rem;
+      font-weight: bold;
+      box-shadow: 0 6px 20px var(--card-shadow);
+      z-index: 900;
+      line-height: 1;
+      padding-bottom: 2px;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .sim-portal-switch:hover {
+      transform: scale(1.1);
+      border-color: var(--green);
+      box-shadow: 0 0 18px rgba(63, 185, 80, 0.4);
+    }
+
+    /* Mobile Adaptations */
+    @media (max-width: 820px) {
+      .floating-wall-overlay { padding: 16px; justify-content: flex-start; }
+      .floating-row-3, .floating-row-2 {
+        grid-template-columns: 1fr;
+        max-width: 340px;
+      }
+      .floating-card-dp { height: 130px; }
+      .topic-dp { height: 180px; }
+      .notes-intro h1 { font-size: 1.75rem; }
     }
 
     @media (max-width: 600px) {
@@ -389,9 +485,9 @@
       .theme-toggle { width: 32px; height: 32px; font-size: 0.9rem; }
       .nav-links { gap: 2px; }
       .nav-btn { font-size: 0.8rem; padding: 4px 6px; }
-      .container { margin: 20px auto 0 auto; padding: 0 12px; gap: 25px; }
-      .notes-intro h1 { font-size: 1.7rem; }
-      .terminal-body { padding: 18px 14px; }
+      .container { margin: 20px auto 0 auto; padding: 0 12px; }
+      #sinkCanvas { width: 220px; height: 220px; }
+      .sim-portal-switch { bottom: 16px; right: 16px; width: 40px; height: 40px; font-size: 1.25rem; }
     }
   </style>
 </head>
@@ -400,7 +496,7 @@
   <!-- Sticky Top Navigation Bar -->
   <nav class="top-nav">
     <div class="nav-left">
-      <button class="ks-badge" id="ksBtn" title="Toggle Task View">KS</button>
+      <button class="ks-badge" id="ksBtn" title="Toggle Floating 3+2 View">KS</button>
       <button class="theme-toggle" id="themeBtn" title="Toggle Light / Dark Mode">💡</button>
     </div>
     <div class="nav-links">
@@ -408,9 +504,8 @@
       <a href="index.html#resume" class="nav-btn">Resume</a>
       <a href="index.html#projects" class="nav-btn">Projects</a>
       
-      <!-- "The Fun" Tab with Dropdown -->
       <div class="dropdown" id="funDropdown">
-        <button class="nav-btn" id="funBtn">The Fun ▾</button>
+        <button class="nav-btn active" id="funBtn">The Fun ▾</button>
         <div class="dropdown-content">
           <a href="notes.html">> Notes</a>
           <a href="simulated.html">> Simulated</a>
@@ -419,81 +514,152 @@
     </div>
   </nav>
 
-  <!-- Task View Overlay for Notes -->
-  <div class="task-view-overlay" id="taskViewOverlay">
-    <div class="task-view-grid" id="taskViewGrid"></div>
-    <div class="task-view-hint">Task View: Click any section to jump • Esc or KS to exit</div>
-  </div>
+  <div class="wall-hint">Floating 3+2 View: Click any card to open • Esc or KS to exit</div>
 
-  <div class="container" id="mainContainer">
+  <canvas id="sinkCanvas" width="360" height="360"></canvas>
 
-    <!-- Unboxed Intro (On actual background) -->
+  <a href="simulated.html" class="sim-portal-switch" id="portalSwitch" title="Go to Simulations">~</a>
+
+  <div class="container">
     <div class="notes-intro">
-      <h1><span style="display:inline-block; width:14px; height:14px; background-color: var(--green); margin-right:8px;"></span>Mathematics Notes & Exposition</h1>
-      <p style="margin-bottom: 25px;">Hey! I would like to recommend that you see the <a href="simulated.html">Simulations</a> section first. This gives a flavour of what is to be expected in the following collection of notes curated by me. They are heavily geometrically motivated.</p> 
+      <h1><span style="display:inline-block; width:14px; height:14px; background-color: var(--green); margin-right:8px;"></span> Mathematics Notes & Exposition</h1>
+      <p style="margin-bottom: 25px;">Hey! I would like to recommend that you see the <a href="simulated.html" style="color:var(--accent); font-weight:bold;">Simulations</a> section first. This gives a flavour of what is to be expected in the following collection of notes curated by me. They are heavily geometrically motivated.</p> 
       <p>The preliminary versions of these were mostly made on a tablet in class during my college days, with sleepy eyes and on the 3rd coffee of the day because classes used to start as early as 8! AND, that is early for me. Do not judge. My friends would tell you I never attended the early morning classes. Do not believe them. They are all undercover spies who want to ruin my good name.</p>
-      <p>The LaTeX-version is a work in progress and will be done done soon. Definitely. Almost surely positively. Hopefully.</p>
+      <p>The LaTeX-version is a work in progress and will be done soon. Definitely. Almost surely positively. Hopefully.</p>
     </div>
 
-    <!-- BOX 1: Stochastic Analysis & Quantitative Models -->
-    <section id="stochastic" class="terminal-window" data-title="bash: Stochastic Analysis">
-      <div class="terminal-header">
-        <span class="dot dot-red"></span>
-        <span class="dot dot-yellow"></span>
-        <span class="dot dot-green"></span>
-        <span class="terminal-header-title">bash ~ /notes/stochastic</span>
-      </div>
-      <div class="terminal-body">
-        <h2><span style="display:inline-block; width:12px; height:12px; background-color: #e6a008; border-radius: 50%; margin-right:8px;"></span>Stochastic Analysis & Quantitative Models</h2>
-        <ul>
-          <li>
-            <span class="prompt">></span> <a href="notes/stochastic_calculus.pdf" target="_blank">Stochastic Calculus & Itô's Lemma</a> 
-            <span class="tag">PDF</span>
-            <div class="card">
-              Semimartingales, quadratic variation, Itô formula, and stochastic integration:
-              $$d(f(t, X_t)) = \frac{\partial f}{\partial t}dt + \frac{\partial f}{\partial x}dX_t + \frac{1}{2}\frac{\partial^2 f}{\partial x^2}d\langle X\rangle_t$$
-            </div>
-          </li>
-          <li>
-            <span class="prompt">></span> <a href="notes/black_scholes_pde.pdf" target="_blank">Black-Scholes & Free Boundary Problems</a> 
-            <span class="tag">PDF</span>
-            <div class="card">
-              Formulation of the Black-Scholes PDE, Cauchy-Euler transformations, and American option free boundaries.
-            </div>
-          </li>
-        </ul>
-      </div>
-    </section>
+    <div class="notes-stack">
+      <!-- 1. Differential Equations -->
+      <a href="notesDE.html" class="topic-card">
+        <div class="topic-dp">
+          <img src="DPs/DE.png" alt="Differential Equations DP">
+        </div>
+        <div class="topic-footer">
+          <div class="topic-title-box">
+            <span class="dot-yellow"></span>
+            <span class="topic-title">Differential Equations</span>
+          </div>
+          <span class="topic-arrow-link">Open Notes ➔</span>
+        </div>
+      </a>
 
-    <!-- BOX 2: Pure Mathematics -->
-    <section id="pure-math" class="terminal-window" data-title="bash: Pure Mathematics">
-      <div class="terminal-header">
-        <span class="dot dot-red"></span>
-        <span class="dot dot-yellow"></span>
-        <span class="dot dot-green"></span>
-        <span class="terminal-header-title">bash ~ /notes/pure_math</span>
-      </div>
-      <div class="terminal-body">
-        <h2><span style="display:inline-block; width:12px; height:12px; background-color: #e6a008; border-radius: 50%; margin-right:8px;"></span>Pure Mathematics</h2>
-        <ul>
-          <li>
-            <span class="prompt">></span> <a href="notes/functional_analysis.pdf" target="_blank">Functional Analysis & Operator Theory</a> 
-            <span class="tag">PDF</span>
-            <div class="card">Hahn-Banach theorem, weak topologies, compact operators, and spectral decomposition.</div>
-          </li>
-          <li>
-            <span class="prompt">></span> <a href="notes/probability_theory.pdf" target="_blank">Measure-Theoretic Probability</a> 
-            <span class="tag">PDF</span>
-            <div class="card">Martingales, stopping times, Doob's maximal inequalities, and uniform integrability.</div>
-          </li>
-        </ul>
-      </div>
-    </section>
+      <!-- 2. Probability and Statistics -->
+      <a href="notesPaS.html" class="topic-card">
+        <div class="topic-dp">
+          <img src="DPs/PaS.png" alt="Probability and Statistics DP">
+        </div> 
+        <div class="topic-footer">
+          <div class="topic-title-box">
+            <span class="dot-yellow"></span>
+            <span class="topic-title">Probability and Statistics</span>
+          </div>
+          <span class="topic-arrow-link">Open Notes ➔</span>
+        </div>
+      </a>
 
+      <!-- 3. Stochastic Analysis -->
+      <a href="notesStoc.html" class="topic-card">
+        <div class="topic-dp">
+          <img src="DPs/Stoc.png" alt="Stochastic Analysis DP"> 
+        </div>
+        <div class="topic-footer">
+          <div class="topic-title-box">
+            <span class="dot-yellow"></span>
+            <span class="topic-title">Stochastic Analysis</span>
+          </div>
+          <span class="topic-arrow-link">Open Notes ➔</span>
+        </div>
+      </a>
+
+      <!-- 4. Calculus -->
+      <a href="notesCalc.html" class="topic-card">
+        <div class="topic-dp">
+          <img src="DPs/Calc.png" alt="Calculus DP">
+        </div>
+        <div class="topic-footer">
+          <div class="topic-title-box">
+            <span class="dot-yellow"></span>
+            <span class="topic-title">Calculus</span>
+          </div>
+          <span class="topic-arrow-link">Open Notes ➔</span>
+        </div>
+      </a>
+
+      <!-- 5. Computing -->
+      <a href="notesComp.html" class="topic-card">
+        <div class="topic-dp">
+          <img src="dp_comp.png" alt="Computing DP" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'240\' viewBox=\'0 0 600 240\'><rect width=\'100%\' height=\'100%\' fill=\'%230d1117\'/><rect x=\'180\' y=\'50\' width=\'240\' height=\'130\' rx=\'6\' fill=\'none\' stroke=\'%233fb950\' stroke-width=\'2\'/><text x=\'205\' y=\'95\' fill=\'%2358a6ff\' font-family=\'monospace\' font-size=\'16\'>&gt; run_algo()</text><text x=\'300\' y=\'220\' fill=\'%238b949e\' font-size=\'13\' font-family=\'monospace\' text-anchor=\'middle\'>Computing (dp_comp.png)</text></svg>';">
+        </div>
+        <div class="topic-footer">
+          <div class="topic-title-box">
+            <span class="dot-yellow"></span>
+            <span class="topic-title">Computing</span>
+          </div>
+          <span class="topic-arrow-link">Open Notes ➔</span>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- Floating 3+2 KS Modal Grid Overlay -->
+  <div class="floating-wall-overlay" id="wallOverlay">
+    <div class="floating-wall-wrapper">
+      <div class="floating-row-3">
+        <a href="notesDE.html" class="floating-card">
+          <div class="floating-card-dp">
+            <img src="DPs/DE.png" alt="DE"> 
+          </div>
+          <div class="floating-card-footer">
+            <span class="dot-yellow"></span>
+            <span class="floating-card-title">Differential Equations</span>
+          </div>
+        </a>
+
+        <a href="notesPaS.html" class="floating-card">
+          <div class="floating-card-dp">
+            <img src="DPs/PaS.png" alt="PaS">
+          </div>
+          <div class="floating-card-footer">
+            <span class="dot-yellow"></span>
+            <span class="floating-card-title">Probability & Stats</span>
+          </div>
+        </a>
+
+        <a href="notesStoc.html" class="floating-card">
+          <div class="floating-card-dp">
+            <img src="DPs/Stoc.png" alt="Stoc">
+          </div>
+          <div class="floating-card-footer">
+            <span class="dot-yellow"></span>
+            <span class="floating-card-title">Stochastic Analysis</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="floating-row-2">
+        <a href="notesCalc.html" class="floating-card">
+          <div class="floating-card-dp">
+            <img src="DPs/Calc.png" alt="Calc">
+          <div class="floating-card-footer">
+            <span class="dot-yellow"></span>
+            <span class="floating-card-title">Calculus</span>
+          </div>
+        </a>
+
+        <a href="notesComp.html" class="floating-card">
+          <div class="floating-card-dp">
+            <img src="dp_comp.png" alt="Comp" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'150\' viewBox=\'0 0 300 150\'><rect width=\'100%\' height=\'100%\' fill=\'%230d1117\'/><rect x=\'80\' y=\'30\' width=\'140\' height=\'90\' rx=\'4\' fill=\'none\' stroke=\'%233fb950\' stroke-width=\'2\'/></svg>';">
+          </div>
+          <div class="floating-card-footer">
+            <span class="dot-yellow"></span>
+            <span class="floating-card-title">Computing</span>
+          </div>
+        </a>
+      </div>
+    </div>
   </div>
 
   <script>
-    // Theme Switcher Logic
     const themeBtn = document.getElementById('themeBtn');
     if (localStorage.getItem('site-theme') === 'light') {
       document.body.classList.add('light-mode');
@@ -504,81 +670,80 @@
       localStorage.setItem('site-theme', isLight ? 'light' : 'dark');
     });
 
-    // "The Fun" Dropdown Toggle Logic
     const funDropdown = document.getElementById('funDropdown');
     const funBtn = document.getElementById('funBtn');
-
     funBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       funDropdown.classList.toggle('show');
     });
-
     window.addEventListener('click', () => {
-      if (funDropdown.classList.contains('show')) {
-        funDropdown.classList.remove('show');
-      }
+      if (funDropdown.classList.contains('show')) funDropdown.classList.remove('show');
     });
 
-    // Task View Logic for Notes Boxes
     const ksBtn = document.getElementById('ksBtn');
-    const taskViewOverlay = document.getElementById('taskViewOverlay');
-    const taskViewGrid = document.getElementById('taskViewGrid');
-    const sections = document.querySelectorAll('.terminal-window');
-    let isTaskViewActive = false;
+    const wallOverlay = document.getElementById('wallOverlay');
+    let isWallMode = false;
 
-    function buildTaskView() {
-      taskViewGrid.innerHTML = '';
-      sections.forEach(sec => {
-        const title = sec.getAttribute('data-title') || 'Terminal Window';
-        const card = document.createElement('div');
-        card.className = 'task-preview-card';
-        card.innerHTML = `
-          <div class="preview-header">
-            <span class="dot dot-green"></span>
-            <span>${title}</span>
-          </div>
-          <div class="preview-body-content">
-            ${sec.querySelector('.terminal-body').innerHTML}
-          </div>
-        `;
-        card.addEventListener('click', () => {
-          closeTaskView();
-          setTimeout(() => {
-            sec.scrollIntoView({ behavior: 'smooth' });
-          }, 100);
-        });
-        taskViewGrid.appendChild(card);
-      });
+    function toggleWallMode(state) {
+      isWallMode = typeof state === 'boolean' ? state : !isWallMode;
+      document.body.classList.toggle('wall-mode', isWallMode);
+      ksBtn.classList.toggle('active', isWallMode);
     }
 
-    function openTaskView() {
-      buildTaskView();
-      isTaskViewActive = true;
-      taskViewOverlay.classList.add('active');
-      document.body.classList.add('task-view-active');
-      ksBtn.classList.add('active');
-    }
-
-    function closeTaskView() {
-      isTaskViewActive = false;
-      taskViewOverlay.classList.remove('active');
-      document.body.classList.remove('task-view-active');
-      ksBtn.classList.remove('active');
-    }
-
-    ksBtn.addEventListener('click', () => {
-      if (isTaskViewActive) closeTaskView();
-      else openTaskView();
+    ksBtn.addEventListener('click', () => toggleWallMode());
+    wallOverlay.addEventListener('click', (e) => {
+      if (e.target === wallOverlay) toggleWallMode(false);
     });
-
-    taskViewOverlay.addEventListener('click', (e) => {
-      if (e.target === taskViewOverlay) closeTaskView();
-    });
-
     window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && isTaskViewActive) closeTaskView();
+      if (e.key === 'Escape' && isWallMode) toggleWallMode(false);
     });
-  </script>
 
+    const canvas = document.getElementById('sinkCanvas');
+    const ctx = canvas.getContext('2d');
+    const numParticles = 45;
+    const particles = [];
+    const R_max = 210;
+    const r_min = 22;
+
+    class Particle {
+      constructor() {
+        this.reset();
+        this.r = r_min + Math.random() * (R_max - r_min);
+      }
+      reset() {
+        this.theta = Math.random() * Math.PI * 2;
+        this.r = R_max;
+        this.speed = 0.45 + Math.random() * 0.45;
+      }
+      update() {
+        this.r -= this.speed;
+        if (this.r <= r_min) this.reset();
+      }
+      draw(origin) {
+        const x = origin.x + this.r * Math.cos(this.theta);
+        const y = origin.y + this.r * Math.sin(this.theta);
+        let opacity = 0.24;
+        if (this.r - r_min < 35) opacity *= (this.r - r_min) / 35;
+        ctx.fillStyle = document.body.classList.contains('light-mode') 
+          ? `rgba(35, 39, 45, ${opacity * 1.5})` 
+          : `rgba(63, 185, 80, ${opacity})`;
+        ctx.beginPath();
+        ctx.arc(x, y, 1.2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+    for (let i = 0; i < numParticles; i++) particles.push(new Particle());
+
+    function animateSink() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const origin = { x: 360 - 24 - 22, y: 360 - 24 - 22 };
+      for (let p of particles) {
+        p.update();
+        p.draw(origin);
+      }
+      requestAnimationFrame(animateSink);
+    }
+    animateSink();
+  </script>
 </body>
 </html>

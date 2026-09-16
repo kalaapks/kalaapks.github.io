@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Differential Equations | Kalaap Sadhu</title>
+  
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    @font-face {
+      font-family: 'AlgolRevived';
+      src: url('AlgolRevived-Regular.ttf') format('truetype'),
+           url('AlgolRevived-Medium.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root {
+      --page-bg-top: #050b14;
+      --page-bg-bottom: #0a192f;
+      --card-bg: #161b22;
+      --terminal-header: #0d1117;
+      --inner-card-bg: #0d1117;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --text-muted: #8b949e;
+      --green: #3fb950;
+      --accent: #58a6ff;
+      --yellow-dot: #e6a008;
+      --card-shadow: rgba(0, 0, 0, 0.6);
+    }
+
+    body.light-mode {
+      --page-bg-top: #f7f5ef;
+      --page-bg-bottom: #e5dfce;
+      --card-bg: #ece7db;
+      --terminal-header: #ddd7c7;
+      --inner-card-bg: #f5f2e9;
+      --border: #c4bcab;
+      --text: #23272d;
+      --text-muted: #69655b;
+      --green: #2b7a3e;
+      --accent: #1e6091;
+      --yellow-dot: #b8860b;
+      --card-shadow: rgba(80, 75, 60, 0.16);
+      background: radial-gradient(circle at 50% 15%, #eae4d3 0%, var(--page-bg-top) 55%, var(--page-bg-bottom) 100%);
+      background-attachment: fixed;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 75px;
+    }
+
+    body {
+      background: radial-gradient(circle at 50% 15%, #0f2744 0%, var(--page-bg-top) 50%, var(--page-bg-bottom) 100%);
+      background-attachment: fixed;
+      color: var(--text);
+      font-family: 'AlgolRevived', 'Courier Prime', 'Fira Code', Courier, monospace;
+      line-height: 1.6;
+      padding-bottom: 90px;
+      min-height: 100vh;
+      transition: background 0.3s ease, color 0.3s ease;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Top Nav stays sharp above the blur */
+    .top-nav {
+      position: sticky;
+      top: 0;
+      z-index: 2100;
+      background: rgba(5, 11, 20, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+
+    body.light-mode .top-nav { background: rgba(247, 245, 239, 0.85); }
+
+    .nav-left { display: flex; align-items: center; gap: 10px; }
+
+    .ks-badge {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--card-bg);
+      border: 2px solid var(--green);
+      color: var(--green);
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(63, 185, 80, 0.2);
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .ks-badge:hover, .ks-badge.active {
+      transform: scale(1.08);
+      background: var(--green);
+      color: #0d1117;
+      box-shadow: 0 0 16px rgba(63, 185, 80, 0.5);
+    }
+
+    .theme-toggle {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1rem;
+      color: var(--text);
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--accent);
+      transform: rotate(12deg) scale(1.05);
+    }
+
+    .nav-links { display: flex; gap: 6px; align-items: center; }
+
+    .nav-btn {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: bold;
+      padding: 6px 10px;
+      border-radius: 4px;
+      border: 1px solid transparent;
+      transition: all 0.25s ease;
+      white-space: nowrap;
+      cursor: pointer;
+      background: transparent;
+      font-family: inherit;
+    }
+
+    .nav-btn:hover {
+      color: var(--green);
+      border-color: var(--border);
+      background: rgba(63, 185, 80, 0.08);
+    }
+
+    .nav-btn.active {
+      color: var(--green);
+      border-color: rgba(63, 185, 80, 0.4);
+      background: rgba(63, 185, 80, 0.12);
+      box-shadow: 0 0 10px rgba(63, 185, 80, 0.25);
+    }
+
+    .dropdown { position: relative; display: inline-block; }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 110%;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      min-width: 145px;
+      border-radius: 6px;
+      box-shadow: 0 8px 24px var(--card-shadow);
+      z-index: 2200;
+      overflow: hidden;
+    }
+
+    .dropdown-content a {
+      color: var(--text);
+      padding: 10px 14px;
+      text-decoration: none;
+      display: block;
+      font-size: 0.85rem;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .dropdown-content a:last-child { border-bottom: none; }
+    .dropdown-content a:hover {
+      background: var(--inner-card-bg);
+      color: var(--green);
+    }
+    .dropdown.show .dropdown-content { display: block; }
+
+    .container {
+      max-width: 860px;
+      margin: 35px auto 0 auto;
+      padding: 0 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      position: relative;
+      z-index: 10;
+      transition: filter 0.3s ease;
+    }
+
+    /* Blur background elements when inspect active */
+    body.ks-inspect-active .container {
+      filter: blur(8px);
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .breadcrumb {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .breadcrumb a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    .notes-intro h1 {
+      color: var(--green);
+      font-size: 2.2rem;
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+
+    .notes-intro p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    /* Terminal Boxes */
+    .terminal-window {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 12px 35px var(--card-shadow);
+      overflow: hidden;
+      transition: border-color 0.25s ease, transform 0.25s ease;
+    }
+
+    .terminal-window:hover { border-color: rgba(63, 185, 80, 0.4); }
+
+    .terminal-header {
+      background: var(--terminal-header);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header-left { display: flex; align-items: center; gap: 8px; }
+
+    .shape-green-square {
+      width: 10px;
+      height: 10px;
+      background-color: var(--green);
+      border-radius: 1px;
+      display: inline-block;
+    }
+
+    .shape-yellow-circle {
+      width: 10px;
+      height: 10px;
+      background-color: var(--yellow-dot);
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .shape-red-arrowhead {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-top: 2px solid #ff5f56;
+      border-right: 2px solid #ff5f56;
+      transform: rotate(45deg);
+      margin-left: 2px;
+    }
+
+    .terminal-header-title {
+      color: var(--text-muted);
+      font-size: 0.78rem;
+    }
+
+    .terminal-body { padding: 24px; }
+
+    .red-arrow-prompt {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-top: 2px solid #ff5f56;
+      border-right: 2px solid #ff5f56;
+      transform: rotate(45deg);
+      margin-right: 10px;
+      vertical-align: 1px;
+      flex-shrink: 0;
+    }
+
+    .doc-headline-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .doc-link-title {
+      color: var(--accent);
+      font-size: 1.2rem;
+      font-weight: 700;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+    }
+
+    .doc-link-title:hover { text-decoration: underline; }
+
+    .pdf-download-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--inner-card-bg);
+      border: 1px solid var(--border);
+      color: #ff5f56;
+      font-size: 0.78rem;
+      font-weight: bold;
+      padding: 5px 10px;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .pdf-download-badge svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+    }
+
+    .pdf-download-badge:hover {
+      background: rgba(255, 95, 86, 0.1);
+      border-color: #ff5f56;
+      transform: translateY(-1px);
+    }
+
+    .card {
+      background: var(--inner-card-bg);
+      border: 1px solid var(--border);
+      padding: 16px 20px;
+      border-radius: 6px;
+      color: var(--text);
+      font-size: 0.92rem;
+    }
+
+    /* ========================================================
+       KS INSPECT: LEFT CONTENTS + RIGHT PREVIEW (DESKTOP & MOBILE)
+       ======================================================== */
+    .preview-stage-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1200;
+      background: rgba(5, 11, 20, 0.65);
+      backdrop-filter: blur(8px);
+      display: none;
+    }
+
+    body.light-mode .preview-stage-overlay {
+      background: rgba(245, 242, 233, 0.7);
+    }
+
+    body.ks-inspect-active .preview-stage-overlay { display: block; }
+
+    /* Left-Docked CONTENTS Sidebar */
+    .contents-sidebar {
+      position: fixed;
+      top: 60px;
+      left: 0;
+      bottom: 0;
+      width: 260px;
+      background: var(--card-bg);
+      border-right: 1.5px solid var(--border);
+      box-shadow: 8px 0 25px var(--card-shadow);
+      z-index: 1500;
+      display: flex;
+      flex-direction: column;
+      transform: translateX(-105%);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow-y: auto;
+    }
+
+    body.ks-inspect-active .contents-sidebar { transform: translateX(0); }
+
+    .contents-header {
+      padding: 16px 18px;
+      background: var(--terminal-header);
+      border-bottom: 1px solid var(--border);
+      color: var(--green);
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .contents-list {
+      list-style: none;
+      padding: 10px 0;
+      margin: 0;
+    }
+
+    .contents-item {
+      padding: 12px 18px;
+      color: var(--text);
+      font-size: 0.88rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-left: 3px solid transparent;
+      transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+    }
+
+    .contents-item:hover, .contents-item.active {
+      background: var(--inner-card-bg);
+      color: var(--green);
+      border-left-color: var(--green);
+    }
+
+    .contents-index-num {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      font-family: monospace;
+    }
+
+    /* Right Preview Window */
+    .preview-card-right {
+      position: fixed;
+      top: 50%;
+      right: 5vw;
+      transform: translateY(-50%);
+      width: min(540px, calc(90vw - 280px));
+      background: var(--card-bg);
+      border: 1.5px solid var(--green);
+      border-radius: 10px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.85), 0 0 20px rgba(63, 185, 80, 0.25);
+      z-index: 1600;
+      overflow: hidden;
+      display: none;
+      animation: previewFade 0.15s ease-out;
+    }
+
+    @keyframes previewFade {
+      from { opacity: 0; transform: translateY(-48%) scale(0.98); }
+      to { opacity: 1; transform: translateY(-50%) scale(1); }
+    }
+
+    .preview-card-right.visible { display: block; }
+
+    .preview-card-header {
+      background: var(--terminal-header);
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      color: var(--green);
+      font-size: 0.82rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .preview-card-body {
+      padding: 20px 22px;
+      max-height: 70vh;
+      overflow-y: auto;
+    }
+
+    .preview-hint-pill {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--terminal-header);
+      border: 1px solid var(--green);
+      color: var(--green);
+      padding: 6px 18px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      z-index: 2000;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+      display: none;
+      pointer-events: none;
+    }
+
+    body.ks-inspect-active .preview-hint-pill { display: block; }
+
+    #sinkCanvas {
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      width: 360px;
+      height: 360px;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .sim-portal-switch {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--card-bg);
+      border: 1.5px solid var(--border);
+      color: var(--green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-size: 1.45rem;
+      font-weight: bold;
+      box-shadow: 0 6px 20px var(--card-shadow);
+      z-index: 900;
+      line-height: 1;
+      padding-bottom: 2px;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .sim-portal-switch:hover {
+      transform: scale(1.1);
+      border-color: var(--green);
+      box-shadow: 0 0 18px rgba(63, 185, 80, 0.4);
+    }
+
+    /* ========================================================
+       MOBILE / TABLET ADAPTATION (<= 768px)
+       Splits height 50-50 vertically so nothing is clipped
+       ======================================================== */
+    @media (max-width: 768px) {
+      .top-nav { padding: 8px 12px; }
+      .ks-badge { width: 34px; height: 34px; font-size: 0.85rem; }
+      .theme-toggle { width: 32px; height: 32px; font-size: 0.9rem; }
+      .nav-links { gap: 2px; }
+      .nav-btn { font-size: 0.8rem; padding: 4px 6px; }
+      .container { margin: 20px auto 0 auto; padding: 0 12px; gap: 20px; }
+      .notes-intro h1 { font-size: 1.7rem; }
+      .terminal-body { padding: 18px 14px; }
+      #sinkCanvas { width: 220px; height: 220px; }
+      .sim-portal-switch { bottom: 16px; right: 16px; width: 40px; height: 40px; font-size: 1.25rem; }
+
+      /* Vertical 50/50 Split on Phone */
+      .contents-sidebar {
+        top: 55px;
+        left: 0;
+        width: 100vw;
+        height: 40vh;
+        bottom: auto;
+        border-right: none;
+        border-bottom: 1.5px solid var(--green);
+      }
+
+      .preview-card-right {
+        top: calc(40vh + 65px);
+        left: 10px;
+        right: 10px;
+        width: calc(100vw - 20px);
+        max-height: calc(56vh - 80px);
+        transform: none;
+      }
+
+      @keyframes previewFade {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      .preview-card-body { max-height: calc(54vh - 120px); padding: 14px; }
+      .preview-hint-pill { font-size: 0.72rem; padding: 5px 12px; bottom: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sticky Top Navigation Bar -->
+  <nav class="top-nav">
+    <div class="nav-left">
+      <button class="ks-badge" id="ksBtn" title="Toggle Contents Sidebar">KS</button>
+      <button class="theme-toggle" id="themeBtn" title="Toggle Light / Dark Mode">💡</button>
+    </div>
+    <div class="nav-links">
+      <a href="index.html#me" class="nav-btn">ME</a>
+      <a href="index.html#resume" class="nav-btn">Resume</a>
+      <a href="index.html#projects" class="nav-btn">Projects</a>
+      
+      <div class="dropdown" id="funDropdown">
+        <button class="nav-btn active" id="funBtn">The Fun ▾</button>
+        <div class="dropdown-content">
+          <a href="notes.html">> Notes</a>
+          <a href="simulated.html">> Simulated</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Extreme-Left Docked CONTENTS Sidebar -->
+  <aside class="contents-sidebar" id="contentsSidebar">
+    <div class="contents-header">
+      <span class="shape-green-square"></span>
+      CONTENTS
+    </div>
+    <ul class="contents-list" id="contentsList"></ul>
+  </aside>
+
+  <!-- Background Blur Backdrop -->
+  <div class="preview-stage-overlay" id="stageOverlay"></div>
+
+  <!-- Reactive Preview Card -->
+  <div class="preview-card-right" id="previewCardRight">
+    <div class="preview-card-header">
+      <span id="previewHeaderTitle">Section Preview</span>
+      <span class="shape-green-square"></span>
+    </div>
+    <div class="preview-card-body" id="previewBodyContent"></div>
+  </div>
+
+  <div class="preview-hint-pill">Tap/Hover a topic in CONTENTS • Esc or KS to close</div>
+
+  <canvas id="sinkCanvas" width="360" height="360"></canvas>
+
+  <a href="simulated.html" class="sim-portal-switch" id="portalSwitch" title="Go to Simulations">~</a>
+
+  <div class="container" id="mainContainer">
+    <div class="breadcrumb">
+      <a href="notes.html">← Back to Notes Hub</a> / Differential Equations
+    </div>
+
+    <div class="notes-intro">
+      <h1><span style="display:inline-block; width:14px; height:14px; background-color: var(--yellow-dot); border-radius: 50%; margin-right:8px;"></span> Calculus</h1>
+      <p>Geometric phase portraits, dynamical flows, Cauchy problem formulations, and boundary conditions.</p>
+    </div>
+
+    <!-- BOX 1: ODE -->
+    <section id="table-ode" class="terminal-window" data-title="Ordinary Differential Equations (ODE)">
+      <div class="terminal-header">
+        <div class="header-left">
+          <span class="shape-green-square"></span>
+          <span class="shape-yellow-circle"></span>
+          <span class="shape-red-arrowhead"></span>
+        </div>
+        <span class="terminal-header-title">bash ~ /notes/de/ode</span>
+      </div>
+      <div class="terminal-body">
+        <div class="doc-headline-row">
+          <a href="notes/ode_lecture_notes.pdf" target="_blank" class="doc-link-title">
+            <span class="red-arrow-prompt"></span> Ordinary Differential Equations
+          </a>
+          <a href="notes/ode_lecture_notes.pdf" download class="pdf-download-badge" title="Download PDF">
+            <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+            PDF
+          </a>
+        </div>
+        <div class="card">
+          Existence and uniqueness via Picard-Lindelöf, planar autonomous linear systems, phase portraits, invariant manifolds, and Lyapunov stability criteria.
+        </div>
+      </div>
+    </section>
+
+    <!-- BOX 2: PDE -->
+    <section id="table-pde" class="terminal-window" data-title="Partial Differential Equations (PDE)">
+      <div class="terminal-header">
+        <div class="header-left">
+          <span class="shape-green-square"></span>
+          <span class="shape-yellow-circle"></span>
+          <span class="shape-red-arrowhead"></span>
+        </div>
+        <span class="terminal-header-title">bash ~ /notes/de/pde</span>
+      </div>
+      <div class="terminal-body">
+        <div class="doc-headline-row">
+          <a href="notes/pde_lecture_notes.pdf" target="_blank" class="doc-link-title">
+            <span class="red-arrow-prompt"></span> Partial Differential Equations
+          </a>
+          <a href="notes/pde_lecture_notes.pdf" download class="pdf-download-badge" title="Download PDF">
+            <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+            PDF
+          </a>
+        </div>
+        <div class="card">
+          Method of characteristics for quasilinear equations, Riemann invariants, shock surfaces, parabolic boundary value problems, and fundamental solutions.
+        </div>
+      </div>
+    </section>
+
+    <!-- BOX 3: Fourier Analysis -->
+    <section id="table-fourier" class="terminal-window" data-title="Fourier Analysis & Transforms">
+      <div class="terminal-header">
+        <div class="header-left">
+          <span class="shape-green-square"></span>
+          <span class="shape-yellow-circle"></span>
+          <span class="shape-red-arrowhead"></span>
+        </div>
+        <span class="terminal-header-title">bash ~ /notes/de/fourier</span>
+      </div>
+      <div class="terminal-body">
+        <div class="doc-headline-row">
+          <a href="notes/fourier_analysis.pdf" target="_blank" class="doc-link-title">
+            <span class="red-arrow-prompt"></span> Fourier Analysis & Transforms
+          </a>
+          <a href="notes/fourier_analysis.pdf" download class="pdf-download-badge" title="Download PDF">
+            <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+            PDF
+          </a>
+        </div>
+        <div class="card">
+          Fourier series decompositions, orthogonal projections in \(L^2\), integral transforms, convolution algebra, and spectral solutions to the heat & wave operators.
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const themeBtn = document.getElementById('themeBtn');
+    if (localStorage.getItem('site-theme') === 'light') {
+      document.body.classList.add('light-mode');
+    }
+    themeBtn.addEventListener('click', () => {
+      document.body.classList.toggle('light-mode');
+      const isLight = document.body.classList.contains('light-mode');
+      localStorage.setItem('site-theme', isLight ? 'light' : 'dark');
+    });
+
+    const funDropdown = document.getElementById('funDropdown');
+    const funBtn = document.getElementById('funBtn');
+    funBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      funDropdown.classList.toggle('show');
+    });
+    window.addEventListener('click', () => {
+      if (funDropdown.classList.contains('show')) funDropdown.classList.remove('show');
+    });
+
+    // ========================================================
+    // CONTENTS SIDEBAR & HOVER PREVIEW
+    // ========================================================
+    const ksBtn = document.getElementById('ksBtn');
+    const contentsSidebar = document.getElementById('contentsSidebar');
+    const contentsList = document.getElementById('contentsList');
+    const previewCardRight = document.getElementById('previewCardRight');
+    const previewHeaderTitle = document.getElementById('previewHeaderTitle');
+    const previewBodyContent = document.getElementById('previewBodyContent');
+    const stageOverlay = document.getElementById('stageOverlay');
+    const sections = document.querySelectorAll('.terminal-window');
+
+    let isInspectActive = false;
+
+    function renderPreview(sec, idx, title) {
+      previewHeaderTitle.textContent = `${idx + 1}. ${title}`;
+      previewBodyContent.innerHTML = sec.querySelector('.terminal-body').innerHTML;
+      previewCardRight.classList.add('visible');
+
+      document.querySelectorAll('.contents-item').forEach(el => el.classList.remove('active'));
+      const activeLi = contentsList.children[idx];
+      if (activeLi) activeLi.classList.add('active');
+
+      if (window.MathJax) {
+        MathJax.typesetPromise([previewBodyContent]).catch(err => console.log(err));
+      }
+    }
+
+    function populateContents() {
+      contentsList.innerHTML = '';
+      sections.forEach((sec, idx) => {
+        const title = sec.getAttribute('data-title') || `Topic ${idx + 1}`;
+        const li = document.createElement('li');
+        li.className = 'contents-item';
+        li.innerHTML = `
+          <span class="contents-index-num">${idx + 1}.</span>
+          <span>${title}</span>
+        `;
+
+        // Desktop hover / Mobile tap support
+        li.addEventListener('mouseenter', () => renderPreview(sec, idx, title));
+        li.addEventListener('touchstart', () => renderPreview(sec, idx, title), { passive: true });
+
+        // Double tap or secondary click to jump directly
+        li.addEventListener('click', () => {
+          renderPreview(sec, idx, title);
+          if (window.innerWidth <= 768) {
+            // Give user a moment to inspect on mobile before jumping
+            setTimeout(() => {
+              toggleInspectMode(false);
+              sec.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 300);
+          } else {
+            toggleInspectMode(false);
+            sec.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        });
+
+        contentsList.appendChild(li);
+      });
+    }
+    populateContents();
+
+    function toggleInspectMode(state) {
+      isInspectActive = typeof state === 'boolean' ? state : !isInspectActive;
+      document.body.classList.toggle('ks-inspect-active', isInspectActive);
+      ksBtn.classList.toggle('active', isInspectActive);
+
+      if (!isInspectActive) {
+        previewCardRight.classList.remove('visible');
+      } else {
+        const firstSec = sections[0];
+        if (firstSec) {
+          renderPreview(firstSec, 0, firstSec.getAttribute('data-title'));
+        }
+      }
+    }
+
+    ksBtn.addEventListener('click', () => toggleInspectMode());
+    stageOverlay.addEventListener('click', () => toggleInspectMode(false));
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isInspectActive) toggleInspectMode(false);
+    });
+
+    // Sink Animation
+    const canvas = document.getElementById('sinkCanvas');
+    const ctx = canvas.getContext('2d');
+    const numParticles = 45;
+    const particles = [];
+    const R_max = 210;
+    const r_min = 22;
+
+    class Particle {
+      constructor() {
+        this.reset();
+        this.r = r_min + Math.random() * (R_max - r_min);
+      }
+      reset() {
+        this.theta = Math.random() * Math.PI * 2;
+        this.r = R_max;
+        this.speed = 0.45 + Math.random() * 0.45;
+      }
+      update() {
+        this.r -= this.speed;
+        if (this.r <= r_min) this.reset();
+      }
+      draw(origin) {
+        const x = origin.x + this.r * Math.cos(this.theta);
+        const y = origin.y + this.r * Math.sin(this.theta);
+        let opacity = 0.24;
+        if (this.r - r_min < 35) opacity *= (this.r - r_min) / 35;
+
+        ctx.fillStyle = document.body.classList.contains('light-mode') 
+          ? `rgba(35, 39, 45, ${opacity * 1.5})` 
+          : `rgba(63, 185, 80, ${opacity})`;
+        ctx.beginPath();
+        ctx.arc(x, y, 1.2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    for (let i = 0; i < numParticles; i++) particles.push(new Particle());
+
+    function animateSink() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const origin = { x: 360 - 24 - 22, y: 360 - 24 - 22 };
+      for (let p of particles) {
+        p.update();
+        p.draw(origin);
+      }
+      requestAnimationFrame(animateSink);
+    }
+    animateSink();
+  </script>
+</body>
+</html>

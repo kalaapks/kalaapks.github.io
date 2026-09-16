@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <title>Simulated | Kalaap Sadhu</title>
+  <title>2D Visualizations | Kalaap Sadhu</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -72,7 +72,7 @@
     .top-nav {
       position: sticky;
       top: 0;
-      z-index: 2100;
+      z-index: 1000;
       background: rgba(5, 11, 20, 0.85);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
@@ -202,15 +202,28 @@
     .dropdown.show .dropdown-content { display: block; }
 
     .container {
-      max-width: 820px;
+      max-width: 960px;
       margin: 35px auto 0 auto;
       padding: 0 20px;
+      transition: max-width 0.4s ease;
       position: relative;
       z-index: 10;
-      transition: filter 0.35s ease;
     }
 
-    .gallery-intro { margin-bottom: 35px; }
+    .breadcrumb {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .breadcrumb a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    .gallery-intro { margin-bottom: 30px; }
 
     .gallery-intro h1 {
       color: var(--green);
@@ -226,164 +239,141 @@
     }
 
     /* ========================================================
-       3x1 VERTICAL STACK (DEFAULT)
+       DEFAULT VIEW: 2 IN EACH ROW
        ======================================================== */
-    .category-stack {
-      display: flex;
-      flex-direction: column;
-      gap: 36px;
-      margin-top: 25px;
+    .sim-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      transition: all 0.4s ease;
     }
 
-    .category-card {
+    .sim-card {
       background: var(--card-bg);
-      border: 1.5px solid var(--border);
-      border-radius: 12px;
-      text-decoration: none;
-      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px;
       overflow: hidden;
+      box-shadow: 0 10px 30px var(--card-shadow);
       display: flex;
       flex-direction: column;
-      box-shadow: 0 10px 30px var(--card-shadow);
       transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
     }
 
-    .category-card:hover {
-      transform: translateY(-4px);
-      border-color: var(--green);
-      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.75), 0 0 16px rgba(63, 185, 80, 0.25);
+    .sim-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
     }
 
-    .category-dp {
-      width: 100%;
-      height: 250px;
-      background: var(--inner-card-bg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .category-dp img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: transform 0.3s ease;
-    }
-
-    .category-card:hover .category-dp img {
-      transform: scale(1.02);
-    }
-
-    .category-footer {
-      padding: 16px 22px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    .sim-card-header {
       background: var(--terminal-header);
-    }
-
-    .category-title {
-      font-size: 1.35rem;
-      font-weight: 700;
-      color: var(--green);
-      letter-spacing: 0.5px;
-    }
-
-    .category-tag {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
       font-size: 0.85rem;
       color: var(--accent);
       font-weight: bold;
+      display: flex;
+      align-items: center;
     }
 
-    /* ========================================================
-       FLOATING 1x3 WALL OVERLAY (KS MODE)
-       ======================================================== */
-    body.wall-mode .container {
-      filter: blur(8px);
-      pointer-events: none;
-      user-select: none;
+    .card-header-arrow {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-top: 2px solid #ff5f56;
+      border-right: 2px solid #ff5f56;
+      transform: rotate(45deg);
+      margin-right: 8px;
+      vertical-align: middle;
+      flex-shrink: 0;
     }
 
-    .floating-wall-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 1500;
-      background: rgba(5, 11, 20, 0.75);
-      backdrop-filter: blur(10px);
-      display: none;
+    .sim-media {
+      width: 100%;
+      background: var(--inner-card-bg);
+      border-bottom: 1px solid var(--border);
+      display: flex;
       align-items: center;
       justify-content: center;
-      padding: 24px;
+      min-height: 200px;
     }
 
-    body.light-mode .floating-wall-overlay {
-      background: rgba(245, 242, 233, 0.8);
-    }
-
-    body.wall-mode .floating-wall-overlay {
-      display: flex;
-    }
-
-    .floating-wall-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
+    .sim-media svg, .sim-media img {
       width: 100%;
-      max-width: 1020px;
-    }
-
-    .floating-card {
-      background: var(--card-bg);
-      border: 2px solid var(--border);
-      border-radius: 10px;
-      text-decoration: none;
-      color: var(--text);
-      overflow: hidden;
-      box-shadow: 0 15px 35px var(--card-shadow);
-      display: flex;
-      flex-direction: column;
-      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
-    }
-
-    .floating-card:hover {
-      transform: translateY(-6px) scale(1.02);
-      border-color: var(--green);
-      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.85), 0 0 20px rgba(63, 185, 80, 0.4);
-    }
-
-    .floating-card-dp {
-      width: 100%;
-      height: 180px;
-      background: var(--inner-card-bg);
-      overflow: hidden;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .floating-card-dp img {
-      width: 100%;
-      height: 100%;
+      height: 200px;
       object-fit: cover;
       display: block;
     }
 
-    .floating-card-footer {
-      padding: 12px 14px;
-      text-align: center;
-      background: var(--terminal-header);
+    .sim-card-body { padding: 18px 20px; }
+    .sim-card-body h3 { font-size: 1.05rem; color: var(--text); margin-bottom: 8px; }
+    .sim-card-body p { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 12px; }
+    .sim-ref { font-size: 0.82rem; color: var(--accent); text-decoration: none; font-weight: bold; }
+    .sim-ref:hover { text-decoration: underline; }
+
+    /* ========================================================
+       KS WALL MODE: 3x5 (5 PER ROW)
+       ======================================================== */
+    body.wall-mode .container {
+      max-width: 96vw;
+      margin-top: 20px;
     }
 
-    .floating-card-title {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: var(--green);
+    body.wall-mode .gallery-intro,
+    body.wall-mode .breadcrumb {
+      display: none;
+    }
+
+    body.wall-mode .sim-grid {
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+    }
+
+    body.wall-mode .sim-card {
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    body.wall-mode .sim-card:hover {
+      transform: translateY(-4px) scale(1.02);
+      border-color: var(--green);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.8), 0 0 15px rgba(63, 185, 80, 0.25);
+    }
+
+    body.wall-mode .sim-media {
+      min-height: 120px;
+      pointer-events: none;
+    }
+
+    body.wall-mode .sim-media svg, 
+    body.wall-mode .sim-media img {
+      height: 125px;
+    }
+
+    body.wall-mode .sim-card-header {
+      padding: 6px 10px;
+      font-size: 0.72rem;
+      pointer-events: none;
+    }
+
+    body.wall-mode .sim-card-body {
+      padding: 10px 12px;
+      pointer-events: none;
+    }
+
+    body.wall-mode .sim-card-body h3 {
+      font-size: 0.82rem;
+      margin-bottom: 4px;
+      line-height: 1.25;
+    }
+
+    body.wall-mode .sim-card-body p, 
+    body.wall-mode .sim-ref {
+      display: none;
     }
 
     .wall-hint {
       position: fixed;
-      bottom: 24px;
+      bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
       background: var(--terminal-header);
@@ -441,14 +431,13 @@
       box-shadow: 0 0 18px rgba(63, 185, 80, 0.4);
     }
 
-    @media (max-width: 800px) {
-      .floating-wall-grid {
-        grid-template-columns: 1fr;
-        max-width: 320px;
-        gap: 16px;
-      }
-      .floating-card-dp { height: 130px; }
-      .category-dp { height: 180px; }
+    @media (max-width: 900px) {
+      body.wall-mode .sim-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (max-width: 650px) {
+      .sim-grid { grid-template-columns: 1fr; }
+      body.wall-mode .sim-grid { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
@@ -457,7 +446,7 @@
   <!-- Sticky Top Navigation Bar -->
   <nav class="top-nav">
     <div class="nav-left">
-      <button class="ks-badge" id="ksBtn" title="Toggle Floating 1x3 View">KS</button>
+      <button class="ks-badge" id="ksBtn" title="Toggle 3x5 Wall View">KS</button>
       <button class="theme-toggle" id="themeBtn" title="Toggle Light / Dark Mode">💡</button>
     </div>
     <div class="nav-links">
@@ -477,7 +466,7 @@
   </nav>
 
   <!-- Wall Mode Hint Bar -->
-  <div class="wall-hint">Floating 1×3 Mode: Click a category to enter • Esc or KS to exit</div>
+  <div class="wall-hint">Wall Mode: Click any card to inspect • Esc or KS to exit</div>
 
   <!-- Outward Source Particle Canvas -->
   <canvas id="sourceCanvas" width="360" height="360"></canvas>
@@ -489,83 +478,100 @@
     </svg>
   </a>
 
-  <!-- Standard Container (3x1 Stack) -->
   <div class="container">
+    <div class="breadcrumb">
+      <a href="simulated.html">← Back to Simulations Hub</a> / 2D
+    </div>
+
     <div class="gallery-intro">
-      <h1><span style="display:inline-block; width:14px; height:14px; background-color: var(--green); margin-right:8px;"></span> Simulations & Visualizations</h1>
-      <p style="margin-bottom: 25px;">This is my absolute favourite part of the website.</p>
-      <p>This section is a quick glimpse into how I see Mathematics. There is immense beauty and power in abstracting ideas, but I have always enjoyed going in the other direction too — stripping away the abstraction and trying to see the geometry hiding underneath it. So this section is essentially a collection of things that made me stop and think, “Ohhh, so that's what this equation or identity looks like. </p>
-      <p>These ranges from geometric ODE/PDE solutions and their numerical approximations, computational models and stochastic trajectories. They are not meant to replace the mathematics. They are little windows into it. All of them are linked back to the corresponding Notes where they are developed more carefully, feel free to click and see where the pictures came from.</p>
+      <h1><span style="display:inline-block; width:14px; height:14px; background-color: var(--green); margin-right:8px;"></span>2D Geometric Simulations</h1>
+      <p>Planar characteristic curves, radial heat diffusion boundaries, and 2D contour approximations extracted directly from the notes.</p>
     </div>
 
-    <!-- 3x1 Stack Layout (Scroll to explore) -->
-    <div class="category-stack">
-      
-      <!-- 2D Category -->
-      <a href="sim2D.html" class="category-card">
-        <div class="category-dp">
-          <img src="dp_2d.png" alt="2D Simulations DP" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'250\' viewBox=\'0 0 600 250\'><rect width=\'100%\' height=\'100%\' fill=\'%230d1117\'/><circle cx=\'300\' cy=\'125\' r=\'65\' stroke=\'%233fb950\' stroke-width=\'2\' fill=\'none\'/><line x1=\'180\' y1=\'125\' x2=\'420\' y2=\'125\' stroke=\'%2358a6ff\' stroke-width=\'1.5\'/><line x1=\'300\' y1=\'35\' x2=\'300\' y2=\'215\' stroke=\'%2358a6ff\' stroke-width=\'1.5\'/><text x=\'300\' y=\'235\' fill=\'%238b949e\' font-size=\'13\' font-family=\'monospace\' text-anchor=\'middle\'>2D Display Picture (dp_2d.png)</text></svg>';">
-        </div>
-        <div class="category-footer">
-          <span class="category-title">> 2D</span>
-          <span class="category-tag">View Collection ➔</span>
-        </div>
-      </a>
+    <!-- 2 in Each Row Grid (Standard) -->
+    <div class="sim-grid" id="simGrid">
 
-      <!-- 3D Category -->
-      <a href="sim3D.html" class="category-card">
-        <div class="category-dp">
-          <img src="dp_3d.png" alt="3D Simulations DP" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'250\' viewBox=\'0 0 600 250\'><rect width=\'100%\' height=\'100%\' fill=\'%230d1117\'/><path d=\'M200 170 L300 65 L400 170 Z\' stroke=\'%2358a6ff\' stroke-width=\'2\' fill=\'none\'/><path d=\'M200 170 L300 200 L400 170\' stroke=\'%233fb950\' stroke-width=\'1.5\' fill=\'none\'/><text x=\'300\' y=\'235\' fill=\'%238b949e\' font-size=\'13\' font-family=\'monospace\' text-anchor=\'middle\'>3D Display Picture (dp_3d.png)</text></svg>';">
+      <!-- Plot 01 -->
+      <div class="sim-card" id="plot1">
+        <div class="sim-card-header">
+          <span class="card-header-arrow"></span> plot_01.png
         </div>
-        <div class="category-footer">
-          <span class="category-title">> 3D</span>
-          <span class="category-tag">View Collection ➔</span>
+        <div class="sim-media">
+          <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="200" fill="#0d1117"/>
+            <path d="M 20 180 Q 150 30 380 160" stroke="#3fb950" stroke-width="2" fill="none"/>
+            <path d="M 40 190 Q 180 60 380 120" stroke="#58a6ff" stroke-width="2" fill="none"/>
+            <text x="20" y="30" fill="#8b949e" font-family="monospace" font-size="12">Characteristic Curves</text>
+          </svg>
         </div>
-      </a>
+        <div class="sim-card-body">
+          <h3>Characteristic Lines for Quasilinear PDE</h3>
+          <p>Characteristic trajectories tracing shock development surfaces.</p>
+          <a href="notes.html#stochastic" class="sim-ref">> Reference: See PDE Notes §2.3</a>
+        </div>
+      </div>
 
-      <!-- Stochastic Category -->
-      <a href="simStochastic.html" class="category-card">
-        <div class="category-dp">
-          <img src="dp_stochastic.png" alt="Stochastic Simulations DP" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'250\' viewBox=\'0 0 600 250\'><rect width=\'100%\' height=\'100%\' fill=\'%230d1117\'/><polyline points=\'150,140 200,110 250,150 300,80 350,130 400,70 450,100\' fill=\'none\' stroke=\'%23ffbd2e\' stroke-width=\'2.5\'/><text x=\'300\' y=\'235\' fill=\'%238b949e\' font-size=\'13\' font-family=\'monospace\' text-anchor=\'middle\'>Stochastic DP (dp_stochastic.png)</text></svg>';">
+      <!-- Plot 02 -->
+      <div class="sim-card" id="plot2">
+        <div class="sim-card-header">
+          <span class="card-header-arrow"></span> plot_02.png
         </div>
-        <div class="category-footer">
-          <span class="category-title">> Stochastic</span>
-          <span class="category-tag">View Collection ➔</span>
+        <div class="sim-media">
+          <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="200" fill="#0d1117"/>
+            <circle cx="200" cy="100" r="70" fill="none" stroke="#58a6ff" stroke-width="1.5" stroke-dasharray="4"/>
+            <circle cx="200" cy="100" r="45" fill="none" stroke="#3fb950" stroke-width="2"/>
+            <circle cx="200" cy="100" r="20" fill="none" stroke="#ff5f56" stroke-width="2.5"/>
+            <text x="20" y="30" fill="#8b949e" font-family="monospace" font-size="12">Radial Diffusion Contours</text>
+          </svg>
         </div>
-      </a>
+        <div class="sim-card-body">
+          <h3>Heat Convection & Diffusion Contours</h3>
+          <p>Crank-Nicolson scheme applied to parabolic boundary value evolution.</p>
+          <a href="notes.html#stochastic" class="sim-ref">> Reference: See Numerical PDEs Notes</a>
+        </div>
+      </div>
 
-    </div>
-  </div>
+      <!-- Plot 03 -->
+      <div class="sim-card" id="plot3">
+        <div class="sim-card-header">
+          <span class="card-header-arrow"></span> plot_03.png
+        </div>
+        <div class="sim-media">
+          <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="200" fill="#0d1117"/>
+            <line x1="30" y1="170" x2="370" y2="30" stroke="#3fb950" stroke-width="2"/>
+            <line x1="30" y1="30" x2="370" y2="170" stroke="#58a6ff" stroke-width="2"/>
+            <circle cx="200" cy="100" r="6" fill="#ffbd2e"/>
+            <text x="20" y="30" fill="#8b949e" font-family="monospace" font-size="12">Linear Manifold Invariance</text>
+          </svg>
+        </div>
+        <div class="sim-card-body">
+          <h3>2D Phase Space Trajectories</h3>
+          <p>Autonomous planar dynamical system stability and invariant eigenspaces.</p>
+          <a href="notes.html#stochastic" class="sim-ref">> Reference: See ODE Notes §3</a>
+        </div>
+      </div>
 
-  <!-- Floating 1x3 KS Wall Overlay -->
-  <div class="floating-wall-overlay" id="wallOverlay">
-    <div class="floating-wall-grid">
-      <a href="sim2D.html" class="floating-card">
-        <div class="floating-card-dp">
-          <img src="dp_2d.png" alt="2D DP" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'180\' viewBox=\'0 0 300 180\'><rect width=\'100%\' height=\'100%\' fill=\'%230d1117\'/><circle cx=\'150\' cy=\'90\' r=\'45\' stroke=\'%233fb950\' stroke-width=\'2\' fill=\'none\'/></svg>';">
+      <!-- Plot 04 -->
+      <div class="sim-card" id="plot4">
+        <div class="sim-card-header">
+          <span class="card-header-arrow"></span> plot_04.png
         </div>
-        <div class="floating-card-footer">
-          <div class="floating-card-title">> 2D</div>
+        <div class="sim-media">
+          <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="200" fill="#0d1117"/>
+            <path d="M 30 150 C 120 40, 220 180, 370 50" stroke="#ffbd2e" stroke-width="2" fill="none"/>
+            <text x="20" y="30" fill="#8b949e" font-family="monospace" font-size="12">B-Spline Interpolant</text>
+          </svg>
         </div>
-      </a>
+        <div class="sim-card-body">
+          <h3>Boundary Spline Approximations</h3>
+          <p>Piecewise continuous cubic polynomial approximations across regular meshing.</p>
+          <a href="notes.html#stochastic" class="sim-ref">> Reference: See Analysis Notes §1.2</a>
+        </div>
+      </div>
 
-      <a href="sim3D.html" class="floating-card">
-        <div class="floating-card-dp">
-          <img src="dp_3d.png" alt="3D DP" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'180\' viewBox=\'0 0 300 180\'><rect width=\'100%\' height=\'100%\' fill=\'%230d1117\'/><path d=\'M100 130 L150 50 L200 130 Z\' stroke=\'%2358a6ff\' stroke-width=\'2\' fill=\'none\'/></svg>';">
-        </div>
-        <div class="floating-card-footer">
-          <div class="floating-card-title">> 3D</div>
-        </div>
-      </a>
-
-      <a href="simStochastic.html" class="floating-card">
-        <div class="floating-card-dp">
-          <img src="dp_stochastic.png" alt="Stochastic DP" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'180\' viewBox=\'0 0 300 180\'><rect width=\'100%\' height=\'100%\' fill=\'%230d1117\'/><polyline points=\'80,110 120,80 160,120 200,60 230,90\' fill=\'none\' stroke=\'%23ffbd2e\' stroke-width=\'2\'/></svg>';">
-        </div>
-        <div class="floating-card-footer">
-          <div class="floating-card-title">> Stochastic</div>
-        </div>
-      </a>
     </div>
   </div>
 
@@ -596,9 +602,9 @@
       }
     });
 
-    // KS Wall Mode: Blur Background + Show Floating 1x3
+    // KS Wall Mode: 3x5 Grid Toggle & Click-to-Inspect
     const ksBtn = document.getElementById('ksBtn');
-    const wallOverlay = document.getElementById('wallOverlay');
+    const simCards = document.querySelectorAll('.sim-card');
     let isWallMode = false;
 
     function toggleWallMode(state) {
@@ -609,8 +615,16 @@
 
     ksBtn.addEventListener('click', () => toggleWallMode());
 
-    wallOverlay.addEventListener('click', (e) => {
-      if (e.target === wallOverlay) toggleWallMode(false);
+    simCards.forEach(card => {
+      card.addEventListener('click', (e) => {
+        if (!isWallMode) return;
+        if (e.target.tagName.toLowerCase() === 'a') return;
+
+        toggleWallMode(false);
+        setTimeout(() => {
+          card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 120);
+      });
     });
 
     window.addEventListener('keydown', (e) => {

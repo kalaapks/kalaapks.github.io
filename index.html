@@ -8,13 +8,11 @@
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
-  <!-- Web fallbacks matching the typewriter/code aesthetic of algolrevived -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
-    /* Local font hook for LaTeX AlgolRevived if placed in your directory */
     @font-face {
       font-family: 'AlgolRevived';
       src: url('AlgolRevived-Regular.ttf') format('truetype'),
@@ -25,7 +23,6 @@
     }
 
     :root {
-      /* Dark Theme Defaults */
       --page-bg-top: #050b14;
       --page-bg-bottom: #0a192f;
       --card-bg: #161b22;
@@ -40,20 +37,19 @@
       --card-shadow: rgba(0, 0, 0, 0.6);
     }
 
-    /* Light Mode: Diluted off-white with muted/desaturated yellow-ochre cards */
     body.light-mode {
-      --page-bg-top: #fbfbfa;
-      --page-bg-bottom: #f2f1ec;
-      --card-bg: #e8e3d5;
-      --terminal-header: #ded7c5;
-      --inner-card-bg: #f4f0e6;
-      --border: #c8c0ae;
+      --page-bg-top: #f7f5ef;
+      --page-bg-bottom: #e5dfce;
+      --card-bg: #ece7db;
+      --terminal-header: #ddd7c7;
+      --inner-card-bg: #f5f2e9;
+      --border: #c4bcab;
       --text: #23272d;
       --text-muted: #69655b;
       --green: #2b7a3e;
       --accent: #1e6091;
-      --overlay-bg: rgba(245, 243, 237, 0.9);
-      --card-shadow: rgba(80, 75, 60, 0.15);
+      --overlay-bg: rgba(245, 243, 237, 0.92);
+      --card-shadow: rgba(80, 75, 60, 0.16);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -69,15 +65,26 @@
       color: var(--text);
       font-family: 'AlgolRevived', 'Courier Prime', 'Fira Code', Courier, monospace;
       line-height: 1.6;
-      padding-bottom: 80px;
       min-height: 100vh;
       transition: background 0.3s ease, color 0.3s ease;
       overflow-x: hidden;
+      position: relative;
     }
 
+    /* Enhanced light-mode gradient with focal warmth and depth */
     body.light-mode {
-      background: radial-gradient(circle at 50% 15%, #ede9dc 0%, var(--page-bg-top) 60%, var(--page-bg-bottom) 100%);
+      background: radial-gradient(circle at 50% 15%, #eae4d3 0%, var(--page-bg-top) 55%, var(--page-bg-bottom) 100%);
       background-attachment: fixed;
+    }
+
+    /* Background density ribbons canvas */
+    #bgCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 1; /* Sits right on top of background gradient, below all cards */
     }
 
     /* Sticky Top Navigation Bar */
@@ -96,7 +103,7 @@
     }
 
     body.light-mode .top-nav {
-      background: rgba(251, 251, 250, 0.85);
+      background: rgba(247, 245, 239, 0.85);
     }
 
     .nav-left {
@@ -152,11 +159,7 @@
       transform: rotate(12deg) scale(1.05);
     }
 
-    .nav-links { 
-      display: flex; 
-      gap: 6px; 
-      align-items: center;
-    }
+    .nav-links { display: flex; gap: 6px; align-items: center; }
 
     .nav-btn {
       color: var(--text-muted);
@@ -166,7 +169,7 @@
       padding: 6px 10px;
       border-radius: 4px;
       border: 1px solid transparent;
-      transition: all 0.2s ease;
+      transition: all 0.25s ease;
       white-space: nowrap;
       cursor: pointer;
       background: transparent;
@@ -179,11 +182,14 @@
       background: rgba(63, 185, 80, 0.08);
     }
 
-    /* "The Fun" Dropdown Menu */
-    .dropdown {
-      position: relative;
-      display: inline-block;
+    .nav-btn.active-tab {
+      color: var(--green);
+      border-color: rgba(63, 185, 80, 0.4);
+      background: rgba(63, 185, 80, 0.12);
+      box-shadow: 0 0 10px rgba(63, 185, 80, 0.25);
     }
+
+    .dropdown { position: relative; display: inline-block; }
 
     .dropdown-content {
       display: none;
@@ -209,35 +215,51 @@
       transition: background 0.2s ease, color 0.2s ease;
     }
 
-    .dropdown-content a:last-child {
-      border-bottom: none;
-    }
-
+    .dropdown-content a:last-child { border-bottom: none; }
     .dropdown-content a:hover {
       background: var(--inner-card-bg);
       color: var(--green);
     }
+    .dropdown.show .dropdown-content { display: block; }
 
-    .dropdown.show .dropdown-content {
-      display: block;
+    /* Layout Spacing */
+    .container {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 0 20px;
+      position: relative;
+      z-index: 10;
     }
 
-    /* Container for sections */
-    .container {
-      max-width: 800px;
-      margin: 35px auto 0 auto;
-      padding: 0 20px;
+    .page-section {
+      min-height: 80vh;
       display: flex;
       flex-direction: column;
-      gap: 45px;
+      justify-content: center;
+      margin: 100px 0 140px 0;
     }
 
-    /* Terminal Window Styling */
+    .page-section#me {
+      margin-top: 28px;
+      justify-content: flex-start;
+    }
+
+    .hero-greeting {
+      font-size: 3.4rem;
+      color: var(--green);
+      font-weight: bold;
+      letter-spacing: 4px;
+      user-select: none;
+      margin-top: 10px;
+      margin-bottom: 34px;
+    }
+
+    /* Terminal Window */
     .terminal-window {
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: 8px;
-      box-shadow: 0 10px 30px var(--card-shadow);
+      box-shadow: 0 12px 35px var(--card-shadow);
       overflow: hidden;
       transition: all 0.25s ease;
     }
@@ -245,16 +267,38 @@
     .terminal-header {
       background: var(--terminal-header);
       border-bottom: 1px solid var(--border);
-      padding: 10px 16px;
+      padding: 12px 18px;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
     }
 
-    .dot { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
-    .dot-red { background: #ff5f56; }
-    .dot-yellow { background: #ffbd2e; }
-    .dot-green { background: #27c93f; }
+    .shape-green-square {
+      width: 10px;
+      height: 10px;
+      background-color: var(--green);
+      border-radius: 1px;
+      display: inline-block;
+    }
+
+    .shape-yellow-circle {
+      width: 10px;
+      height: 10px;
+      background-color: #e6a008;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    .shape-red-arrowhead {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-top: 2px solid #ff5f56;
+      border-right: 2px solid #ff5f56;
+      transform: rotate(45deg);
+      margin-left: 2px;
+    }
 
     .terminal-header-title {
       color: var(--text-muted);
@@ -262,9 +306,7 @@
       margin-left: auto;
     }
 
-    .terminal-body {
-      padding: 26px;
-    }
+    .terminal-body { padding: 28px; }
 
     h1 { color: var(--green); font-size: 2.2rem; margin-bottom: 8px; line-height: 1.15; }
     h2 { color: var(--accent); font-size: 1.15rem; margin-bottom: 14px; border-bottom: 1px dashed var(--border); padding-bottom: 6px; }
@@ -300,6 +342,23 @@
       margin: 24px 0 16px 0;
     }
 
+    .contact-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .contact-icon-svg {
+      width: 17px;
+      height: 17px;
+      fill: currentColor;
+      color: var(--accent);
+      flex-shrink: 0;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
     .btn-link {
       display: inline-block;
       margin-top: 10px;
@@ -316,7 +375,6 @@
       text-decoration: none;
     }
 
-    /* Interactive Hub for "The Fun" Section */
     .fun-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -355,7 +413,7 @@
       line-height: 1.4;
     }
 
-    /* Task View Styles */
+    /* Task View */
     body.task-view-active { overflow: hidden; }
 
     .task-view-overlay {
@@ -450,48 +508,138 @@
       box-shadow: 0 4px 20px rgba(0,0,0,0.4);
     }
 
-    /* ========================================================
-       MOBILE VIEWPORT PERFECTION
-       ======================================================== */
+    /* Terminal Intro */
+    #welcomeIntro {
+      position: fixed;
+      inset: 0;
+      background: #000000;
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.6s ease;
+    }
+
+    .intro-terminal-box {
+      font-family: 'AlgolRevived', 'Courier Prime', 'Fira Code', monospace;
+      font-size: 3.4rem;
+      color: #3fb950;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      text-shadow: 0 0 15px rgba(63, 185, 80, 0.45);
+      user-select: none;
+    }
+
+    #typeLine2 {
+      font-size: 4.2rem;
+      min-height: 1.2em;
+    }
+
+    .cursor {
+      display: inline-block;
+      animation: blink 0.7s infinite;
+    }
+
+    @keyframes blink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+
+    #flyingKs {
+      position: fixed;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #161b22;
+      border: 2px solid #3fb950;
+      color: #3fb950;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-family: 'AlgolRevived', 'Courier Prime', monospace;
+      font-weight: bold;
+      font-size: 0.95rem;
+      z-index: 100000;
+      box-shadow: 0 0 14px rgba(63, 185, 80, 0.6);
+      pointer-events: none;
+      transition: transform 0.85s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease;
+    }
+
+    /* Sink Vector Field & ~ Switch */
+    #sinkCanvas {
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      width: 360px;
+      height: 360px;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .sim-portal-switch {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--card-bg);
+      border: 1.5px solid var(--border);
+      color: var(--green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-size: 1.45rem;
+      font-weight: bold;
+      box-shadow: 0 6px 20px var(--card-shadow);
+      z-index: 900;
+      line-height: 1;
+      padding-bottom: 2px;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .sim-portal-switch:hover {
+      transform: scale(1.1);
+      border-color: var(--green);
+      box-shadow: 0 0 18px rgba(63, 185, 80, 0.4);
+    }
+
     @media (max-width: 600px) {
-      .top-nav {
-        padding: 8px 12px;
-      }
-      .ks-badge {
-        width: 34px;
-        height: 34px;
-        font-size: 0.85rem;
-      }
-      .theme-toggle {
-        width: 32px;
-        height: 32px;
-        font-size: 0.9rem;
-      }
-      .nav-links {
-        gap: 2px;
-      }
-      .nav-btn {
-        font-size: 0.8rem;
-        padding: 4px 6px;
-      }
-      .container {
-        margin: 20px auto 0 auto;
-        padding: 0 12px;
-        gap: 30px;
-      }
-      .terminal-body {
-        padding: 18px 14px;
-      }
-      h1 {
-        font-size: 1.7rem;
-      }
-      .fun-grid {
-        grid-template-columns: 1fr;
-      }
+      .top-nav { padding: 8px 12px; }
+      .ks-badge { width: 34px; height: 34px; font-size: 0.85rem; }
+      .theme-toggle { width: 32px; height: 32px; font-size: 0.9rem; }
+      .nav-links { gap: 2px; }
+      .nav-btn { font-size: 0.8rem; padding: 4px 6px; }
+      .container { padding: 0 12px; }
+      .terminal-body { padding: 18px 14px; }
+      h1 { font-size: 1.7rem; }
+      .hero-greeting { font-size: 2.2rem; margin-bottom: 20px; }
+      .intro-terminal-box { font-size: 2.3rem; }
+      #typeLine2 { font-size: 2.8rem; }
+      .fun-grid { grid-template-columns: 1fr; }
+      #sinkCanvas { width: 240px; height: 240px; }
+      .sim-portal-switch { bottom: 16px; right: 16px; width: 40px; height: 40px; font-size: 1.25rem; }
     }
   </style>
 </head>
 <body>
+
+  <!-- Fullscreen Welcome Intro Terminal -->
+  <div id="welcomeIntro">
+    <div class="intro-terminal-box">
+      <div id="typeLine1"><span id="welcomeText"></span><span class="cursor" id="cursor1">_</span></div>
+      <div id="typeLine2"><span id="ksText"></span><span class="cursor" id="cursor2" style="display: none;">_</span></div>
+    </div>
+  </div>
+
+  <!-- Flying KS Badge -->
+  <div id="flyingKs">KS</div>
+
+  <!-- Full-Screen Evolving Probability Density Ribbons Canvas -->
+  <canvas id="bgCanvas"></canvas>
 
   <!-- Sticky Top Navigation Bar -->
   <nav class="top-nav">
@@ -500,11 +648,10 @@
       <button class="theme-toggle" id="themeBtn" title="Toggle Light / Dark Mode">💡</button>
     </div>
     <div class="nav-links">
-      <a href="#me" class="nav-btn">ME</a>
-      <a href="#resume" class="nav-btn">Resume</a>
-      <a href="#projects" class="nav-btn">Projects</a>
+      <a href="#me" class="nav-btn" id="nav-me">ME</a>
+      <a href="#resume" class="nav-btn" id="nav-resume">Resume</a>
+      <a href="#projects" class="nav-btn" id="nav-projects">Projects</a>
       
-      <!-- "The Fun" Tab with Dropdown -->
       <div class="dropdown" id="funDropdown">
         <button class="nav-btn" id="funBtn">The Fun ▾</button>
         <div class="dropdown-content">
@@ -521,116 +668,398 @@
     <div class="task-view-hint">Task View: Click any window to switch • Esc or KS to exit</div>
   </div>
 
+  <!-- Vector Field Sink Canvas -->
+  <canvas id="sinkCanvas" width="360" height="360"></canvas>
+
+  <!-- "~" Portal Switch -->
+  <a href="simulated.html" class="sim-portal-switch" id="portalSwitch" title="Go to Simulations">
+    ~
+  </a>
+
+  <!-- Main Container -->
   <div class="container" id="mainContainer">
 
     <!-- 1. ME SECTION -->
-    <section id="me" class="terminal-window" data-title="bash: ME (about)">
-      <div class="terminal-header">
-        <span class="dot dot-red"></span>
-        <span class="dot dot-yellow"></span>
-        <span class="dot dot-green"></span>
-        <span class="terminal-header-title">bash ~ about</span>
-      </div>
-      <div class="terminal-body">
-        <h1>KALAAP SADHU</h1>
-        <p>Mathematics Postgrad, IISER Kolkata <br>
-           Quantitative Finance | Stochastic Calculus | Scientific Computing</p>
+    <div class="page-section" id="me">
+      <div class="hero-greeting">HEY!</div>
+      <section class="terminal-window" data-title="bash: ME (about)">
+        <div class="terminal-header">
+          <span class="shape-green-square"></span>
+          <span class="shape-yellow-circle"></span>
+          <span class="shape-red-arrowhead"></span>
+          <span class="terminal-header-title">bash ~ about</span>
+        </div>
+        <div class="terminal-body">
+          <h1>KALAAP SADHU</h1>
+          <p>Mathematics Postgrad, IISER Kolkata <br>
+             Quantitative Finance | Stochastic Calculus | Scientific Computing</p>
 
-        <hr class="contact-divider">
-        <h2><span style="display:inline-block; width:12px; height:12px; background-color: var(--green); margin-right:8px;"></span>Contact</h2>
-        <p><span class="prompt">></span> Email: <code>ks24mp030@iiserkol.ac.in</code></p>
-        <p><span class="prompt">></span> GitHub: <a href="https://github.com" target="_blank">github.com/[your-username]</a></p>
-        <p><span class="prompt">></span> LinkedIn: <a href="#" target="_blank">[Profile Link]</a></p>
-      </div>
-    </section>
+          <hr class="contact-divider">
+          <h2><span style="display:inline-block; width:12px; height:12px; background-color: var(--green); margin-right:8px;"></span>Contact</h2>
+          
+          <div class="contact-row">
+            <span class="shape-yellow-circle"></span>
+            <svg class="contact-icon-svg" viewBox="0 0 24 24">
+              <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+            </svg>
+            <code>ks24mp030@iiserkol.ac.in</code>
+          </div>
+
+          <div class="contact-row">
+            <span class="shape-yellow-circle"></span>
+            <svg class="contact-icon-svg" viewBox="0 0 24 24">
+              <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+            </svg>
+            <a href="https://github.com" target="_blank">github.com/[your-username]</a>
+          </div>
+
+          <div class="contact-row">
+            <span class="shape-yellow-circle"></span>
+            <svg class="contact-icon-svg" viewBox="0 0 24 24">
+              <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.65 1.65 0 1 0 0 3.3 1.65 1.65 0 0 0 0-3.3z"/>
+            </svg>
+            <a href="#" target="_blank">[Profile Link]</a>
+          </div>
+        </div>
+      </section>
+    </div>
 
     <!-- 2. RESUME SECTION -->
-    <section id="resume" class="terminal-window" data-title="bash: Resume (cv)">
-      <div class="terminal-header">
-        <span class="dot dot-red"></span>
-        <span class="dot dot-yellow"></span>
-        <span class="dot dot-green"></span>
-        <span class="terminal-header-title">bash ~ cv</span>
-      </div>
-      <div class="terminal-body">
-        <h2><span style="display:inline-block; width:12px; height:12px; background-color: var(--green); margin-right:8px;"></span>Curriculum Vitae</h2>
-        <p>You can view or download the complete academic and research CV below:</p>
-        <div class="card">
-          <p><strong>Status:</strong> Available for research collaborations and technical roles.</p>
-          <a href="resume.pdf" target="_blank" class="btn-link">[Open Full Resume PDF]</a>
+    <div class="page-section" id="resume">
+      <section class="terminal-window" data-title="bash: Resume (cv)">
+        <div class="terminal-header">
+          <span class="shape-green-square"></span>
+          <span class="shape-yellow-circle"></span>
+          <span class="shape-red-arrowhead"></span>
+          <span class="terminal-header-title">bash ~ cv</span>
         </div>
-      </div>
-    </section>
+        <div class="terminal-body">
+          <h2><span style="display:inline-block; width:12px; height:12px; background-color: var(--green); margin-right:8px;"></span>Curriculum Vitae</h2>
+          <p>You can view or download the complete academic and research CV below:</p>
+          <div class="card">
+            <p><strong>Status:</strong> Available for research collaborations and technical roles.</p>
+            <a href="resume.pdf" target="_blank" class="btn-link">[Open Full Resume PDF]</a>
+          </div>
+        </div>
+      </section>
+    </div>
 
     <!-- 3. PROJECTS & RESEARCH SECTION -->
-    <section id="projects" class="terminal-window" data-title="bash: Projects">
-      <div class="terminal-header">
-        <span class="dot dot-red"></span>
-        <span class="dot dot-yellow"></span>
-        <span class="dot dot-green"></span>
-        <span class="terminal-header-title">bash ~ projects</span>
-      </div>
-      <div class="terminal-body">
-        <h2><span style="display:inline-block; width:12px; height:12px; background-color: var(--green); margin-right:8px;"></span>Projects</h2>
-        <ul>
-          <li>
-            <span class="prompt">></span> <strong>Numerical Approximations for PDEs</strong>
-            <span class="tag">Python / Finite Differences</span>
-            <div class="card">
-              Implementation of finite difference schemes for heat equations and parabolic PDEs.
-              <br><a href="#" target="_blank">[View Code & Report]</a>
-            </div>
-          </li>
-          <li>
-            <span class="prompt">></span> <strong>Stochastic Option Pricing Models</strong>
-            <span class="tag">Stochastic Calculus</span>
-            <div class="card">
-              Exploration of the Black-Scholes model and Monte Carlo simulation paths.
-              <br><a href="#" target="_blank">[Read Notes]</a>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </section>
+    <div class="page-section" id="projects">
+      <section class="terminal-window" data-title="bash: Projects">
+        <div class="terminal-header">
+          <span class="shape-green-square"></span>
+          <span class="shape-yellow-circle"></span>
+          <span class="shape-red-arrowhead"></span>
+          <span class="terminal-header-title">bash ~ projects</span>
+        </div>
+        <div class="terminal-body">
+          <h2><span style="display:inline-block; width:12px; height:12px; background-color: var(--green); margin-right:8px;"></span>Projects</h2>
+          <ul>
+            <li>
+              <span class="shape-yellow-circle" style="margin-right: 6px;"></span> 
+              <strong>Numerical Approximations for PDEs</strong>
+              <span class="tag">Python / Finite Differences</span>
+              <div class="card">
+                Implementation of finite difference schemes for heat equations and parabolic PDEs.
+                <br><a href="#" target="_blank">[View Code & Report]</a>
+              </div>
+            </li>
+            <li>
+              <span class="shape-yellow-circle" style="margin-right: 6px;"></span> 
+              <strong>Stochastic Option Pricing Models</strong>
+              <span class="tag">Stochastic Calculus</span>
+              <div class="card">
+                Exploration of the Black-Scholes model and Monte Carlo simulation paths.
+                <br><a href="#" target="_blank">[Read Notes]</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+    </div>
 
     <!-- 4. THE FUN SECTION -->
-    <section id="fun" class="terminal-window" data-title="bash: The Fun">
-      <div class="terminal-header">
-        <span class="dot dot-red"></span>
-        <span class="dot dot-yellow"></span>
-        <span class="dot dot-green"></span>
-        <span class="terminal-header-title">bash ~ /fun</span>
-      </div>
-      <div class="terminal-body">
-        <h2><span style="display:inline-block; width:12px; height:12px; background-color: var(--green); margin-right:8px;"></span>The Fun</h2>
-        <p>Curated notes and computational graphics created during study & research:</p>
-        
-        <div class="fun-grid">
-          <!-- Link to Notes -->
-          <a href="notes.html" class="fun-card">
-            <div>
-              <div class="fun-card-title">> Notes</div>
-              <div class="fun-card-desc">Typed LaTeX lecture notes, proof surveys, and reading group write-ups.</div>
-            </div>
-            <span class="btn-link" style="margin-top: 14px; text-align: center;">[Open Notes &rarr;]</span>
-          </a>
-
-          <!-- Link to Simulated -->
-          <a href="simulated.html" class="fun-card">
-            <div>
-              <div class="fun-card-title">> Simulated</div>
-              <div class="fun-card-desc">Visualizations of PDEs, geometric characteristic curves, and stochastic paths.</div>
-            </div>
-            <span class="btn-link" style="margin-top: 14px; text-align: center;">[View Simulations &rarr;]</span>
-          </a>
+    <div class="page-section" id="fun">
+      <section class="terminal-window" data-title="bash: The Fun">
+        <div class="terminal-header">
+          <span class="shape-green-square"></span>
+          <span class="shape-yellow-circle"></span>
+          <span class="shape-red-arrowhead"></span>
+          <span class="terminal-header-title">bash ~ /fun</span>
         </div>
-      </div>
-    </section>
+        <div class="terminal-body">
+          <h2><span style="display:inline-block; width:12px; height:12px; background-color: var(--green); margin-right:8px;"></span>The Fun</h2>
+          <p>Curated notes and computational graphics created during study & research:</p>
+          
+          <div class="fun-grid">
+            <a href="notes.html" class="fun-card">
+              <div>
+                <div class="fun-card-title">Notes</div>
+                <div class="fun-card-desc">Typed LaTeX lecture notes, proof surveys, and reading group write-ups.</div>
+              </div>
+              <span class="btn-link" style="margin-top: 14px; text-align: center;">[Open Notes &rarr;]</span>
+            </a>
+
+            <a href="simulated.html" class="fun-card">
+              <div>
+                <div class="fun-card-title">Simulated</div>
+                <div class="fun-card-desc">Visualizations of PDEs, geometric characteristic curves, and stochastic paths.</div>
+              </div>
+              <span class="btn-link" style="margin-top: 14px; text-align: center;">[View Simulations &rarr;]</span>
+            </a>
+          </div>
+        </div>
+      </section>
+    </div>
 
   </div>
 
   <script>
-    // Theme Switcher Logic
+    /* ========================================================
+       1. BACKGROUND PROBABILITY DENSITY RIBBONS ANIMATION
+       ======================================================== */
+    const bgCanvas = document.getElementById('bgCanvas');
+    const bgCtx = bgCanvas.getContext('2d');
+
+    let bgWidth, bgHeight;
+    function resizeBg() {
+      bgWidth = bgCanvas.width = window.innerWidth;
+      bgHeight = bgCanvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeBg);
+    resizeBg();
+
+    const NUM_RIBBONS = 5;
+    const RESOLUTION = 120;
+    let ribbonTime = 0;
+
+    function animateRibbons() {
+      bgCtx.clearRect(0, 0, bgWidth, bgHeight);
+      ribbonTime += 0.005;
+
+      const isLight = document.body.classList.contains('light-mode');
+
+      for (let r = 0; r < NUM_RIBBONS; r++) {
+        const baseY = bgHeight * (0.32 + r * 0.12);
+
+        // Dynamic drifting expectation & variance
+        const mu1 = bgWidth * (0.32 + 0.20 * Math.sin(ribbonTime * 0.6 + r * 0.8));
+        const sigma1 = bgWidth * (0.13 + 0.04 * Math.cos(ribbonTime * 0.4 + r));
+
+        const mu2 = bgWidth * (0.68 + 0.18 * Math.cos(ribbonTime * 0.5 - r * 0.7));
+        const sigma2 = bgWidth * (0.11 + 0.03 * Math.sin(ribbonTime * 0.7 + r));
+
+        const amplitude = bgHeight * 0.17;
+
+        bgCtx.beginPath();
+        for (let i = 0; i <= RESOLUTION; i++) {
+          const x = (i / RESOLUTION) * bgWidth;
+
+          const g1 = Math.exp(-Math.pow(x - mu1, 2) / (2 * sigma1 * sigma1));
+          const g2 = Math.exp(-Math.pow(x - mu2, 2) / (2 * sigma2 * sigma2));
+          const density = (g1 * 0.65 + g2 * 0.55);
+
+          const y = baseY - density * amplitude + Math.sin(x * 0.0035 + ribbonTime + r) * 5;
+
+          if (i === 0) bgCtx.moveTo(x, y);
+          else bgCtx.lineTo(x, y);
+        }
+
+        // Adaptive strokes matching themes
+        bgCtx.lineWidth = 1.1;
+        bgCtx.strokeStyle = isLight 
+          ? `rgba(30, 96, 145, ${0.11 + r * 0.025})` 
+          : `rgba(88, 166, 255, ${0.10 + r * 0.025})`;
+        bgCtx.stroke();
+
+        // Soft ambient downward curtain fill
+        bgCtx.lineTo(bgWidth, bgHeight);
+        bgCtx.lineTo(0, bgHeight);
+        bgCtx.closePath();
+        bgCtx.fillStyle = isLight
+          ? `rgba(43, 122, 62, 0.012)`
+          : `rgba(63, 185, 80, 0.012)`;
+        bgCtx.fill();
+      }
+
+      requestAnimationFrame(animateRibbons);
+    }
+    animateRibbons();
+
+    /* ========================================================
+       2. TYPEWRITER INTRO SEQUENCE + SESSION STORAGE
+       ======================================================== */
+    const introOverlay = document.getElementById('welcomeIntro');
+    const welcomeText = document.getElementById('welcomeText');
+    const ksText = document.getElementById('ksText');
+    const cursor1 = document.getElementById('cursor1');
+    const cursor2 = document.getElementById('cursor2');
+    const flyingKs = document.getElementById('flyingKs');
+    const targetBadge = document.getElementById('ksBtn');
+
+    if (sessionStorage.getItem('introPlayed')) {
+      introOverlay.style.display = 'none';
+    } else {
+      const phrase = "welcome";
+      let charIdx = 0;
+
+      function typeWelcome() {
+        if (charIdx < phrase.length) {
+          welcomeText.textContent += phrase[charIdx];
+          charIdx++;
+          setTimeout(typeWelcome, 110);
+        } else {
+          cursor1.style.display = 'none';
+          cursor2.style.display = 'inline-block';
+          setTimeout(typeKS, 350);
+        }
+      }
+
+      function typeKS() {
+        ksText.textContent = "K";
+        setTimeout(() => {
+          ksText.textContent = "KS";
+          cursor2.style.display = 'none';
+          setTimeout(launchKsToBadge, 500);
+        }, 160);
+      }
+
+      function launchKsToBadge() {
+        const ksRect = ksText.getBoundingClientRect();
+        const badgeRect = targetBadge.getBoundingClientRect();
+
+        flyingKs.style.display = 'flex';
+        flyingKs.style.left = `${ksRect.left}px`;
+        flyingKs.style.top = `${ksRect.top}px`;
+        flyingKs.style.transform = 'scale(1.4)';
+
+        document.getElementById('typeLine1').style.transition = 'opacity 0.4s ease';
+        document.getElementById('typeLine1').style.opacity = '0';
+        ksText.style.visibility = 'hidden';
+
+        setTimeout(() => {
+          flyingKs.style.transform = `translate(${badgeRect.left - ksRect.left}px, ${badgeRect.top - ksRect.top}px) scale(1)`;
+          introOverlay.style.opacity = '0';
+
+          setTimeout(() => {
+            introOverlay.style.display = 'none';
+            flyingKs.style.display = 'none';
+            sessionStorage.setItem('introPlayed', 'true');
+          }, 850);
+        }, 120);
+      }
+
+      setTimeout(typeWelcome, 400);
+    }
+
+    /* ========================================================
+       3. VECTOR FIELD SINK (-x, -y)
+       ======================================================== */
+    const canvas = document.getElementById('sinkCanvas');
+    const ctx = canvas.getContext('2d');
+
+    const numParticles = 45;
+    const particles = [];
+    const R_max = 210;
+    const r_min = 22;
+
+    function resizeCanvas() {
+      canvas.width = 360;
+      canvas.height = 360;
+    }
+    resizeCanvas();
+
+    function getSinkOrigin() {
+      return { x: 360 - 24 - 22, y: 360 - 24 - 22 };
+    }
+
+    class Particle {
+      constructor() {
+        this.reset();
+        this.r = r_min + Math.random() * (R_max - r_min);
+      }
+
+      reset() {
+        this.theta = Math.random() * Math.PI * 2;
+        this.r = R_max;
+        this.speed = 0.45 + Math.random() * 0.45;
+      }
+
+      update() {
+        this.r -= this.speed;
+        if (this.r <= r_min) {
+          this.reset();
+        }
+      }
+
+      draw(origin) {
+        const x = origin.x + this.r * Math.cos(this.theta);
+        const y = origin.y + this.r * Math.sin(this.theta);
+
+        const fadeDist = 35;
+        let opacity = 0.24;
+        if (this.r - r_min < fadeDist) {
+          opacity *= (this.r - r_min) / fadeDist;
+        }
+
+        ctx.fillStyle = document.body.classList.contains('light-mode') 
+          ? `rgba(35, 39, 45, ${opacity * 1.5})` 
+          : `rgba(63, 185, 80, ${opacity})`;
+
+        ctx.beginPath();
+        ctx.arc(x, y, 1.2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    for (let i = 0; i < numParticles; i++) {
+      particles.push(new Particle());
+    }
+
+    function animateSink() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const origin = getSinkOrigin();
+
+      for (let p of particles) {
+        p.update();
+        p.draw(origin);
+      }
+      requestAnimationFrame(animateSink);
+    }
+    animateSink();
+
+    /* ========================================================
+       4. SCROLL SPY - ACTIVE TAB GLOW
+       ======================================================== */
+    const sectionsObs = document.querySelectorAll('.page-section');
+    const navItems = {
+      'me': document.getElementById('nav-me'),
+      'resume': document.getElementById('nav-resume'),
+      'projects': document.getElementById('nav-projects'),
+      'fun': document.getElementById('funBtn')
+    };
+
+    const spyObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          Object.values(navItems).forEach(btn => btn && btn.classList.remove('active-tab'));
+          if (navItems[id]) {
+            navItems[id].classList.add('active-tab');
+          }
+        }
+      });
+    }, {
+      root: null,
+      threshold: 0.35
+    });
+
+    sectionsObs.forEach(sec => spyObserver.observe(sec));
+
+    /* ========================================================
+       5. THEME TOGGLE & TASK VIEW LOGIC
+       ======================================================== */
     const themeBtn = document.getElementById('themeBtn');
     if (localStorage.getItem('site-theme') === 'light') {
       document.body.classList.add('light-mode');
@@ -642,7 +1071,6 @@
       localStorage.setItem('site-theme', isLight ? 'light' : 'dark');
     });
 
-    // "The Fun" Dropdown Toggle Logic
     const funDropdown = document.getElementById('funDropdown');
     const funBtn = document.getElementById('funBtn');
 
@@ -651,14 +1079,12 @@
       funDropdown.classList.toggle('show');
     });
 
-    // Close dropdown when clicking anywhere outside
     window.addEventListener('click', () => {
       if (funDropdown.classList.contains('show')) {
         funDropdown.classList.remove('show');
       }
     });
 
-    // Task View Logic
     const ksBtn = document.getElementById('ksBtn');
     const taskViewOverlay = document.getElementById('taskViewOverlay');
     const taskViewGrid = document.getElementById('taskViewGrid');
@@ -673,8 +1099,8 @@
         card.className = 'task-preview-card';
         card.innerHTML = `
           <div class="preview-header">
-            <span class="dot dot-green"></span>
-            <span>${title}</span>
+            <span class="shape-green-square" style="width:8px; height:8px;"></span>
+            <span style="margin-left: 6px;">${title}</span>
           </div>
           <div class="preview-body-content">
             ${sec.querySelector('.terminal-body').innerHTML}
