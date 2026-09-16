@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalaap Sadhu | Portfolio</title>
+  
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    :root {
+      /* Dark Theme Defaults */
+      --page-bg-top: #050b14;
+      --page-bg-bottom: #0a192f;
+      --card-bg: #161b22;
+      --terminal-header: #0d1117;
+      --inner-card-bg: #0d1117;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --text-muted: #8b949e;
+      --green: #3fb950;
+      --accent: #58a6ff;
+      --overlay-bg: rgba(3, 7, 14, 0.85);
+      --card-shadow: rgba(0, 0, 0, 0.6);
+    }
+
+    /* Light Mode: Diluted off-white with muted/desaturated yellow-ochre cards */
+    body.light-mode {
+      --page-bg-top: #fbfbfa;
+      --page-bg-bottom: #f2f1ec;
+      --card-bg: #e8e3d5; /* Desaturated yellow ochre */
+      --terminal-header: #ded7c5;
+      --inner-card-bg: #f4f0e6;
+      --border: #c8c0ae;
+      --text: #23272d;
+      --text-muted: #69655b;
+      --green: #2b7a3e;
+      --accent: #1e6091;
+      --overlay-bg: rgba(245, 243, 237, 0.9);
+      --card-shadow: rgba(80, 75, 60, 0.15);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 80px;
+    }
+
+    body {
+      background: radial-gradient(circle at 50% 15%, #0f2744 0%, var(--page-bg-top) 50%, var(--page-bg-bottom) 100%);
+      background-attachment: fixed;
+      color: var(--text);
+      font-family: 'Courier New', Courier, monospace;
+      line-height: 1.6;
+      padding-bottom: 80px;
+      min-height: 100vh;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    body.light-mode {
+      background: radial-gradient(circle at 50% 15%, #ede9dc 0%, var(--page-bg-top) 60%, var(--page-bg-bottom) 100%);
+      background-attachment: fixed;
+    }
+
+    /* Sticky Top Navigation Bar */
+    .top-nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(5, 11, 20, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 24px;
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+
+    body.light-mode .top-nav {
+      background: rgba(251, 251, 250, 0.85);
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .ks-badge {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--card-bg);
+      border: 2px solid var(--green);
+      color: var(--green);
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(63, 185, 80, 0.2);
+      transition: all 0.2s ease;
+    }
+
+    .ks-badge:hover, .ks-badge.active {
+      transform: scale(1.08);
+      background: var(--green);
+      color: #0d1117;
+      box-shadow: 0 0 16px rgba(63, 185, 80, 0.5);
+    }
+
+    /* Minimalist Light Bulb Button */
+    .theme-toggle {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.05rem;
+      color: var(--text);
+      transition: all 0.2s ease;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--accent);
+      transform: rotate(12deg) scale(1.05);
+    }
+
+    .nav-links { display: flex; gap: 10px; }
+
+    .nav-btn {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: bold;
+      padding: 6px 14px;
+      border-radius: 4px;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    .nav-btn:hover {
+      color: var(--green);
+      border-color: var(--border);
+      background: rgba(63, 185, 80, 0.08);
+    }
+
+    /* Container for sections */
+    .container {
+      max-width: 800px;
+      margin: 40px auto 0 auto;
+      padding: 0 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 50px;
+    }
+
+    /* Terminal Window Styling */
+    .terminal-window {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 10px 30px var(--card-shadow);
+      overflow: hidden;
+      transition: all 0.25s ease;
+    }
+
+    .terminal-header {
+      background: var(--terminal-header);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+    .dot-red { background: #ff5f56; }
+    .dot-yellow { background: #ffbd2e; }
+    .dot-green { background: #27c93f; }
+
+    .terminal-header-title {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      margin-left: auto;
+    }
+
+    .terminal-body {
+      padding: 28px;
+    }
+
+    h1 { color: var(--green); font-size: 2.6rem; margin-bottom: 8px; line-height: 1.1; }
+    h2 { color: var(--accent); font-size: 1.15rem; margin-bottom: 14px; border-bottom: 1px dashed var(--border); padding-bottom: 6px; }
+    .prompt { color: var(--green); font-weight: bold; }
+    p { margin-bottom: 14px; }
+    ul { list-style: none; padding-left: 0; }
+    li { margin-bottom: 16px; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .tag {
+      font-size: 0.75rem;
+      background: var(--inner-card-bg);
+      border: 1px solid var(--border);
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-left: 6px;
+      color: var(--text-muted);
+    }
+
+    .card {
+      background: var(--inner-card-bg);
+      border: 1px solid var(--border);
+      padding: 14px 18px;
+      border-radius: 4px;
+      margin-top: 8px;
+      color: var(--text);
+    }
+
+    .contact-divider {
+      border: none;
+      border-top: 1px dashed var(--border);
+      margin: 24px 0 16px 0;
+    }
+
+    .btn-link {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 8px 16px;
+      border: 1px solid var(--green);
+      border-radius: 4px;
+      color: var(--green);
+      font-weight: bold;
+      transition: all 0.2s ease;
+    }
+
+    .btn-link:hover {
+      background: rgba(63, 185, 80, 0.15);
+      text-decoration: none;
+    }
+
+    /* Task View Styles */
+    body.task-view-active { overflow: hidden; }
+
+    .task-view-overlay {
+      position: fixed;
+      top: 60px;
+      left: 0;
+      width: 100vw;
+      height: calc(100vh - 60px);
+      background: var(--overlay-bg);
+      backdrop-filter: blur(16px);
+      z-index: 1500;
+      display: none;
+      overflow-y: auto;
+      padding: 40px 30px 100px 30px;
+    }
+
+    .task-view-overlay.active { display: block; }
+
+    .task-view-grid {
+      max-width: 1350px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 28px;
+    }
+
+    .task-preview-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: 0 12px 30px var(--card-shadow);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+      height: 250px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .task-preview-card:hover {
+      transform: translateY(-6px) scale(1.02);
+      border-color: var(--green);
+    }
+
+    .preview-header {
+      background: var(--terminal-header);
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: bold;
+    }
+
+    .preview-body-content {
+      padding: 16px;
+      overflow: hidden;
+      font-size: 0.78rem;
+      line-height: 1.4;
+      pointer-events: none;
+      opacity: 0.85;
+      flex: 1;
+      position: relative;
+    }
+
+    .preview-body-content::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 60px;
+      background: linear-gradient(transparent, var(--card-bg));
+    }
+
+    .task-view-hint {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--terminal-header);
+      border: 1px solid var(--green);
+      color: var(--green);
+      padding: 8px 22px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      z-index: 2000;
+      pointer-events: none;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sticky Top Navigation Bar -->
+  <nav class="top-nav">
+    <div class="nav-left">
+      <button class="ks-badge" id="ksBtn" title="Toggle Task View">KS</button>
+      <button class="theme-toggle" id="themeBtn" title="Toggle Light / Dark Mode">💡</button>
+    </div>
+    <div class="nav-links">
+      <a href="#me" class="nav-btn">ME</a>
+      <a href="#resume" class="nav-btn">Resume</a>
+      <a href="#projects" class="nav-btn">Projects</a>
+      <a href="notes.html" class="nav-btn">Notes</a>
+      <a href="simulated.html" class="nav-btn">Simulated</a>
+    </div>
+  </nav>
+
+  <!-- Task View Overlay -->
+  <div class="task-view-overlay" id="taskViewOverlay">
+    <div class="task-view-grid" id="taskViewGrid"></div>
+    <div class="task-view-hint">Task View: Click any window to switch • Esc or KS to exit</div>
+  </div>
+
+  <div class="container" id="mainContainer">
+
+    <!-- 1. ME SECTION -->
+    <section id="me" class="terminal-window" data-title="bash: ME (about)">
+      <div class="terminal-header">
+        <span class="dot dot-red"></span>
+        <span class="dot dot-yellow"></span>
+        <span class="dot dot-green"></span>
+        <span class="terminal-header-title">bash ~ about</span>
+      </div>
+      <div class="terminal-body">
+        <h1>KALAAP SADHU</h1>
+        <p>Mathematics Postgrad, IISER Kolkata <br>
+           Quantitative Finance | Stochastic Calculus | Scientific Computing</p>
+
+        <hr class="contact-divider">
+        <h2><span style="display:inline-block; width:12px; height:12px; background-color: var(--green); margin-right:8px;"></span>Contact</h2>
+        <p><span class="prompt">></span> Email: <code>ks24mp030@iiserkol.ac.in</code></p>
+        <p><span class="prompt">></span> GitHub: <a href="https://github.com" target="_blank">github.com/[your-username]</a></p>
+        <p><span class="prompt">></span> LinkedIn: <a href="#" target="_blank">[Profile Link]</a></p>
+      </div>
+    </section>
+
+    <!-- 2. RESUME SECTION -->
+    <section id="resume" class="terminal-window" data-title="bash: Resume (cv)">
+      <div class="terminal-header">
+        <span class="dot dot-red"></span>
+        <span class="dot dot-yellow"></span>
+        <span class="dot dot-green"></span>
+        <span class="terminal-header-title">bash ~ cv</span>
+      </div>
+      <div class="terminal-body">
+        <h2><span style="display:inline-block; width:12px; height:12px; background-color: var(--green); margin-right:8px;"></span>Curriculum Vitae</h2>
+        <p>You can view or download the complete academic and research CV below:</p>
+        <div class="card">
+          <p><strong>Status:</strong> Available for research collaborations and technical roles.</p>
+          <a href="resume.pdf" target="_blank" class="btn-link">[Open Full Resume PDF]</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. PROJECTS & RESEARCH SECTION -->
+    <section id="projects" class="terminal-window" data-title="bash: Projects">
+      <div class="terminal-header">
+        <span class="dot dot-red"></span>
+        <span class="dot dot-yellow"></span>
+        <span class="dot dot-green"></span>
+        <span class="terminal-header-title">bash ~ projects</span>
+      </div>
+      <div class="terminal-body">
+        <h2><span style="display:inline-block; width:12px; height:12px; background-color: var(--green); margin-right:8px;"></span>Projects</h2>
+        <ul>
+          <li>
+            <span class="prompt">></span> <strong>Numerical Approximations for PDEs</strong>
+            <span class="tag">Python / Finite Differences</span>
+            <div class="card">
+              Implementation of finite difference schemes for heat equations and parabolic PDEs.
+              <br><a href="#" target="_blank">[View Code & Report]</a>
+            </div>
+          </li>
+          <li>
+            <span class="prompt">></span> <strong>Stochastic Option Pricing Models</strong>
+            <span class="tag">Stochastic Calculus</span>
+            <div class="card">
+              Exploration of the Black-Scholes model and Monte Carlo simulation paths.
+              <br><a href="#" target="_blank">[Read Notes]</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    // Theme Switcher Logic
+    const themeBtn = document.getElementById('themeBtn');
+    if (localStorage.getItem('site-theme') === 'light') {
+      document.body.classList.add('light-mode');
+    }
+
+    themeBtn.addEventListener('click', () => {
+      document.body.classList.toggle('light-mode');
+      const isLight = document.body.classList.contains('light-mode');
+      localStorage.setItem('site-theme', isLight ? 'light' : 'dark');
+    });
+
+    // Task View Logic
+    const ksBtn = document.getElementById('ksBtn');
+    const taskViewOverlay = document.getElementById('taskViewOverlay');
+    const taskViewGrid = document.getElementById('taskViewGrid');
+    const sections = document.querySelectorAll('.terminal-window');
+    let isTaskViewActive = false;
+
+    function buildTaskView() {
+      taskViewGrid.innerHTML = '';
+      sections.forEach(sec => {
+        const title = sec.getAttribute('data-title') || 'Terminal Window';
+        const card = document.createElement('div');
+        card.className = 'task-preview-card';
+        card.innerHTML = `
+          <div class="preview-header">
+            <span class="dot dot-green"></span>
+            <span>${title}</span>
+          </div>
+          <div class="preview-body-content">
+            ${sec.querySelector('.terminal-body').innerHTML}
+          </div>
+        `;
+        card.addEventListener('click', () => {
+          closeTaskView();
+          setTimeout(() => {
+            sec.scrollIntoView({ behavior: 'smooth' });
+          }, 100);
+        });
+        taskViewGrid.appendChild(card);
+      });
+    }
+
+    function openTaskView() {
+      buildTaskView();
+      isTaskViewActive = true;
+      taskViewOverlay.classList.add('active');
+      document.body.classList.add('task-view-active');
+      ksBtn.classList.add('active');
+    }
+
+    function closeTaskView() {
+      isTaskViewActive = false;
+      taskViewOverlay.classList.remove('active');
+      document.body.classList.remove('task-view-active');
+      ksBtn.classList.remove('active');
+    }
+
+    ksBtn.addEventListener('click', () => {
+      if (isTaskViewActive) closeTaskView();
+      else openTaskView();
+    });
+
+    taskViewOverlay.addEventListener('click', (e) => {
+      if (e.target === taskViewOverlay) closeTaskView();
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isTaskViewActive) closeTaskView();
+    });
+  </script>
+
+</body>
+</html>
