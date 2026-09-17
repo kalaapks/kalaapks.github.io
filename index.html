@@ -231,7 +231,7 @@
       z-index: 10;
     }
 
-    .page-section {
+    /* .page-section {
       min-height: 80vh;
       display: flex;
       flex-direction: column;
@@ -242,17 +242,56 @@
     .page-section#me {
       margin-top: 28px;
       justify-content: flex-start;
+    } */
+
+    .page-section {
+      min-height: auto;
+      margin: 32px 0; /* Compact spacing between boxes */
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+
+    /* ME section is visible right from the start */
+    .page-section#me {
+      margin-top: 20px;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Revealed class added as you scroll past */
+    .page-section.is-revealed {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     .hero-greeting {
-      font-size: 3.4rem;
-      color: var(--green);
+      font-size: 6rem;
+      color: rgba(78, 118, 171, 0.78); /* #58a6ff with ~78% opacity */
       font-weight: bold;
-      letter-spacing: 4px;
+      letter-spacing: 6px;
       user-select: none;
       margin-top: 10px;
       margin-bottom: 34px;
+      display: inline-block; /* Keeps layout tight so dots sit directly beside it since we are going to add a dot animation */
     }
+     .hero-greeting::after {
+        content: '.';
+        display: inline-block;
+        animation: dotCycle 3s steps(1, end) infinite;
+        letter-spacing: 2px;
+        color: inherit; 
+      }
+
+      @keyframes dotCycle {
+  0%   { content: '.'; }
+  20%  { content: '..'; }
+  40%  { content: '...'; }
+  60%  { content: '....'; }
+  80%  { content: ''; }
+      }
+       
 
     /* Terminal Window */
     .terminal-window {
@@ -316,6 +355,38 @@
     li { margin-bottom: 16px; }
     a { color: var(--accent); text-decoration: none; }
     a:hover { text-decoration: underline; }
+
+      /* Keeps list markers and multi-line titles perfectly aligned */
+      .project-title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap; /* Allows the tag to wrap gracefully on very small mobile screens */
+      }
+
+      .project-title-row .shape-yellow-circle {
+  flex-shrink: 0;      /* Prevents the dot from squishing into an oval */
+  align-self: center;  /* Keeps the dot vertically centered with the first line */
+      }
+
+      /* For the under the guidance of portion in project. */
+      .project-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-left: 18px; /* Indents past the 10px dot + gap so it lines up with the title text */
+  margin-top: 4px;
+      }
+
+      .scholar-link {
+  font-size: 0.78rem;
+  color: var(--accent);
+  margin-left: 6px;
+  text-decoration: none;
+      }
+
+      .scholar-link:hover {
+  text-decoration: underline;
+      }
 
     .tag {
       font-size: 0.75rem;
@@ -680,41 +751,46 @@
   <div class="container" id="mainContainer">
 
     <!-- 1. ME SECTION -->
-    <div class="page-section" id="me">
+    <div class="page-section" id="me">   <!-- id=me links scroll-spy observer to navbar -->
       <div class="hero-greeting">HEY!</div>
       <section class="terminal-window" data-title="bash: ME (about)">
         <div class="terminal-header">
           <span class="shape-green-square"></span>
           <span class="shape-yellow-circle"></span>
           <span class="shape-red-arrowhead"></span>
-          <span class="terminal-header-title">bash ~ about</span>
+          <span class="terminal-header-title">bash ~ ME</span>
         </div>
         <div class="terminal-body">
-          <h1>KALAAP SADHU</h1>
+          <h1 style="font-size: 4rem; color: var(--green); font-weight: 100;">KALAAP SADHU</h1>
           <p>Mathematics Postgrad, IISER Kolkata <br>
              Quantitative Finance | Stochastic Calculus | Scientific Computing</p>
 
           <hr class="contact-divider">
-          <h2><span style="display:inline-block; width:12px; height:12px; background-color: var(--green); margin-right:8px;"></span>Contact</h2>
-          
+          <h2><span style="display:inline-block; width:12px; height:12px; background-color: #e6a008; border-radius: 50%; margin-right:8px;"></span>Contact</h2>
+
           <div class="contact-row">
-            <span class="shape-yellow-circle"></span>
+            <!-- <span class="shape-yellow-circle"></span> -->
             <svg class="contact-icon-svg" viewBox="0 0 24 24">
               <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
             </svg>
-            <code>ks24mp030@iiserkol.ac.in</code>
+              <div>                         <!-- this <div>...</div> is because <br> dont work in display: flex which is how the .contact-row environment is defined -->
+                <a href="mailto:kalaap.ks@gmail.com">
+                  <code>kalaap.ks@gmail.com</code></a> <br>
+                <a href="mailto:ks24mp030@iiserkol.ac.in">
+                  <code>ks24mp030@iiserkol.ac.in</code></a>
+              </div>    
           </div>
 
           <div class="contact-row">
-            <span class="shape-yellow-circle"></span>
+            <!-- <span class="shape-yellow-circle"></span> -->
             <svg class="contact-icon-svg" viewBox="0 0 24 24">
               <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
             </svg>
-            <a href="https://github.com" target="_blank">github.com/[your-username]</a>
+            <a href="https://github.com" target="_blank">github.com/kalaapks</a>
           </div>
 
           <div class="contact-row">
-            <span class="shape-yellow-circle"></span>
+            <!-- <span class="shape-yellow-circle"></span> -->
             <svg class="contact-icon-svg" viewBox="0 0 24 24">
               <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.65 1.65 0 1 0 0 3.3 1.65 1.65 0 0 0 0-3.3z"/>
             </svg>
@@ -723,6 +799,7 @@
         </div>
       </section>
     </div>
+
 
     <!-- 2. RESUME SECTION -->
     <div class="page-section" id="resume">
@@ -734,15 +811,60 @@
           <span class="terminal-header-title">bash ~ cv</span>
         </div>
         <div class="terminal-body">
-          <h2><span style="display:inline-block; width:12px; height:12px; background-color: var(--green); margin-right:8px;"></span>Curriculum Vitae</h2>
-          <p>You can view or download the complete academic and research CV below:</p>
-          <div class="card">
-            <p><strong>Status:</strong> Available for research collaborations and technical roles.</p>
-            <a href="resume.pdf" target="_blank" class="btn-link">[Open Full Resume PDF]</a>
+          
+          <!-- Root Heading: Green Box Resume -->
+          <h2><span style="display:inline-block; width:12px; height:12px; background-color: var(--green); margin-right:8px;"></span>Resume</h2>
+
+          <!-- Branch 1: Yellow Circle - Curriculum Vitae (with far-right PDF link) -->
+          <div style="margin-left: 14px; margin-top: 20px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+              <div style="display: flex; align-items: center; gap: 8px; font-weight: bold; color: var(--text);">
+                <span class="shape-yellow-circle"></span>
+                <span>Curriculum Vitae</span>
+              </div>
+
+              <!-- Compact PDF download button -->
+              <a href="resume.pdf" download="Kalaap_Sadhu_CV.pdf" title="Download CV (PDF)" style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 8px; border: 1px solid var(--border); border-radius: 4px; background: var(--inner-card-bg); font-size: 0.78rem; color: var(--accent); text-decoration: none;">
+                <svg style="width: 13px; height: 13px; fill: #ff5f56; flex-shrink: 0;" viewBox="0 0 24 24">
+                  <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9.5 8.5h-1v2h1c.55 0 1-.45 1-1s-.45-1-1-1zm6.5 0h-1.5v3H16c.55 0 1-.45 1-1v-1c0-.55-.45-1-1-1zm-6-4.5H6.5v7H8V12h1.5c1.1 0 2-.9 2-2s-.9-2-2-2zm5.5 0h-3v7h3c1.1 0 2-.9 2-2v-3c0-1.1-.9-2-2-2zm6.5 0h-4v7h1.5v-2.5h2V10h-2V8.5h2.5V7z"/>
+                </svg>
+                <span>PDF</span>
+              </a>
+            </div>
+
+            <!-- Plain unboxed note text -->
+            <p style="margin-left: 18px; margin-top: 4px; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0;">
+              For complete academic details and coursework, see CV.
+            </p>
           </div>
+
+                    
+          <!-- Branch 2: Yellow Circle - Current Interests -->
+          <div style="margin-left: 14px; margin-top: 18px; margin-bottom: 24px;">
+            <div style="display: flex; align-items: center; gap: 8px; font-weight: bold; margin-bottom: 8px; color: var(--text);">
+              <span class="shape-yellow-circle"></span>
+              <span>Current Interests</span>
+            </div>
+
+            <!-- Inset Box for Topics -->
+            <div class="card" style="margin-left: 18px; margin-top: 6px;">
+              <ul style="list-style: none; margin: 0; padding: 0;">
+                <li style="margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+                  <span class="shape-red-arrowhead" style="margin-left: 0;"></span>
+                  <span>American Option pricing</span>
+                </li>
+                <li style="margin-bottom: 0; display: flex; align-items: center; gap: 8px;">
+                  <span class="shape-red-arrowhead" style="margin-left: 0;"></span>
+                  <span>Multidimensional Statistical modelling</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
         </div>
       </section>
     </div>
+
 
     <!-- 3. PROJECTS & RESEARCH SECTION -->
     <div class="page-section" id="projects">
@@ -751,29 +873,117 @@
           <span class="shape-green-square"></span>
           <span class="shape-yellow-circle"></span>
           <span class="shape-red-arrowhead"></span>
-          <span class="terminal-header-title">bash ~ projects</span>
+          <span class="terminal-header-title">bash ~ Projects</span>
         </div>
         <div class="terminal-body">
           <h2><span style="display:inline-block; width:12px; height:12px; background-color: var(--green); margin-right:8px;"></span>Projects</h2>
           <ul>
+
+            <!-- Project 1 -->
             <li>
-              <span class="shape-yellow-circle" style="margin-right: 6px;"></span> 
-              <strong>Numerical Approximations for PDEs</strong>
-              <span class="tag">Python / Finite Differences</span>
+              <div class="project-title-row"></div>
+              <div style="margin-left: 14px; margin-top: 16px;">
+                <span class="shape-yellow-circle" style="margin-right: 6px;"></span> 
+                <strong>Time Series Analysis for Quantitative Finance</strong><br>
+                <div class="project-subtitle"><span style="display: inline-block; width: 1px;"></span>
+                Under Dr. Anirvan Chakraborty , IISER Kolkata
+                <a href="https://scholar.google.com/citations?user=8zOX2SoAAAAJ&hl=en" target="_blank" class="scholar-link">[Google Scholar]</a>
+                </div>
+              </div>
+              <span class="tag" style="margin-left: 40px;">R Studios / Stochastic Processes</span>
               <div class="card">
-                Implementation of finite difference schemes for heat equations and parabolic PDEs.
-                <br><a href="#" target="_blank">[View Code & Report]</a>
+                Blahhh.
+                <br><a href="#" target="_blank">[View Report]</a>
               </div>
             </li>
+
+            <!-- Project 2 -->
             <li>
-              <span class="shape-yellow-circle" style="margin-right: 6px;"></span> 
-              <strong>Stochastic Option Pricing Models</strong>
-              <span class="tag">Stochastic Calculus</span>
+              <div class="project-title-row"></div>
+              <div style="margin-left: 14px; margin-top: 16px;">
+                <span class="shape-yellow-circle" style="margin-right: 6px;"></span> 
+                <strong>Numerical approximation of multi-dimensional Black-Scholes Jump-diffusuion model for European options</strong>
+                <div class="project-subtitle"><span style="display: inline-block; width: 1px;"></span>
+                Under Dr. Rajib Dutta , IISER Kolkata
+                <a href="https://scholar.google.com/citations?user=tedFiUUAAAAJ&hl=en" target="_blank" class="scholar-link">[Google Scholar]</a>
+                </div>
+              </div>  
+              <span class="tag" style="margin-left: 40px;">Python / Finite Differences</span>
               <div class="card">
-                Exploration of the Black-Scholes model and Monte Carlo simulation paths.
-                <br><a href="#" target="_blank">[Read Notes]</a>
+                ~summary~
+                <br><a href="#" target="_blank">[View Report]</a>
               </div>
             </li>
+
+            <!-- Project 3 -->
+            <li>
+              <div class="project-title-row"></div>
+              <div style="margin-left: 14px; margin-top: 16px;">
+                <span class="shape-yellow-circle" style="margin-right: 6px;"></span> 
+                <strong>Markov Chain Monte Carlo methods</strong> <br>
+                <div class="project-subtitle"><span style="display: inline-block; width: 1px;"></span>
+                Under Dr. Satyaki Mazumder, IISER Kolkata 
+                <a href="https://scholar.google.com/citations?user=4d6qQV0AAAAJ&hl=en" target="_blank" class="scholar-link">[Google Scholar]</a>
+                </div>
+              </div>
+              <span class="tag" style="margin-left: 40px;">Python / Probability & Statistics</span>
+              <div class="card">
+                Explore.
+                <br><a href="#" target="_blank">[View Report]</a>
+              </div>
+            </li>
+            <!-- <li>
+              <div class="project-title-row"></div>
+              <span class="shape-yellow-circle" style="margin-right: 6px;"></span> 
+              <strong>XYZ</strong><br>
+              <div class="project-subtitle">
+              Under the guidance of Prof. FG, WW Uni
+              <a href="https://scholar.google.com/citations?user=YOUR_PROF_ID" target="_blank" class="scholar-link">[Google Scholar]</a>
+              </div>
+              <span class="tag">xyz</span>
+              <div class="card">
+                axoaizee.
+                <br><a href="#" target="_blank">[Notes]</a>
+              </div>
+            </li> -->
+
+            <!-- Project 4 -->
+            <li>
+              <div class="project-title-row"></div>
+              <div style="margin-left: 14px; margin-top: 16px;">
+                <span class="shape-yellow-circle" style="margin-right: 6px;"></span> 
+                <strong>Efficiency...</strong><br>
+                <div class="project-subtitle"><span style="display: inline-block; width: 1px;"></span>
+                Independent Study
+                <!-- <a href="https://scholar.google.com/citations?user=YOUR_PROF_ID" target="_blank" class="scholar-link">[Google Scholar]</a> -->
+                </div>
+              </div>
+              <span class="tag" style="margin-left: 40px;">Python / Computing</span>
+              <div class="card">
+                axoaizee.
+                <br><a href="#" target="_blank">[Notes]</a>
+              </div>
+            </li>
+
+            <!-- Project 5 -->
+            <li>
+              <div class="project-title-row"></div>
+              <div style="margin-left: 14px; margin-top: 16px;">
+                <span class="shape-yellow-circle" style="margin-right: 6px;"></span> 
+                <strong>Geometry of...</strong><br>
+                <div class="project-subtitle"><span style="display: inline-block; width: 1px;"></span>
+                Independent Study
+                <!-- <a href="https://scholar.google.com/citations?user=YOUR_PROF_ID" target="_blank" class="scholar-link">[Google Scholar]</a> -->
+                </div>
+              </div>
+              <span class="tag" style="margin-left: 40px;">xyz</span>
+              <div class="card">
+                axoaizee.
+                <br><a href="#" target="_blank">[Notes]</a>
+              </div>
+            </li>
+
+
           </ul>
         </div>
       </section>
@@ -790,23 +1000,23 @@
         </div>
         <div class="terminal-body">
           <h2><span style="display:inline-block; width:12px; height:12px; background-color: var(--green); margin-right:8px;"></span>The Fun</h2>
-          <p>Curated notes and computational graphics created during study & research:</p>
+          <p>Curated notes and computational graphics created during study & research.</p>
           
           <div class="fun-grid">
             <a href="notes.html" class="fun-card">
               <div>
                 <div class="fun-card-title">Notes</div>
-                <div class="fun-card-desc">Typed LaTeX lecture notes, proof surveys, and reading group write-ups.</div>
+                <div class="fun-card-desc">Typed LaTeX lecture notes (mostly) and geometric proof surveys.</div>
               </div>
-              <span class="btn-link" style="margin-top: 14px; text-align: center;">[Open Notes &rarr;]</span>
+              <span class="btn-link" style="margin-top: 14px; text-align: center;">Open Notes &rarr;</span>
             </a>
 
             <a href="simulated.html" class="fun-card">
               <div>
                 <div class="fun-card-title">Simulated</div>
-                <div class="fun-card-desc">Visualizations of PDEs, geometric characteristic curves, and stochastic paths.</div>
+                <div class="fun-card-desc">Visualizations of Differential Equations and Stochastic paths.</div>
               </div>
-              <span class="btn-link" style="margin-top: 14px; text-align: center;">[View Simulations &rarr;]</span>
+              <span class="btn-link" style="margin-top: 14px; text-align: center;">View Simulations &rarr;</span>
             </a>
           </div>
         </div>
@@ -1040,9 +1250,13 @@
       'fun': document.getElementById('funBtn')
     };
 
-    const spyObserver = new IntersectionObserver((entries) => {
+    const scrollObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
+        // 1. Reveal table smoothly as you scroll into it
         if (entry.isIntersecting) {
+          entry.target.classList.add('is-revealed');
+
+          // 2. Active tab glow in navbar
           const id = entry.target.id;
           Object.values(navItems).forEach(btn => btn && btn.classList.remove('active-tab'));
           if (navItems[id]) {
@@ -1052,10 +1266,11 @@
       });
     }, {
       root: null,
-      threshold: 0.35
+      threshold: 0.25,
+      rootMargin: "0px 0px -60px 0px" // Triggers reveal once you scroll close to the next box
     });
 
-    sectionsObs.forEach(sec => spyObserver.observe(sec));
+    sectionsObs.forEach(sec => scrollObserver.observe(sec));
 
     /* ========================================================
        5. THEME TOGGLE & TASK VIEW LOGIC
