@@ -347,7 +347,7 @@
       font-weight: 600;
       letter-spacing: 0.5px;
       margin-bottom: 8px;
-      line-height: 0.6;
+      line-height: 1;
     }
 
     .notes-intro p {
@@ -718,9 +718,9 @@
       <button class="theme-toggle" id="themeBtn" title="Toggle Light / Dark Mode">💡</button>
     </div>
     <div class="nav-links">
-      <a href="index.html#me" class="nav-btn">ME</a>
-      <a href="index.html#resume" class="nav-btn">Resume</a>
-      <a href="index.html#projects" class="nav-btn">Projects</a>
+      <a href="index.html#me" class="nav-btn">HOME</a>
+      <!-- <a href="index.html#resume" class="nav-btn">Resume</a>
+      <a href="index.html#projects" class="nav-btn">Projects</a> -->
       
       <div class="dropdown" id="funDropdown">
         <button class="nav-btn active" id="funBtn">Fun ▾</button>
@@ -1045,5 +1045,9 @@ if (sessionStorage.getItem(currentPageKey) === 'true') {
     }
     animateSink();
   </script>
+
+
+<!-- controls the gap at the bottom of the home page -->
+<div style="height: 27vh;"></div>
 </body>
 </html>

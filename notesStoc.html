@@ -341,13 +341,14 @@
       transform: translateY(-1px);
     }
 
+    /* CONTROLS THE FIRST HEADING FONT SIZE ETC */
     .notes-intro h1 {
       color: var(--green);
       font-size: 2.5rem;
       font-weight: 600;
       letter-spacing: 0.5px;
       margin-bottom: 8px;
-      line-height: 0.6;
+      line-height: 1;
     }
 
     .notes-intro p {
@@ -718,9 +719,9 @@
       <button class="theme-toggle" id="themeBtn" title="Toggle Light / Dark Mode">💡</button>
     </div>
     <div class="nav-links">
-      <a href="index.html#me" class="nav-btn">ME</a>
-      <a href="index.html#resume" class="nav-btn">Resume</a>
-      <a href="index.html#projects" class="nav-btn">Projects</a>
+      <a href="index.html#me" class="nav-btn">HOME</a>
+      <!-- <a href="index.html#resume" class="nav-btn">Resume</a>
+      <a href="index.html#projects" class="nav-btn">Projects</a> -->
       
       <div class="dropdown" id="funDropdown">
         <button class="nav-btn active" id="funBtn">Fun ▾</button>
@@ -769,7 +770,7 @@
 
     <!-- Title & Description directly beneath banner -->
     <div class="notes-intro">
-      <h1><span style="display:inline-block; width:14px; height:14px; background-color: var(--yellow-dot); border-radius: 50%; margin-right:8px;"></span> Stochastic Analysis & Finance</h1>
+      <h1><span style="display:inline-block; width:14px; height:14px; background-color: var(--yellow-dot); border-radius: 50%; margin-right:8px;"></span>Stochastic Analysis & Finance</h1>
       <p>intro</p>
     </div>
 
@@ -1124,5 +1125,9 @@ if (sessionStorage.getItem(currentPageKey) === 'true') {
     }
     animateSink();
   </script>
+
+
+<!-- controls the gap at the bottom of the home page -->
+<div style="height: 27vh;"></div>
 </body>
 </html>

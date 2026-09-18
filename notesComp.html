@@ -347,7 +347,7 @@
       font-weight: 600;
       letter-spacing: 0.5px;
       margin-bottom: 8px;
-      line-height: 0.6;
+      line-height: 1;
     }
 
     .notes-intro p {
@@ -718,9 +718,9 @@
       <button class="theme-toggle" id="themeBtn" title="Toggle Light / Dark Mode">💡</button>
     </div>
     <div class="nav-links">
-      <a href="index.html#me" class="nav-btn">ME</a>
-      <a href="index.html#resume" class="nav-btn">Resume</a>
-      <a href="index.html#projects" class="nav-btn">Projects</a>
+      <a href="index.html#me" class="nav-btn">HOME</a>
+      <!-- <a href="index.html#resume" class="nav-btn">Resume</a>
+      <a href="index.html#projects" class="nav-btn">Projects</a> -->
       
       <div class="dropdown" id="funDropdown">
         <button class="nav-btn active" id="funBtn"> Fun ▾</button>
@@ -770,23 +770,24 @@
     <!-- Title & Description directly beneath banner -->
     <div class="notes-intro">
       <h1><span style="display:inline-block; width:14px; height:14px; background-color: var(--yellow-dot); border-radius: 50%; margin-right:8px;"></span> Computing </h1>
-      <p>intro</p>
+      <p> Several articles in this section might be very obvious to someone with a formal background in Computer Science. Since I am trained in Maths, however, I couldn't help trying to connect things back to Mathematics wherever I could. Even though soome of the articles, such as Numerical Methods, are fairly math-heavy, the others are more about the process of figuring out how something works and then trying to build it myself. For example, the article named Browser-Based Flow Simulation, is probably a fairly standard template for webpage design. But that is not how I wrote it. I started with an actual vector field in Cartesian coordinates, and somehow, by the time I was done coding, there were no signs of vector fields anywhere! <br> Anyways, Happy reading. </p>
     </div>
 
+
     <!-- BOX 1: -->
-    <section id="table-ode" class="terminal-window" data-title="ch ()">
+    <section id="table-ode" class="terminal-window" data-title="Geometry of IEEE-754 Binary Representation (GBR)">
       <div class="terminal-header">
         <div class="header-left">
           <span class="shape-green-square"></span>
           <span class="shape-yellow-circle"></span>
           <span class="shape-red-arrowhead"></span>
         </div>
-        <span class="terminal-header-title">bash ~ /Notes/C/?</span>
+        <span class="terminal-header-title">bash ~ /Notes/C/GBR</span>
       </div>
       <div class="terminal-body">
         <div class="doc-headline-row">
           <a href="notes/ode_lecture_notes.pdf" target="_blank" class="doc-link-title">
-            <span class="red-arrow-prompt"></span> Chap
+            <span class="red-arrow-prompt"></span> Geometry of IEEE-754 Binary Representation on Real-line
           </a>
           <a href="notes/ode_lecture_notes.pdf" download class="pdf-download-badge" title="Download PDF">
             <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
@@ -794,24 +795,49 @@
           </a>
         </div>
         <div class="card">
-          blah.
+         How do we choose importance of one number over the other when we have uncountable choices? We see which numbers on the \(\mathbb{R}\) actually does get to have an actual binary representation and which ones do not make the cut.
       </div>
     </section>
 
     <!-- BOX 2: -->
-    <section id="table-pde" class="terminal-window" data-title="ch ()">
+    <section id="table-ode" class="terminal-window" data-title="Numerical Methods (NM)">
       <div class="terminal-header">
         <div class="header-left">
           <span class="shape-green-square"></span>
           <span class="shape-yellow-circle"></span>
           <span class="shape-red-arrowhead"></span>
         </div>
-        <span class="terminal-header-title">bash ~ /Notes/C/?</span>
+        <span class="terminal-header-title">bash ~ /Notes/C/NM</span>
+      </div>
+      <div class="terminal-body">
+        <div class="doc-headline-row">
+          <a href="notes/ode_lecture_notes.pdf" target="_blank" class="doc-link-title">
+            <span class="red-arrow-prompt"></span> Numerical Methods
+          </a>
+          <a href="notes/ode_lecture_notes.pdf" download class="pdf-download-badge" title="Download PDF">
+            <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+            PDF
+          </a>
+        </div>
+        <div class="card">
+         Roots of a Linear equation, Non-linear equations, Finite difference derivates, Numerical integration and Numerical solutions to ODE
+      </div>
+    </section>
+
+    <!-- BOX 3: -->
+    <section id="table-pde" class="terminal-window" data-title="2D Vector Fields and Browser-Based Flow Simulations (BbFS)">
+      <div class="terminal-header">
+        <div class="header-left">
+          <span class="shape-green-square"></span>
+          <span class="shape-yellow-circle"></span>
+          <span class="shape-red-arrowhead"></span>
+        </div>
+        <span class="terminal-header-title">bash ~ /Notes/C/BbFS</span>
       </div>
       <div class="terminal-body">
         <div class="doc-headline-row">
           <a href="notes/pde_lecture_notes.pdf" target="_blank" class="doc-link-title">
-            <span class="red-arrow-prompt"></span> Chap
+            <span class="red-arrow-prompt"></span> 2D Vector Fields and Browser-Based Flow Simulations
           </a>
           <a href="notes/pde_lecture_notes.pdf" download class="pdf-download-badge" title="Download PDF">
             <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
@@ -819,12 +845,38 @@
           </a>
         </div>
         <div class="card">
-          Blah.
+          This idea was used to create the simulation you see right now on the bottom-right corner of this page. We start with what inward flowing vector fields are and then end with how to create something like this in JS.
         </div>
       </div>
     </section>
 
-    <!-- BOX 3: -->
+    <!-- BOX 4: -->
+    <section id="table-fourier" class="terminal-window" data-title="Probability Density Ribbons from Fokker-Planck equation (PDR)">
+      <div class="terminal-header">
+        <div class="header-left">
+          <span class="shape-green-square"></span>
+          <span class="shape-yellow-circle"></span>
+          <span class="shape-red-arrowhead"></span>
+        </div>
+        <span class="terminal-header-title">bash ~ /Notes/C/PDR</span>
+      </div>
+      <div class="terminal-body">
+        <div class="doc-headline-row">
+          <a href="notes/fourier_analysis.pdf" target="_blank" class="doc-link-title">
+            <span class="red-arrow-prompt"></span> Probability density ribbons from Fokker-Planck equation
+          </a>
+          <a href="notes/fourier_analysis.pdf" download class="pdf-download-badge" title="Download PDF">
+            <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+            PDF
+          </a>
+        </div>
+        <div class="card">
+          This simulation was also built for this website and you will be able to see it once you click the HOME button above.
+        </div>
+      </div>
+    </section>
+
+    <!-- BOX 5: -->
     <section id="table-fourier" class="terminal-window" data-title="ch ()">
       <div class="terminal-header">
         <div class="header-left">
@@ -849,6 +901,8 @@
         </div>
       </div>
     </section>
+
+
   </div>
 
   <script>
@@ -1044,5 +1098,9 @@ if (sessionStorage.getItem(currentPageKey) === 'true') {
     }
     animateSink();
   </script>
+
+
+<!-- controls the gap at the bottom of the home page -->
+<div style="height: 27vh;"></div>
 </body>
 </html>
