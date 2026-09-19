@@ -235,7 +235,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   font-family: inherit;
   font-weight: bold;
   color: var(--text);
@@ -819,20 +819,38 @@
     }
 
     @media (max-width: 600px) {
-      body {
+      /* body {
         padding-left: 0;
         padding-right: 0;
-      }
+      } */
+
+      html, body {
+         overflow-x: hidden;
+         max-width: 100vw;
+        }
+        
+
       .page-section {
         padding-left: 20px;
         padding-right: 20px;
         box-sizing: border-box;
       }
-      .top-nav { padding: 8px 12px; }
-      .ks-badge { width: 34px; height: 34px; font-size: 0.85rem; }
-      .theme-toggle { width: 32px; height: 32px; font-size: 0.9rem; }
+      .top-nav { padding: 6px 8px; }
+           /* added */
+           .nav-left {
+              gap: 4px; /* Tighter spacing between KS, Theme, Contact */
+               }
+
+            .nav-links {
+              gap: 1px; /* Tighter spacing between tabs */
+               }
+
+/* scales down the switches */
+      .ks-badge { width: 30px; height: 30px; font-size: 0.78rem; }
+      .contact-btn {height: 30px; padding: 0.6px; font-size: 0.72rem; }
+      .theme-toggle { width: 30px; height: 30px; font-size: 0.78rem; }
       .nav-links { gap: 2px; }
-      .nav-btn { font-size: 0.8rem; padding: 4px 6px; }
+      .nav-btn { font-size: 0.74rem; padding: 4px 6px; }
       .container { padding: 0 12px; }
       .terminal-body { padding: 18px 14px; }
       h1 { font-size: 1.7rem; }
@@ -966,7 +984,7 @@
 
     </div>
     <div class="nav-links">
-      <a href="#me" class="nav-btn" id="nav-me">ME</a>
+      <a href="#me" class="nav-btn" id="nav-me">Me</a>
       <a href="#resume" class="nav-btn" id="nav-resume">Resume</a>
       <a href="#projects" class="nav-btn" id="nav-projects">Projects</a>
       
@@ -1006,7 +1024,7 @@
           <span class="shape-green-square"></span>
           <span class="shape-yellow-circle"></span>
           <span class="shape-red-arrowhead"></span>
-          <span class="terminal-header-title">bash ~ ME</span>
+          <span class="terminal-header-title">bash ~ \me</span>
         </div>
         <div class="terminal-body">
           <h1 style="font-size: 4rem; color: var(--green); font-weight: 100;">KALAAP SADHU</h1>
@@ -1050,7 +1068,7 @@
           <span class="shape-green-square"></span>
           <span class="shape-yellow-circle"></span>
           <span class="shape-red-arrowhead"></span>
-          <span class="terminal-header-title">bash ~ Resume</span>
+          <span class="terminal-header-title">bash ~ \resume</span>
         </div>
         <div class="terminal-body">
           <h2><span style="display:inline-block; width:12px; height:12px; background-color: var(--green); margin-right:8px;"></span>Resume</h2>
@@ -1142,7 +1160,7 @@
           <span class="shape-green-square"></span>
           <span class="shape-yellow-circle"></span>
           <span class="shape-red-arrowhead"></span>
-          <span class="terminal-header-title">bash ~ Projects</span>
+          <span class="terminal-header-title">bash ~ \projects</span>
         </div>
         <div class="terminal-body">
           <h2><span style="display:inline-block; width:12px; height:12px; background-color: var(--green); margin-right:8px;"></span>Projects</h2>
@@ -1246,7 +1264,7 @@
           <span class="shape-green-square"></span>
           <span class="shape-yellow-circle"></span>
           <span class="shape-red-arrowhead"></span>
-          <span class="terminal-header-title">bash ~ /Fun</span>
+          <span class="terminal-header-title">bash ~ /fun</span>
         </div>
         <div class="terminal-body">
           <h2><span style="display:inline-block; width:12px; height:12px; background-color: var(--green); margin-right:8px;"></span>The Fun</h2>
@@ -1273,7 +1291,7 @@
 
           <!-- Row 2: Games Heading -->
           <div style="margin-top: 32px; border-top: 1px dashed var(--border); padding-top: 20px;">
-            <div class="fun-card-title" style="font-size: 1.15rem; margin-bottom: 4px;">Games</div>
+            <div class="fun-card-title" style="font-size: 1.2rem; margin-bottom: 4px;">Games</div>
             <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 12px;">Interactive mathematical puzzles and visual estimation experiments.</p>
             
             <!-- Auto-wrapping 3-per-row grid (1 to 3 in first row, 4 to 6 in second row) -->
