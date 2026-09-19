@@ -31,6 +31,7 @@
       --border: #30363d;
       --text: #c9d1d9;
       --text-muted: #8b949e;
+      --text-mutedD: #777b80;
       --green: #3fb950;
       --accent: #58a6ff;
       --overlay-bg: rgba(3, 7, 14, 0.85);
@@ -410,12 +411,7 @@
     a { color: var(--accent); text-decoration: none; }
     a:hover { text-decoration: underline; }
 
-    .project-title-row {
-      display: flex;
-      align-items: baseline;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
+    .project-title-row { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
 
     .project-title-row .shape-yellow-circle { flex-shrink: 0; align-self: center; }
 
@@ -426,13 +422,13 @@
     
     .project-header-flex { display: flex; align-items: baseline; gap: 8px;}
 
-    .project-title-text { font-weight: bold; line-height: 1.35; color: var(--text);}
+    .project-title-text { font-size:1.3rem; font-weight: none; line-height: 1.35; color: var(--text);}
 
     /* //////////////Conclude phne adjustment//////////////// */
 
     .project-subtitle { font-size: 0.90rem; color: var(--text-muted); margin-left: 25px; margin-top: 4px; line-height: 1.35; }
 
-    .scholar-link { font-size: 0.68rem; color: var(--accent); margin-left: 6px; text-decoration: none; }
+    .scholar-link { font-size: 0.68rem; color: #3b7fb3; margin-left: 6px; text-decoration: none; }
     .scholar-link:hover { text-decoration: none; }
 
     .tag {
@@ -452,7 +448,7 @@
       padding: 14px 18px;
       border-radius: 4px;
       margin-top: 8px;
-      color: var(--text); 
+      color: var(--text-muted); 
     }
 
     .contact-divider {
@@ -1157,7 +1153,7 @@
               <div style="margin-left: 14px; margin-top: 16px;">
                 <div class="project-header-flex">
                   <span class="shape-yellow-circle" style="margin-right: 6px;"></span> 
-                  <strong>Stochastic Calculus and Black Scholes PDE</strong> <br>
+                  <strong class="project-title-text">Stochastic Calculus and Black Scholes PDE</strong> <br>
                 </div>
                 <div class="project-subtitle"> Under Dr. Anirvan Chakraborty , IISER Kolkata (2025-2026)<a href="https://scholar.google.com/citations?user=8zOX2SoAAAAJ&hl=en" target="_blank" class="scholar-link">[Google Scholar]</a>
                 </div>
@@ -1177,7 +1173,7 @@
               <div style="margin-left: 14px; margin-top: 16px;">
                 <div class="project-header-flex">              <!--In general alignmnet is fixed, but on a phone we need to fix alignment and wrap because these titles gets long, this does that -->
                   <span class="shape-yellow-circle" style="margin-right: 6px;"></span> 
-                  <strong>Time Series Analysis for Quantitative Finance</strong><br>
+                  <strong class="project-title-text">Time Series Analysis for Quantitative Finance</strong><br>
                 </div>
                 <div class="project-subtitle">
                 <!-- <span style="display: inline-block; width: 1px;"></span> -->
@@ -1197,7 +1193,7 @@
               <div style="margin-left: 14px; margin-top: 16px;">
                 <div class="project-header-flex">          
                   <span class="shape-yellow-circle" style="margin-right: 6px;"></span> 
-                  <strong>Numerical approximation of multi-dimensional Jump-diffusuion model for European options</strong>
+                  <strong class="project-title-text">Numerical approximation of multi-dimensional Jump-diffusuion model for European options</strong>
                 </div>  
                 <div class="project-subtitle">
                 <!-- <span style="display: inline-block; width: 1px;"></span> -->
@@ -1217,7 +1213,7 @@
               <div style="margin-left: 14px; margin-top: 16px;">
                 <div class="project-header-flex">
                   <span class="shape-yellow-circle" style="margin-right: 6px;"></span> 
-                  <strong>Markov Chain Monte Carlo methods</strong> <br>
+                  <strong class="project-title-text">Markov Chain Monte Carlo methods</strong> <br>
                 </div>
                 <div class="project-subtitle">
                 <!-- <span style="display: inline-block; width: 1px;"></span> -->
@@ -1237,7 +1233,7 @@
               <div style="margin-left: 14px; margin-top: 16px;">
                 <div class="project-header-flex">
                   <span class="shape-yellow-circle" style="margin-right: 6px;"></span> 
-                  <strong>Efficiency of...</strong> <br>
+                  <strong class="project-title-text">Efficiency of...</strong> <br>
                 </div>
                 <div class="project-subtitle"> Independent study 
                 </div>
@@ -1255,7 +1251,7 @@
               <div style="margin-left: 14px; margin-top: 16px;">
                 <div class="project-header-flex">
                   <span class="shape-yellow-circle" style="margin-right: 6px;"></span> 
-                  <strong>Geometry of...</strong> <br>
+                  <strong class="project-title-text">Geometry of...</strong> <br>
                 </div>
                 <div class="project-subtitle"> Independent study 
                 </div>
@@ -1286,7 +1282,8 @@
         </div>
         <div class="terminal-body">
           <h2><span style="display:inline-block; width:12px; height:12px; background-color: var(--green); margin-right:8px;"></span>The Fun</h2>
-          <p>Curated notes, computational graphics, and mini-games created during study & research.</p>
+          <p style="font-size: 0.88rem; color: var(--text-mutedD); margin-bottom: 12px;">Curated notes, computational graphics, and mini-games created during study & research.</p>
+          
           
           <!-- Row 1: Notes & Simulated side-by-side -->
           <div class="fun-grid">
