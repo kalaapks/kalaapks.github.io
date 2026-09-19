@@ -451,6 +451,326 @@
       color: var(--text-muted); 
     }
 
+  /* //////////////////////////////////////////////////// */
+
+/* ========================================= */
+/* 1. Card Interaction Switches              */
+/* ========================================= */
+.card-action-switches {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  font-size: 0.8rem;
+  font-family: var(--font-mono, monospace);
+}
+
+/* Question Mark in Circle */
+.switch-help {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 95, 86, 0.4);
+  background: rgba(255, 95, 86, 0.08);
+  color: #ff5f56;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 0.72rem;
+  font-weight: bold;
+  line-height: 1;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+.switch-help:hover {
+  background: rgba(255, 95, 86, 0.2);
+  border-color: #ff5f56;
+  transform: scale(1.08);
+}
+
+/* Green-themed [X] Extra Toggle */
+.switch-extra {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.x-box {
+  width: 17px;
+  height: 17px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  font-weight: bold;
+  line-height: 1;
+  transition: all 0.2s ease;
+}
+
+.extra-label {
+  opacity: 0;
+  max-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 0.75rem;
+  transition: all 0.25s ease;
+}
+
+/* Hover: Green accent */
+.switch-extra:hover .x-box {
+  border-color: var(--green, #3fb950);
+  color: var(--green, #3fb950);
+  background: rgba(63, 185, 80, 0.08);
+}
+.switch-extra:hover .extra-label {
+  color: var(--green, #3fb950);
+  opacity: 1;
+  max-width: 50px;
+  margin-right: 2px;
+}
+
+/* ========================================= */
+/* 2. Floating Title Badge (Fixed Display)   */
+/* ========================================= */
+.floating-extra-title {
+  position: absolute;
+  top: -26px;
+  left: 14px;
+  z-index: 10;
+  background: var(--terminal-header, #161b22);
+  border: 1px solid var(--border);
+  border-bottom: none;
+  padding: 3px 10px;
+  border-radius: 5px 5px 0 0;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.68rem;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.title-x-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 13px;
+  height: 13px;
+  border: 1px solid var(--green, #3fb950);
+  color: var(--green, #3fb950);
+  border-radius: 2px;
+  font-size: 0.6rem;
+  line-height: 1;
+}
+
+.blinking-dot {
+  color: var(--green, #3fb950);
+  font-weight: bold;
+  animation: subtle-blink 1s steps(2, start) infinite;
+}
+
+@keyframes subtle-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ========================================= */
+/* 3. Modal Architecture (Responsive & Phone) */
+/* ========================================= */
+#extra-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 9999;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+#extra-modal-overlay.is-visible {
+  display: flex;
+}
+
+.extra-window {
+  background: var(--card-bg, #0d1117);
+  border: 1px solid var(--border);
+  width: 100%;
+  max-width: 480px;
+  max-height: 85vh;
+  border-radius: 6px;
+  position: relative;
+  /* CRITICAL: Must be visible so the top badge doesn't get clipped */
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
+}
+
+.extra-header {
+  background: var(--terminal-header, #161b22);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  border-radius: 6px 6px 0 0;
+}
+
+#modal-project-title {
+  color: var(--text);
+  font-size: 0.82rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 12px;
+}
+
+.close-extra-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  cursor: pointer;
+  margin-left: auto;
+  line-height: 1;
+}
+.close-extra-btn:hover { color: #ff5f56; }
+
+/* Scrollable Container */
+.extra-body {
+  padding: 16px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* Tabs */
+.extra-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+}
+
+.extra-tab-link {
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 3px 8px;
+  border-radius: 3px;
+  font-size: 0.72rem;
+  font-family: var(--font-mono, monospace);
+  transition: all 0.2s ease;
+}
+
+.extra-tab-link:hover {
+  background: var(--inner-card-bg);
+  color: var(--text);
+}
+
+.extra-tab-link.active {
+  color: var(--green, #3fb950);
+  background: rgba(63, 185, 80, 0.1);
+}
+
+.extra-tab-panel {
+  display: none;
+  line-height: 1.55;
+}
+.extra-tab-panel.active {
+  display: block;
+}
+
+/* Comment Box */
+.extra-comment-title {
+  color: var(--text);
+  margin-bottom: 6px;
+  font-size: 0.75rem;
+  font-family: var(--font-mono, monospace);
+}
+
+#extra-comment-input {
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--inner-card-bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text);
+  padding: 8px 10px;
+  font-size: 0.75rem;
+  font-family: var(--font-mono, monospace);
+  resize: vertical;
+}
+
+#extra-comment-input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.55;
+}
+
+#extra-comment-input:focus {
+  outline: none;
+  border-color: var(--green, #3fb950);
+}
+
+/* Footer & Buttons */
+.extra-footer {
+  padding: 10px 16px;
+  border-top: 1px solid var(--border);
+  background: var(--terminal-header, #161b22);
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  border-radius: 0 0 6px 6px;
+}
+
+.modal-btn {
+  padding: 4px 12px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-family: var(--font-mono, monospace);
+  border: 1px solid var(--border);
+}
+
+.modal-btn-close {
+  background: transparent;
+  color: var(--text-muted);
+}
+.modal-btn-close:hover {
+  background: var(--inner-card-bg);
+}
+
+.modal-btn-post {
+  background: var(--green, #3fb950);
+  color: #0d1117;
+  border-color: var(--green, #3fb950);
+  font-weight: 600;
+}
+.modal-btn-post:hover {
+  opacity: 0.9;
+}
+
+
+/* //////////////////////////////////////////////////////// */
+
     .contact-divider {
       border: none;
       border-top: 1px dashed var(--border);
@@ -1153,16 +1473,33 @@
               <div style="margin-left: 14px; margin-top: 16px;">
                 <div class="project-header-flex">
                   <span class="shape-yellow-circle" style="margin-right: 6px;"></span> 
-                  <strong class="project-title-text">Stochastic Calculus and Black Scholes PDE</strong> <br>
+                  <strong class="project-title-text" id="title-ms">Stochastic Calculus and Black Scholes PDE</strong> <br>                     
+                   <!-- this id is unique to this project, change it for each and use the id in .card block -->
                 </div>
                 <div class="project-subtitle"> Under Dr. Anirvan Chakraborty , IISER Kolkata (2025-2026)<a href="https://scholar.google.com/citations?user=8zOX2SoAAAAJ&hl=en" target="_blank" class="scholar-link">[Google Scholar]</a>
                 </div>
               </div>
-              <span class="tag" style="margin-left: 40px;">MS-Thesis</span>
+              <span class="tag" style="margin-left: 40px;">MS-Thesis</span> 
               <div class="card">
                 <span class="shape-red-arrowhead"></span> Le\(\hat{v}\)y and Random-walk construction of Brownian motion and its properties in \(\mathbb{R}^d\).<br> 
                 <span class="shape-red-arrowhead"></span> Developed stochastic calculus from foundational measure-theoretic concepts and applied it solve the standard Black-Scholes PDE for European option pricing using Gaussian kernel and Girsanov's risk-neutral measure.<br>
-                <span class="shape-red-arrowhead"></span> <a href="#" target="_blank">View MS-Thesis</a>
+                                   
+                <!-- //////////NEW FOR THE X-BOX////////// -->
+                    <div class="card-action-switches"><a href="#" target="_blank">View Ms-Thesis</a>
+                    <a class="switch-help" href="mailto:kalaap.ks@gmail.com?subject=Question: MS Thesis" title="Doubts? Tap to mail me">?</a>
+                      <!-- the id will be used in next <div></div> -->
+                      <div class="switch-extra" 
+                           onclick="openExtraModal(this, 'title-ms')"      
+                           data-story="Story about MS Thesis..." 
+                           data-why="Why Black-Scholes PDE..." 
+                           data-takeaway="Main takeaway of MS thesis..." 
+                           data-branches="Branches & future scope...">
+                         <span class="extra-label">extra</span>
+                         <span class="x-box">X</span>
+                      </div>
+                    </div>
+
+                <!-- /////////////////////////////// -->
               </div>
             </li>
 
@@ -1173,7 +1510,7 @@
               <div style="margin-left: 14px; margin-top: 16px;">
                 <div class="project-header-flex">              <!--In general alignmnet is fixed, but on a phone we need to fix alignment and wrap because these titles gets long, this does that -->
                   <span class="shape-yellow-circle" style="margin-right: 6px;"></span> 
-                  <strong class="project-title-text">Time Series Analysis for Quantitative Finance</strong><br>
+                  <strong class="project-title-text" id="title-ts">Time Series Analysis for Quantitative Finance</strong><br>
                 </div>
                 <div class="project-subtitle">
                 <!-- <span style="display: inline-block; width: 1px;"></span> -->
@@ -1183,7 +1520,23 @@
               <span class="tag" style="margin-left: 40px;">R Studios / Stochastic Processes</span>
               <div class="card">
                 <span class="shape-red-arrowhead"></span> Blahhh. <br>
-                <span class="shape-red-arrowhead"></span> <a href="#" target="_blank">View Report</a>
+                <span class="shape-red-arrowhead"></span> Blahhh.
+
+                <!-- //////////NEW FOR THE X-BOX////////// -->
+                  <div class="card-action-switches"> <a href="#" target="_blank">View Report</a>
+                   <a class="switch-help" href="mailto:kalaap.ks@gmail.com?subject=Question: Time Series" title="Doubts? Tap to mail me">?</a>
+                     <div class="switch-extra" 
+                        onclick="openExtraModal(this, 'title-ts')" 
+                        data-story="Story about Time Series..." 
+                        data-why="Why Time Series for Quant Finance..." 
+                        data-takeaway="Key takeaway..." 
+                        data-branches="GARCH, ARIMA...">
+                       <span class="extra-label">extra</span>
+                      <span class="x-box">X</span>
+                     </div>
+                  </div>
+
+                <!-- /////////////////////////////// --> 
               </div>
             </li>
 
@@ -1193,7 +1546,7 @@
               <div style="margin-left: 14px; margin-top: 16px;">
                 <div class="project-header-flex">          
                   <span class="shape-yellow-circle" style="margin-right: 6px;"></span> 
-                  <strong class="project-title-text">Numerical approximation of multi-dimensional Jump-diffusuion model for European options</strong>
+                  <strong class="project-title-text" id="title-na">Numerical approximation of multi-dimensional Jump-diffusuion model for European options</strong>
                 </div>  
                 <div class="project-subtitle">
                 <!-- <span style="display: inline-block; width: 1px;"></span> -->
@@ -1203,7 +1556,25 @@
               <span class="tag" style="margin-left: 40px;">Python / Finite Differences</span>
               <div class="card">
                 <span class="shape-red-arrowhead"></span> ~summary~ <br>
-                <span class="shape-red-arrowhead"></span> <a href="#" target="_blank">View Report</a>
+                <span class="shape-red-arrowhead"></span> ~summary~
+
+                              <!-- //////////NEW FOR THE X-BOX////////// -->
+                    <div class="card-action-switches"><a href="#" target="_blank">View Report</a>
+                    <a class="switch-help" href="mailto:kalaap.ks@gmail.com?subject=Question: Numerical approx J-D" title="Doubts? Tap to mail me">?</a>
+                      <!-- KEEP in mind to update the Question, it shows in the bottom when you hover,;the id will be used in next <div></div> -->
+                      <div class="switch-extra" 
+                           onclick="openExtraModal(this, 'title-na')"      
+                           data-story="Story about MS Thesis..." 
+                           data-why="Why Black-Scholes PDE..." 
+                           data-takeaway="Main takeaway of MS thesis..." 
+                           data-branches="Branches & future scope...">
+                         <span class="extra-label">extra</span>
+                         <span class="x-box">X</span>
+                      </div>
+                    </div>
+
+                <!-- /////////////////////////////// -->
+
               </div>
             </li>
 
@@ -1213,7 +1584,7 @@
               <div style="margin-left: 14px; margin-top: 16px;">
                 <div class="project-header-flex">
                   <span class="shape-yellow-circle" style="margin-right: 6px;"></span> 
-                  <strong class="project-title-text">Markov Chain Monte Carlo methods</strong> <br>
+                  <strong class="project-title-text" id="title-MC">Markov Chain Monte Carlo methods</strong> <br>
                 </div>
                 <div class="project-subtitle">
                 <!-- <span style="display: inline-block; width: 1px;"></span> -->
@@ -1222,8 +1593,25 @@
               </div>
               <span class="tag" style="margin-left: 40px;">Python / Probability & Statistics</span>
               <div class="card">
-                Explore.
-                <br><a href="#" target="_blank">View Report</a>
+                <span class="shape-red-arrowhead"></span> ~summary~ <br>
+                <span class="shape-red-arrowhead"></span> ~summary~
+                              
+                              <!-- //////////NEW FOR THE X-BOX////////// -->
+                  <div class="card-action-switches"> <a href="#" target="_blank">View Report</a>
+                   <a class="switch-help" href="mailto:kalaap.ks@gmail.com?subject=Question: Markov Chains" title="Doubts? Tap to mail me">?</a>
+                     <div class="switch-extra" 
+                        onclick="openExtraModal(this, 'title-MC')" 
+                        data-story="Story about Time Series..." 
+                        data-why="Why Time Series for Quant Finance..." 
+                        data-takeaway="Key takeaway..." 
+                        data-branches="GARCH, ARIMA...">
+                       <span class="extra-label">extra</span>
+                      <span class="x-box">X</span>
+                     </div>
+                  </div>
+
+                <!-- /////////////////////////////// -->               
+              
               </div>
             </li>
 
@@ -1413,6 +1801,73 @@
     </div>
 
   </div>
+
+
+<!-- /////////////////////////////////////////////////// -->
+ <!-- ///////////////////////////////////////////// -->
+
+  <!-- ================================================= -->
+    <!-- PASTE THE MODAL HTML HERE (Right before <script>) -->
+    <!-- ================================================= -->
+      <div id="extra-modal-overlay">
+  <div class="extra-window">
+    
+    <!-- Floating Title Badge -->
+    <div class="floating-extra-title">
+      E<span class="title-x-box">X</span>TRA<span class="blinking-dot">.</span>
+    </div>
+
+    <!-- Terminal-like Header -->
+    <div class="extra-header">
+      <span id="modal-project-title">Project Title</span>
+      <button class="close-extra-btn" onclick="closeExtraModal()">×</button>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="extra-body">
+      <div class="extra-tabs">
+        <div class="extra-tab-link active" data-panel="panel-story">story</div>
+        <div class="extra-tab-link" data-panel="panel-why">why</div>
+        <div class="extra-tab-link" data-panel="panel-takeaway">main takeaway</div>
+        <div class="extra-tab-link" data-panel="panel-custom1">branches</div>
+        <div class="extra-tab-link" data-panel="panel-custom2">[add]</div>
+      </div>
+
+      <div class="extra-content-viewport">
+        <div class="extra-tab-panel active" id="panel-story">
+          How I almost picked Schrödinger's Equation before realizing the deep probabilistic elegance of Black-Scholes. The foundational measure-theoretic construction of Brownian Motion provided the necessary toolkit. It was a fascinating transition.
+        </div>
+        <div class="extra-tab-panel" id="panel-why">
+          BSM provides a definitive PDE that elegantly links the price of an option directly to its underlying stochastic volatility and risk-neutral drift. It's the cornerstone of modern quantitative finance.
+        </div>
+        <div class="extra-tab-panel" id="panel-takeaway">
+          The core takeaway will go here...
+        </div>
+        <div class="extra-tab-panel" id="panel-custom1">
+          Branching concepts, extensions like stochastic volatility models...
+        </div>
+        <div class="extra-tab-panel" id="panel-custom2">
+          Placeholder for future template expansion...
+        </div>
+      </div>
+
+      <div class="extra-comment-section">
+        <div class="extra-comment-title">Comments or Questions</div>
+        <textarea id="extra-comment-input" rows="3" placeholder="feel free to leave informal comments"></textarea>
+      </div>
+    </div>
+
+    <div class="extra-footer">
+      <button class="modal-btn modal-btn-close" onclick="closeExtraModal()">Close</button>
+      <button class="modal-btn modal-btn-post" onclick="postExtraComment()">Post</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- /////////////////////////////////////////////// -->
+<!-- /////////////////////////////////////////////// -->
+<!-- /////////////////////////////////////////////// -->
 
   <script>
     /* ========================================================
@@ -1815,6 +2270,94 @@
 
       observer.observe(sinkContainer);
     }
+
+
+/* ========================================= */
+      /* EXTRA MODAL CONTROLS                      */
+      /* ========================================= */
+      const modalOverlay = document.getElementById('extra-modal-overlay');
+      const modalTitle = document.getElementById('modal-project-title');
+      const commentInput = document.getElementById('extra-comment-input');
+
+      function openExtraModal(btn, projectTitleId) {
+        // 1. Grab the title from the card that was clicked
+        const triggeringElement = document.getElementById(projectTitleId);
+        if (triggeringElement) {
+          modalTitle.innerText = triggeringElement.innerText;
+        }
+  
+        // 2. Clear previous comment text
+        commentInput.value = '';
+
+       // 3. Inject the specific text from that button into the tabs
+       if (btn) {
+        const storyPanel = document.getElementById('panel-story');
+        const whyPanel = document.getElementById('panel-why');
+        const takeawayPanel = document.getElementById('panel-takeaway');
+        const branchesPanel = document.getElementById('panel-custom1');
+
+        if (storyPanel && btn.dataset.story) storyPanel.innerText = btn.dataset.story;
+        if (whyPanel && btn.dataset.why) whyPanel.innerText = btn.dataset.why;
+        if (takeawayPanel && btn.dataset.takeaway) takeawayPanel.innerText = btn.dataset.takeaway;
+        if (branchesPanel && btn.dataset.branches) branchesPanel.innerText = btn.dataset.branches;
+      }
+
+      // 4. Reset to 'story' tab being active
+     const allTabs = document.querySelectorAll('.extra-tab-link');
+     const allPanels = document.querySelectorAll('.extra-tab-panel');
+     allTabs.forEach(t => t.classList.remove('active'));
+     allPanels.forEach(p => p.classList.remove('active'));
+
+     const defaultTab = document.querySelector('.extra-tab-link[data-panel="panel-story"]');
+     const defaultPanel = document.getElementById('panel-story');
+     if (defaultTab) defaultTab.classList.add('active');
+     if (defaultPanel) defaultPanel.classList.add('active');
+
+    // 5. Open modal
+    modalOverlay.classList.add('is-visible'); }
+
+      function closeExtraModal() {
+        modalOverlay.classList.remove('is-visible');
+      }
+
+      const extraTabsContainer = document.querySelector('.extra-tabs');
+      if (extraTabsContainer) {
+        extraTabsContainer.addEventListener('click', (e) => {
+          if (e.target.classList.contains('extra-tab-link')) {
+            const allTabs = document.querySelectorAll('.extra-tab-link');
+            const allPanels = document.querySelectorAll('.extra-tab-panel');
+
+            allTabs.forEach(t => t.classList.remove('active'));
+            allPanels.forEach(p => p.classList.remove('active'));
+
+            e.target.classList.add('active');
+            const targetPanel = document.getElementById(e.target.dataset.panel);
+            if (targetPanel) targetPanel.classList.add('active');
+          }
+        });
+      }
+
+      function postExtraComment() {
+        const comment = commentInput.value.trim();
+        const activeProject = modalTitle.innerText;
+        if (comment) {
+          const subject = encodeURIComponent(`Comment on project: ${activeProject}`);
+          const body = encodeURIComponent(`Project: ${activeProject}\n\nComment:\n${comment}`);
+          window.location.href = `mailto:kalaap.ks@gmail.com?subject=${subject}&body=${body}`;
+        }
+      }
+
+      if (modalOverlay) {
+        modalOverlay.addEventListener('click', (e) => {
+          if (e.target === modalOverlay) closeExtraModal();
+        });
+      }
+
+
+/*=========================================*/
+/* =========================================*/
+
+
   </script>
 
   <!-- Controls the gap at the bottom of the home page -->
