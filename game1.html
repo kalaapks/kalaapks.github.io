@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Game of Estimation | Kalaap Sadhu</title>
+
+  <!-- Pyodide WebAssembly CPython Runtime -->
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    @font-face {
+      font-family: 'AlgolRevived';
+      src: url('AlgolRevived-Regular.ttf') format('truetype'),
+           url('AlgolRevived-Medium.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root {
+      --page-bg-top: #050b14;
+      --page-bg-bottom: #0a192f;
+      --card-bg: #161b22;
+      --terminal-header: #0d1117;
+      --inner-card-bg: #0d1117;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --text-muted: #8b949e;
+      --green: #3fb950;
+      --accent: #58a6ff;
+      --red: #ff5f56;
+      --overlay-bg: rgba(3, 7, 14, 0.85);
+      --card-shadow: rgba(0, 0, 0, 0.6);
+      --canvas-bg: #0b1017;
+    }
+
+    body.light-mode {
+      --page-bg-top: #f7f5ef;
+      --page-bg-bottom: #e5dfce;
+      --card-bg: #ece7db;
+      --terminal-header: #ddd7c7;
+      --inner-card-bg: #f5f2e9;
+      --border: #c4bcab;
+      --text: #23272d;
+      --text-muted: #69655b;
+      --green: #2b7a3e;
+      --accent: #1e6091;
+      --red: #cf222e;
+      --overlay-bg: rgba(245, 243, 237, 0.92);
+      --card-shadow: rgba(80, 75, 60, 0.16);
+      --canvas-bg: #fbf9f4;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: radial-gradient(circle at 50% 15%, #0f2744 0%, var(--page-bg-top) 50%, var(--page-bg-bottom) 100%);
+      background-attachment: fixed;
+      color: var(--text);
+      font-family: 'AlgolRevived', 'Courier Prime', 'Fira Code', Courier, monospace;
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body.light-mode {
+      background: radial-gradient(circle at 50% 15%, #eae4d3 0%, var(--page-bg-top) 55%, var(--page-bg-bottom) 100%);
+      background-attachment: fixed;
+    }
+
+    /* Sticky Navigation */
+    .top-nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(5, 11, 20, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+    }
+
+    body.light-mode .top-nav { background: rgba(247, 245, 239, 0.85); }
+
+    .nav-left { display: flex; align-items: center; gap: 10px; }
+
+    .ks-badge {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--card-bg);
+      border: 2px solid var(--green);
+      color: var(--green);
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      transition: transform 0.2s;
+    }
+
+    .ks-badge:hover { transform: scale(1.06); }
+
+    .theme-toggle {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1rem;
+      color: var(--text);
+      transition: all 0.2s;
+    }
+
+    .theme-toggle:hover { border-color: var(--accent); transform: rotate(12deg); }
+
+    /* Contact Dropdown */
+    .contact-dropdown { position: relative; display: inline-block; }
+
+    .contact-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      height: 36px;
+      padding: 0 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.82rem;
+      font-family: inherit;
+      font-weight: bold;
+      color: var(--text);
+      transition: all 0.2s;
+    }
+
+    .contact-btn:hover { border-color: var(--green); color: var(--green); }
+
+    .contact-dropdown-content {
+      display: none;
+      position: absolute;
+      left: 0;
+      top: 115%;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      box-shadow: 0 8px 24px var(--card-shadow);
+      z-index: 1100;
+      padding: 8px 12px;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .contact-dropdown.show .contact-dropdown-content { display: flex; }
+
+    .contact-drop-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .contact-drop-icon svg { width: 17px; height: 17px; fill: currentColor; }
+    .contact-drop-icon:hover { color: var(--green); transform: translateY(-2px); }
+
+    .nav-btn {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: bold;
+      padding: 6px 12px;
+      border-radius: 4px;
+      border: 1px solid transparent;
+      background: transparent;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+
+    .nav-btn:hover {
+      color: var(--green);
+      border-color: var(--border);
+      background: rgba(63, 185, 80, 0.08);
+    }
+
+    /* Layout Spacing */
+    .container {
+      max-width: 860px;
+      margin: 24px auto 60px auto;
+      padding: 0 16px;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Page Heading in Signature Green */
+    .game-page-title-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .game-page-heading {
+      font-size: 2.1rem;
+      font-weight: bold;
+      color: var(--green);
+      letter-spacing: 1px;
+    }
+
+    .terminal-window {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 12px 35px var(--card-shadow);
+      overflow: hidden;
+    }
+
+    .terminal-header {
+      background: var(--terminal-header);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .shape-green-square { width: 10px; height: 10px; background-color: var(--green); border-radius: 1px; display: inline-block; }
+    .shape-yellow-circle { width: 10px; height: 10px; background-color: #e6a008; border-radius: 50%; display: inline-block; }
+    .shape-red-arrowhead {
+      width: 7px; height: 7px;
+      border-top: 2px solid var(--red);
+      border-right: 2px solid var(--red);
+      transform: rotate(45deg);
+      display: inline-block;
+      margin-left: 2px;
+    }
+
+    .terminal-header-title { color: var(--text-muted); font-size: 0.78rem; margin-left: auto; }
+    .terminal-body { padding: 24px; }
+
+    /* Explanation Card */
+    .game-explanation-card {
+      background: var(--inner-card-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 14px 18px;
+      margin-bottom: 20px;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .game-explanation-card strong { color: var(--green); }
+
+    /* Top Control Bar */
+    .game-controls-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px dashed var(--border);
+    }
+
+    .level-selector-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .level-btn {
+      background: var(--inner-card-bg);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 5px 12px;
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: bold;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .level-btn.active {
+      border-color: var(--green);
+      color: var(--green);
+      background: rgba(63, 185, 80, 0.12);
+    }
+
+    /* Math Mode 0/1 Toggle Slider */
+    .math-switch-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.82rem;
+      font-weight: bold;
+      color: var(--text-muted);
+      user-select: none;
+    }
+
+    .math-slider {
+      position: relative;
+      width: 48px;
+      height: 24px;
+      background: var(--inner-card-bg);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .math-slider::after {
+      content: '0';
+      position: absolute;
+      top: 1px;
+      left: 2px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--border);
+      color: #0d1117;
+      font-size: 0.65rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .math-slider.active {
+      border-color: var(--accent);
+      background: rgba(88, 166, 255, 0.15);
+    }
+
+    .math-slider.active::after {
+      content: '1';
+      left: 24px;
+      background: var(--accent);
+      color: #0d1117;
+      box-shadow: 0 0 8px rgba(88, 166, 255, 0.6);
+    }
+
+    /* Target + Shape Chooser */
+    .sub-control-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      background: var(--inner-card-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 16px;
+      margin-bottom: 14px;
+    }
+
+    .target-val {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: var(--green);
+    }
+
+    .shape-pills {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .shape-pill-btn {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: bold;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+
+    .shape-pill-btn.active {
+      border-color: var(--green);
+      color: var(--green);
+      background: rgba(63, 185, 80, 0.12);
+    }
+
+    /* Sliders Bar */
+    .sliders-panel {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      background: var(--inner-card-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+    }
+
+    .slider-control {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .slider-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .slider-header-row span.val {
+      font-weight: bold;
+      color: var(--green);
+    }
+
+    input[type="range"].horizontal-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    input[type="range"].horizontal-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--green);
+      border: 2px solid var(--terminal-header);
+      cursor: pointer;
+      box-shadow: 0 0 6px rgba(63, 185, 80, 0.4);
+      transition: transform 0.15s ease;
+    }
+
+    input[type="range"].horizontal-slider::-webkit-slider-thumb:hover { transform: scale(1.15); }
+
+    /* Canvas Stage */
+    .canvas-stage-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 480px;
+      aspect-ratio: 1 / 1;
+      margin: 0 auto;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      background: var(--canvas-bg);
+      overflow: hidden;
+      touch-action: none;
+    }
+
+    canvas.game-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    #gridCanvas { z-index: 1; pointer-events: none; }
+    #shapeCanvas { z-index: 2; pointer-events: none; }
+    #drawingCanvas { z-index: 3; cursor: crosshair; }
+    #mathOverlayCanvas { z-index: 4; pointer-events: none; }
+
+    /* Action Buttons */
+    .action-row {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .action-btn {
+      padding: 8px 22px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: bold;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .action-btn.submit {
+      background: rgba(63, 185, 80, 0.15);
+      border: 1px solid var(--green);
+      color: var(--green);
+    }
+
+    .action-btn.submit:hover {
+      background: var(--green);
+      color: #0d1117;
+      box-shadow: 0 0 14px rgba(63, 185, 80, 0.4);
+    }
+
+    .action-btn.clear {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+
+    .action-btn.clear:hover {
+      border-color: var(--red);
+      color: var(--red);
+    }
+
+    /* Score Feedback Panel */
+    .score-panel {
+      margin-top: 18px;
+      padding: 14px 18px;
+      background: var(--inner-card-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .score-panel.visible { display: block; }
+
+    /* Math Inspector Telemetry */
+    .math-telemetry-panel {
+      margin-top: 18px;
+      padding: 16px 20px;
+      background: var(--inner-card-bg);
+      border: 1px solid var(--accent);
+      border-radius: 6px;
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .math-telemetry-panel.visible { display: block; }
+
+    .telemetry-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .telemetry-item {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      border-radius: 4px;
+    }
+
+    .telemetry-label { color: var(--text-muted); font-size: 0.72rem; }
+    .telemetry-val { font-size: 1.05rem; font-weight: bold; color: var(--accent); }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive for phones */
+    @media (max-width: 600px) {
+      .game-page-heading { font-size: 1.6rem; }
+      .terminal-body { padding: 16px 12px; }
+      .game-controls-bar { flex-direction: column; align-items: flex-start; }
+      .math-switch-container { width: 100%; justify-content: space-between; margin-top: 4px; }
+      .sub-control-bar { flex-direction: column; align-items: flex-start; }
+      .sliders-panel { grid-template-columns: 1fr; gap: 12px; }
+      .action-row { width: 100%; }
+      .action-btn { flex: 1; text-align: center; padding: 10px; }
+      .canvas-stage-wrapper { max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sticky Top Navigation Bar -->
+  <nav class="top-nav">
+    <div class="nav-left">
+      <button class="ks-badge" id="ksRefreshBtn" title="Restart Game">KS</button>
+      <!-- <a href="index.html" class="ks-badge" title="Home">KS</a> -->
+      <button class="theme-toggle" id="themeBtn" title="Toggle Light / Dark Mode">💡</button>
+
+      <!-- Quick Contact Dropdown -->
+      <div class="contact-dropdown" id="contactDropdown">
+        <button class="contact-btn" id="contactBtn">Contact ▾</button>
+        <div class="contact-dropdown-content">
+          <a href="mailto:kalaap.ks@gmail.com" class="contact-drop-icon" title="Email">
+            <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+          </a>
+          <a href="https://github.com/kalaapks" target="_blank" class="contact-drop-icon" title="GitHub">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+          </a>
+          <a href="#" target="_blank" class="contact-drop-icon" title="LinkedIn">
+            <svg viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.65 1.65 0 1 0 0 3.3 1.65 1.65 0 0 0 0-3.3z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-links">
+      <a href="index.html" class="nav-btn">Home</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    
+    <!-- Title in Signature Green -->
+    <div class="game-page-title-row">
+      <span class="shape-green-square" style="width: 14px; height: 14px;"></span>
+      <h1 class="game-page-heading">Game of estimation</h1>
+    </div>
+
+    <!-- Terminal Window Container -->
+    <section class="terminal-window">
+      <div class="terminal-header">
+        <span class="shape-green-square"></span>
+        <span class="shape-yellow-circle"></span>
+        <span class="shape-red-arrowhead"></span>
+        <span class="terminal-header-title">bash ~ /games/Estimation</span>
+      </div>
+
+      <div class="terminal-body">
+
+        <!-- Explanation Card -->
+         
+        <div class="game-explanation-card">
+          <strong>Rules:</strong> A random target fraction between <strong>1%</strong> and <strong>99%</strong> is generated. Once you choose a level and a shape, paint inside the shape boundary with your brush to shade that exact fraction. When you click <em>Submit Estimate</em>, the Monte Carlo estimator samples points across the domain. Toggle <strong>Math Mode</strong> to see the live rejection sampling coordinates.
+           <!-- (Muted grey outside, bright red in unshaded domain, vibrant green in shaded domain). -->
+        </div>
+        <div class="game-explanation-card"> <strong>p.s.</strong> Some of the world's best minds were consulted and we all concluded the same thing. <strong>0%</strong> and <strong>100%</strong> will be too easy. Thank you for your cooperation!</div>
+        
+        <!-- <div style="margin-top: 10px;"> See the Math behind this at 
+          <a href="notesComp.html" target="_blank" style="color: var(--accent); font-weight: bold; text-decoration: none;">
+          Notes</a>.
+        </div> -->
+      
+
+
+        <!-- Level Row & 0/1 Math Mode Switch -->
+      <div class="game-controls-bar">
+          <div class="level-selector-group">
+            <span style="font-size: 0.8rem; color: var(--text-muted);">Level:</span>
+            <button class="level-btn active" data-level="1">L1 (Grid)</button>
+            <button class="level-btn" data-level="2">L2 (Gridless)</button>
+            <button class="level-btn" data-level="3">L3 (Topology)</button>
+          </div>
+
+          <!-- Binary 0 / 1 Math Slider -->
+          <div class="math-switch-container">
+            <span>Math mode:</span>
+            <div class="math-slider" id="mathSlider" title="Toggle 0 / 1 Math Inspector"></div>
+          </div>
+        </div>
+
+        <!-- Target & Shape Chooser -->
+        <div class="sub-control-bar">
+          <div>
+            <span style="font-size: 0.8rem; color: var(--text-muted);">Target: </span>
+            <span class="target-val" id="targetDisplay">--%</span>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 0.8rem; color: var(--text-muted);">Shape:</span>
+            <div class="shape-pills" id="shapePillsGroup"></div>
+          </div>
+        </div>
+
+        <!-- Sliders Bar -->
+        <div class="sliders-panel">
+          <div class="slider-control">
+            <div class="slider-header-row">
+              <span>Paintbrush Width</span>
+              <span class="val" id="brushValLabel">32 px</span>
+            </div>
+            <input type="range" class="horizontal-slider" id="brushSlider" min="6" max="50" value="32" step="1">
+          </div>
+
+          <div class="slider-control">
+            <div class="slider-header-row">
+              <span>Sample Points (N)</span>
+              <span class="val" id="sampleValLabel">3000 pts</span>
+            </div>
+            <input type="range" class="horizontal-slider" id="sampleSlider" min="1000" max="6000" value="3000" step="250">
+          </div>
+        </div>
+
+        <!-- Stacked Canvases -->
+        <div class="canvas-stage-wrapper" id="canvasWrapper">
+          <canvas id="gridCanvas" class="game-layer" width="480" height="480"></canvas>
+          <canvas id="shapeCanvas" class="game-layer" width="480" height="480"></canvas>
+          <canvas id="drawingCanvas" class="game-layer" width="480" height="480"></canvas>
+          <canvas id="mathOverlayCanvas" class="game-layer" width="480" height="480"></canvas>
+        </div>
+
+        <!-- Action Row -->
+        <div class="action-row">
+          <button class="action-btn clear" id="clearBtn">Clear</button>
+          <button class="action-btn submit" id="submitBtn">Submit Estimate</button>
+          <button class="action-btn clear" id="newTargetBtn" style="margin-left: auto;">New Target</button>
+        </div>
+
+        <!-- Score Panel -->
+        <div class="score-panel" id="scorePanel">
+          <div style="font-size: 1.05rem; font-weight: bold; margin-bottom: 4px;" id="scoreVerdict">Verdict</div>
+          <div style="font-size: 0.86rem; color: var(--text-muted);" id="scoreBreakdown">Breakdown</div>
+        </div>
+
+        <!-- Math Mode Telemetry -->
+        <div class="math-telemetry-panel" id="mathPanel">
+          <div style="display: flex; justify-content: space-between; align-items: baseline;">
+            <div style="color: var(--accent); font-weight: bold; font-size: 0.92rem;">
+              Monte Carlo Rejection Sampling Telemetry
+            </div>
+            <span style="font-size: 0.72rem; color: var(--text-muted);" id="engineBadge">Standard Monte Carlo Engine</span>
+          </div>
+          <div class="telemetry-grid">
+            <div class="telemetry-item">
+              <div class="telemetry-label">Uniform Proposals (N)</div>
+              <div class="telemetry-val" id="valN">0</div>
+            </div>
+            <div class="telemetry-item">
+              <div class="telemetry-label">Domain Hits (N_&Omega;)</div>
+              <div class="telemetry-val" id="valNOmega">0</div>
+            </div>
+            <div class="telemetry-item">
+              <div class="telemetry-label">Shaded Hits (N_s)</div>
+              <div class="telemetry-val" id="valNShaded" style="color: var(--green);">0</div>
+            </div>
+            <div class="telemetry-item">
+              <div class="telemetry-label">Empirical p&#770; = N_s / N_&Omega;</div>
+              <div class="telemetry-val" id="valPHat">0.0%</div>
+            </div>
+            <div class="telemetry-item">
+              <div class="telemetry-label">Std Error (&plusmn;&sigma;)</div>
+              <div class="telemetry-val" id="valSE">&plusmn;0.00%</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div style="margin-top: 10px; margin-bottom: 16px; margin-left: 20px; font-size: 0.78rem;">
+        <span style="color: var(--text-muted);">Read the Math behind this code here:</span>
+        <a href="notesComp.html" target="_blank" style="color: var(--accent); font-weight: bold; text-decoration: none;">
+        Notes on Computing</a>
+        <span style="color: var(--text-muted);">(See the Chapter Game 1)</span>
+        </div>
+    </section>
+  </div>
+  
+  
+
+  <script>
+    /* ========================================================
+       1. THEME & CONTACT DROPDOWN LOGIC
+       ======================================================== */
+    const themeBtn = document.getElementById('themeBtn');
+    if (localStorage.getItem('site-theme') === 'light') {
+      document.body.classList.add('light-mode');
+    }
+    themeBtn.addEventListener('click', () => {
+      document.body.classList.toggle('light-mode');
+      const isLight = document.body.classList.contains('light-mode');
+      localStorage.setItem('site-theme', isLight ? 'light' : 'dark');
+      renderScene();
+    });
+
+    const contactDropdown = document.getElementById('contactDropdown');
+    const contactBtn = document.getElementById('contactBtn');
+    contactBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      contactDropdown.classList.toggle('show');
+    });
+    window.addEventListener('click', () => {
+      if (contactDropdown.classList.contains('show')) {
+        contactDropdown.classList.remove('show');
+      }
+    });
+
+    /* ========================================================
+       2. CANVASES & PAINTING CONTROLS
+       ======================================================== */
+    const gridCanvas = document.getElementById('gridCanvas');
+    const gridCtx = gridCanvas.getContext('2d');
+
+    const shapeCanvas = document.getElementById('shapeCanvas');
+    const shapeCtx = shapeCanvas.getContext('2d');
+
+    // Offscreen mask canvas dedicated strictly to defining pure geometry domain \Omega
+    const maskCanvas = document.createElement('canvas');
+    maskCanvas.width = 480;
+    maskCanvas.height = 480;
+    const maskCtx = maskCanvas.getContext('2d');
+
+    const drawCanvas = document.getElementById('drawingCanvas');
+    const drawCtx = drawCanvas.getContext('2d');
+
+    const mathCanvas = document.getElementById('mathOverlayCanvas');
+    const mathCtx = mathCanvas.getContext('2d');
+
+    let currentLevel = 1;
+    let currentShape = 'circle';
+    let targetPercent = Math.floor(Math.random() * 95) + 3;
+    let isMathMode = false;
+    let isDrawing = false;
+
+    // Brush setup: FAINT BLUE PAINT so Green Monte Carlo dots pop vividly!
+    let currentBrushSize = 32;
+    let currentNumSamples = 3000;
+
+    drawCtx.lineCap = 'round';
+    drawCtx.lineJoin = 'round';
+    drawCtx.lineWidth = currentBrushSize;
+    drawCtx.strokeStyle = 'rgba(88, 166, 255, 0.45)'; // Soft Faint Blue
+
+    const brushSlider = document.getElementById('brushSlider');
+    const brushValLabel = document.getElementById('brushValLabel');
+    brushSlider.addEventListener('input', (e) => {
+      currentBrushSize = parseInt(e.target.value);
+      drawCtx.lineWidth = currentBrushSize;
+      brushValLabel.textContent = `${currentBrushSize} px`;
+    });
+
+    const sampleSlider = document.getElementById('sampleSlider');
+    const sampleValLabel = document.getElementById('sampleValLabel');
+    sampleSlider.addEventListener('input', (e) => {
+      currentNumSamples = parseInt(e.target.value);
+      sampleValLabel.textContent = `${currentNumSamples} pts`;
+    });
+
+    function getCoords(e) {
+      const rect = drawCanvas.getBoundingClientRect();
+      const scaleX = drawCanvas.width / rect.width;
+      const scaleY = drawCanvas.height / rect.height;
+
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+      return {
+        x: (clientX - rect.left) * scaleX,
+        y: (clientY - rect.top) * scaleY
+      };
+    }
+
+    function startDraw(e) {
+      isDrawing = true;
+      const pt = getCoords(e);
+      drawCtx.beginPath();
+      drawCtx.moveTo(pt.x, pt.y);
+      drawCtx.lineTo(pt.x, pt.y);
+      drawCtx.stroke();
+    }
+
+    function moveDraw(e) {
+      if (!isDrawing) return;
+      const pt = getCoords(e);
+      drawCtx.lineTo(pt.x, pt.y);
+      drawCtx.stroke();
+    }
+
+    function endDraw() {
+      if (!isDrawing) return;
+      isDrawing = false;
+      drawCtx.closePath();
+    }
+
+    drawCanvas.addEventListener('mousedown', startDraw);
+    window.addEventListener('mousemove', moveDraw);
+    window.addEventListener('mouseup', endDraw);
+
+    drawCanvas.addEventListener('touchstart', (e) => { e.preventDefault(); startDraw(e); }, { passive: false });
+    drawCanvas.addEventListener('touchmove', (e) => { e.preventDefault(); moveDraw(e); }, { passive: false });
+    window.addEventListener('touchend', endDraw);
+
+    /* ========================================================
+       3. LEVEL & SHAPE CONTROLS & SYMBOLS
+       ======================================================== */
+    const shapePillsGroup = document.getElementById('shapePillsGroup');
+    const targetDisplay = document.getElementById('targetDisplay');
+
+    const LEVEL_CONFIG = {
+      1: { shapes: [{ id: 'circle', symbol: '○' }, { id: 'triangle', symbol: '△' }, { id: 'square', symbol: '□' }], hasGrid: true },
+      2: { shapes: [{ id: 'circle', symbol: '○' }, { id: 'triangle', symbol: '△' }, { id: 'square', symbol: '□' }], hasGrid: false },
+      3: { shapes: [{ id: 'annulus', symbol: '◎' }, { id: 'K', symbol: 'K' }, { id: 'S', symbol: 'S' }], hasGrid: false }
+    };
+
+    function updateShapePills() {
+      shapePillsGroup.innerHTML = '';
+      const cfg = LEVEL_CONFIG[currentLevel];
+      
+      if (!cfg.shapes.find(s => s.id === currentShape)) {
+        currentShape = cfg.shapes[0].id;
+      }
+
+      cfg.shapes.forEach(s => {
+        const btn = document.createElement('button');
+        btn.className = `shape-pill-btn ${s.id === currentShape ? 'active' : ''}`;
+        btn.textContent = s.symbol;
+        btn.title = `Shape ${s.id}`;
+        btn.addEventListener('click', () => {
+          currentShape = s.id;
+          updateShapePills();
+          clearPlayerCanvas();
+          renderScene();
+        });
+        shapePillsGroup.appendChild(btn);
+      });
+    }
+
+    function pickNewTarget() {
+      targetPercent = Math.floor(Math.random() * 95) + 3;
+      targetDisplay.textContent = `${targetPercent}%`;
+      clearPlayerCanvas();
+      document.getElementById('scorePanel').classList.remove('visible');
+    }
+
+    document.getElementById('newTargetBtn').addEventListener('click', pickNewTarget);
+
+    const levelBtns = document.querySelectorAll('.level-btn');
+    levelBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        levelBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentLevel = parseInt(btn.dataset.level);
+        updateShapePills();
+        clearPlayerCanvas();
+        renderScene();
+        document.getElementById('scorePanel').classList.remove('visible');
+      });
+    });
+
+    function clearPlayerCanvas() {
+      drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+      mathCtx.clearRect(0, 0, mathCanvas.width, mathCanvas.height);
+    }
+
+    document.getElementById('clearBtn').addEventListener('click', () => {
+      clearPlayerCanvas();
+      document.getElementById('scorePanel').classList.remove('visible');
+    });
+
+    /* ========================================================
+       4. SCENE RENDERING: GRIDS, SHAPES & PURE MASK
+       ======================================================== */
+    function renderScene() {
+      const isLight = document.body.classList.contains('light-mode');
+      const strokeColor = isLight ? '#23272d' : '#c9d1d9';
+      const gridColor = isLight ? 'rgba(0, 0, 0, 0.08)' : 'rgba(255, 255, 255, 0.08)';
+      const fillColor = isLight ? 'rgba(0, 0, 0, 0.04)' : 'rgba(255, 255, 255, 0.04)';
+
+      // 1. Grid Canvas
+      gridCtx.clearRect(0, 0, gridCanvas.width, gridCanvas.height);
+      if (LEVEL_CONFIG[currentLevel].hasGrid) {
+        gridCtx.strokeStyle = gridColor;
+        gridCtx.lineWidth = 1;
+        const step = 40;
+        for (let x = step; x < gridCanvas.width; x += step) {
+          gridCtx.beginPath();
+          gridCtx.moveTo(x, 0);
+          gridCtx.lineTo(x, gridCanvas.height);
+          gridCtx.stroke();
+        }
+        for (let y = step; y < gridCanvas.height; y += step) {
+          gridCtx.beginPath();
+          gridCtx.moveTo(0, y);
+          gridCtx.lineTo(gridCanvas.width, y);
+          gridCtx.stroke();
+        }
+      }
+
+      // 2. Clear Visual Shape Canvas & Offscreen Mathematical Mask
+      shapeCtx.clearRect(0, 0, shapeCanvas.width, shapeCanvas.height);
+      maskCtx.clearRect(0, 0, maskCanvas.width, maskCanvas.height);
+
+      shapeCtx.strokeStyle = strokeColor;
+      shapeCtx.fillStyle = fillColor;
+      shapeCtx.lineWidth = 2.5;
+
+      // Solid fill for exact binary mask definition
+      maskCtx.fillStyle = '#ffffff';
+
+      const w = shapeCanvas.width;
+      const h = shapeCanvas.height;
+
+      function drawPathOn(context) {
+        context.beginPath();
+        if (currentShape === 'circle') {
+          context.arc(w / 2, h / 2, 175, 0, Math.PI * 2);
+        } else if (currentShape === 'triangle') {
+          context.moveTo(w / 2, 60);
+          context.lineTo(w - 60, h - 70);
+          context.lineTo(60, h - 70);
+          context.closePath();
+        } else if (currentShape === 'square') {
+          context.rect(75, 75, 330, 330);
+        } else if (currentShape === 'annulus') {
+          context.arc(w / 2, h / 2, 185, 0, Math.PI * 2, false);
+          context.arc(w / 2, h / 2, 90, 0, Math.PI * 2, true);
+          context.closePath();
+        } else if (currentShape === 'K') {
+          context.moveTo(90, 60);
+          context.lineTo(165, 60);
+          context.lineTo(165, 205);
+          context.lineTo(315, 60);
+          context.lineTo(410, 60);
+          context.lineTo(240, 240);
+          context.lineTo(415, 420);
+          context.lineTo(315, 420);
+          context.lineTo(165, 270);
+          context.lineTo(165, 420);
+          context.lineTo(90, 420);
+          context.closePath();
+        } else if (currentShape === 'S') {
+          context.moveTo(110, 60);
+          context.lineTo(390, 60);
+          context.lineTo(390, 190);
+          context.lineTo(200, 190);
+          context.lineTo(200, 230);
+          context.lineTo(390, 230);
+          context.lineTo(390, 420);
+          context.lineTo(110, 420);
+          context.lineTo(110, 290);
+          context.lineTo(300, 290);
+          context.lineTo(300, 250);
+          context.lineTo(110, 250);
+          context.closePath();
+        }
+      }
+
+      // Draw pure filled binary domain into mask
+      drawPathOn(maskCtx);
+      maskCtx.fill();
+
+      // Draw aesthetic shape on visible canvas
+      drawPathOn(shapeCtx);
+      shapeCtx.stroke();
+      shapeCtx.fill();
+    }
+
+    /* ========================================================
+       5. MATH MODE BINARY 0 / 1 SLIDER
+       ======================================================== */
+    const mathSlider = document.getElementById('mathSlider');
+    const mathPanel = document.getElementById('mathPanel');
+
+    mathSlider.addEventListener('click', () => {
+      isMathMode = !isMathMode;
+      mathSlider.classList.toggle('active', isMathMode);
+      mathPanel.classList.toggle('visible', isMathMode);
+      if (!isMathMode) {
+        mathCtx.clearRect(0, 0, mathCanvas.width, mathCanvas.height);
+      }
+    });
+
+    /* ========================================================
+       6. UNIFIED RIGOROUS MONTE CARLO ENGINE
+       ======================================================== */
+    let pyodide = null;
+
+    async function loadPython() {
+      try {
+        pyodide = await loadPyodide();
+        await pyodide.loadPackage('numpy');
+        await pyodide.runPythonAsync(`
+import numpy as np
+
+def run_mc(mask_arr, draw_arr, width, height, N=3000):
+    xs = np.random.randint(0, width, size=N)
+    ys = np.random.randint(0, height, size=N)
+    idx = ys * width + xs
+
+    # 1. Point belongs to domain Omega
+    in_dom = mask_arr[idx] > 100
+    
+    # 2. Point belongs to player's painted shaded region
+    in_shd = (draw_arr[idx] > 20) & in_dom
+
+    n_omega = int(np.sum(in_dom))
+    n_shaded = int(np.sum(in_shd))
+
+    p = float(n_shaded / n_omega) if n_omega > 0 else 0.0
+    se = float(np.sqrt(max(p * (1.0 - p), 0.0) / n_omega)) if n_omega > 0 else 0.0
+
+    return {
+        "n_samples": int(N),
+        "n_omega": n_omega,
+        "n_shaded": n_shaded,
+        "p_hat": p,
+        "se": se,
+        "xs": xs.tolist(),
+        "ys": ys.tolist(),
+        "in_dom": in_dom.tolist(),
+        "in_shd": in_shd.tolist()
+    }
+        `);
+      } catch (err) {
+        console.warn("Pyodide offline or loading. Fast JS engine active:", err);
+      }
+    }
+    loadPython();
+
+    // Mathematically identical fast JS implementation
+    function runMonteCarloEngine(maskAlpha, drawAlpha, width, height, N = 3000) {
+      const xs = new Int32Array(N);
+      const ys = new Int32Array(N);
+      const in_dom = new Uint8Array(N);
+      const in_shd = new Uint8Array(N);
+
+      let n_omega = 0;
+      let n_shaded = 0;
+
+      for (let i = 0; i < N; i++) {
+        const x = Math.floor(Math.random() * width);
+        const y = Math.floor(Math.random() * height);
+        const idx = y * width + x;
+
+        const isDom = maskAlpha[idx] > 100;
+        const isShd = isDom && (drawAlpha[idx] > 20);
+
+        xs[i] = x;
+        ys[i] = y;
+        in_dom[i] = isDom ? 1 : 0;
+        in_shd[i] = isShd ? 1 : 0;
+
+        if (isDom) n_omega++;
+        if (isShd) n_shaded++;
+      }
+
+      const p_hat = n_omega > 0 ? (n_shaded / n_omega) : 0;
+      const se = n_omega > 0 ? Math.sqrt((p_hat * (1 - p_hat)) / n_omega) : 0;
+
+      return {
+        n_samples: N,
+        n_omega: n_omega,
+        n_shaded: n_shaded,
+        p_hat: p_hat,
+        se: se,
+        xs: Array.from(xs),
+        ys: Array.from(ys),
+        in_dom: Array.from(in_dom),
+        in_shd: Array.from(in_shd)
+      };
+    }
+
+    /* ========================================================
+       7. SUBMIT BUTTON HANDLER
+       ======================================================== */
+    const submitBtn = document.getElementById('submitBtn');
+
+    submitBtn.addEventListener('click', async () => {
+      const W = 480, H = 480;
+
+      // Pure domain Omega extracted from maskCanvas
+      const maskImg = maskCtx.getImageData(0, 0, W, H).data;
+      // Painted shaded region extracted from drawingCanvas
+      const drawImg = drawCtx.getImageData(0, 0, W, H).data;
+
+      const len = W * H;
+      const maskAlpha = new Uint8Array(len);
+      const drawAlpha = new Uint8Array(len);
+
+      for (let i = 0; i < len; i++) {
+        maskAlpha[i] = maskImg[i * 4 + 3];
+        drawAlpha[i] = drawImg[i * 4 + 3];
+      }
+
+      let res = null;
+      const N = currentNumSamples;
+
+      if (pyodide) {
+        try {
+          pyodide.globals.set("m_arr", maskAlpha);
+          pyodide.globals.set("d_arr", drawAlpha);
+          const pyRes = await pyodide.runPythonAsync(`run_mc(m_arr, d_arr, ${W}, ${H}, ${N})`);
+          res = pyRes.toJs({ dict_converter: Object.fromEntries });
+          document.getElementById('engineBadge').textContent = 'CPython (Pyodide WebAssembly)';
+        } catch (e) {
+          res = runMonteCarloEngine(maskAlpha, drawAlpha, W, H, N);
+          document.getElementById('engineBadge').textContent = 'Standard Monte Carlo Engine';
+        }
+      } else {
+        res = runMonteCarloEngine(maskAlpha, drawAlpha, W, H, N);
+        document.getElementById('engineBadge').textContent = 'Standard Monte Carlo Engine';
+      }
+
+      const estimated = (res.p_hat * 100).toFixed(1);
+      const error = Math.abs(estimated - targetPercent).toFixed(1);
+
+      // Score output
+      const scorePanel = document.getElementById('scorePanel');
+      const scoreVerdict = document.getElementById('scoreVerdict');
+      const scoreBreakdown = document.getElementById('scoreBreakdown');
+      scorePanel.classList.add('visible');
+
+      if (error <= 3.0) {
+        scoreVerdict.textContent = "🎯 Bullseye! Phenomenal visual estimation!";
+        scoreVerdict.style.color = "var(--green)";
+      } else if (error <= 7.0) {
+        scoreVerdict.textContent = "👍 Solid accuracy! Very close.";
+        scoreVerdict.style.color = "var(--accent)";
+      } else {
+        scoreVerdict.textContent = "Off mark! Area perception can be tricky.";
+        scoreVerdict.style.color = "var(--red)";
+      }
+
+      scoreBreakdown.textContent = `Target: ${targetPercent}% | Shaded area: ${estimated}% | Absolute Error: ${error}%`;
+
+      // Update Math Mode Telemetry & Trigger Live Stochastic Rain
+      document.getElementById('valN').textContent = res.n_samples;
+      document.getElementById('valNOmega').textContent = res.n_omega;
+      document.getElementById('valNShaded').textContent = res.n_shaded;
+      document.getElementById('valPHat').textContent = `${estimated}%`;
+      document.getElementById('valSE').textContent = `±${(res.se * 100).toFixed(2)}%`;
+
+      if (isMathMode) {
+        animateStochasticRain(res);
+      } else {
+        mathCtx.clearRect(0, 0, mathCanvas.width, mathCanvas.height);
+      }
+    });
+
+    /* ========================================================
+       8. STOCHASTIC REJECTION SAMPLING ANIMATION: GREY / RED / GREEN
+       ======================================================== */
+    function animateStochasticRain(res) {
+      mathCtx.clearRect(0, 0, mathCanvas.width, mathCanvas.height);
+      const N = res.xs.length;
+      let i = 0;
+      const batch = Math.max(120, Math.floor(N / 25));
+
+      function step() {
+        const lim = Math.min(i + batch, N);
+        for (; i < lim; i++) {
+          const x = res.xs[i];
+          const y = res.ys[i];
+          const inDom = res.in_dom[i];
+          const inShd = res.in_shd[i];
+
+          mathCtx.beginPath();
+          mathCtx.arc(x, y, 2.0, 0, Math.PI * 2);
+
+          if (!inDom) {
+            // 1. Outside Domain Omega: Muted Grey proposal points
+            mathCtx.fillStyle = 'rgba(139, 148, 158, 0.22)';
+          } else if (inShd) {
+            // 2. Inside Domain Omega AND Painted: Vibrant Green (pops over faint blue!)
+            mathCtx.fillStyle = '#3fb950';
+          } else {
+            // 3. Inside Domain Omega but Unshaded: Bright Red
+            mathCtx.fillStyle = 'rgba(255, 95, 86, 0.85)';
+          }
+          mathCtx.fill();
+        }
+        if (i < N) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+
+    // Initialize state
+    updateShapePills();
+    pickNewTarget();
+    renderScene();
+
+
+
+  /* ========================================================
+       8. STOCHASTIC REJECTION SAMPLING ANIMATION: GREY / RED / GREEN
+       ======================================================== */
+    document.getElementById('ksRefreshBtn').addEventListener('click', () => {
+    clearPlayerCanvas();
+    pickNewTarget();
+    renderScene();
+    });
+
+  </script>
+
+
+
+<!-- controls the gap at the bottom of the home page -->
+<div style="height: 17vh;"></div>
+</body>
+</html>
