@@ -609,7 +609,8 @@
   background: var(--card-bg, #0d1117);
   border: 1px solid var(--border);
   width: 100%;
-  max-width: 480px;
+  max-width: 840px;
+  /* min-height: 420px; */  /* Gives it a taller, spacious feel on PC but it lower than 600px or else it messes with media order on phn BUT SMALL TABLES WITH NO CONTENT ARE ELONGATED WITH EMPTY SPACE SO DONT USE*/
   max-height: 85vh;
   border-radius: 6px;
   position: relative;
@@ -1481,8 +1482,8 @@
               </div>
               <span class="tag" style="margin-left: 40px;">MS-Thesis</span> 
               <div class="card">
-                <span class="shape-red-arrowhead"></span> Le\(\hat{v}\)y and Random-walk construction of Brownian motion and its properties in \(\mathbb{R}^d\).<br> 
-                <span class="shape-red-arrowhead"></span> Developed stochastic calculus from foundational measure-theoretic concepts and applied it solve the standard Black-Scholes PDE for European option pricing using Gaussian kernel and Girsanov's risk-neutral measure.<br>
+                <span class="shape-red-arrowhead"></span> Levy and Random-walk construction of Brownian motion and its properties in \(\mathbb{R}^d\).<br> 
+                <span class="shape-red-arrowhead"></span> Developed stochastic calculus from foundational measure-theoretic concepts and applied it to solve the standard Black-Scholes PDE for European option pricing using Gaussian kernel and Girsanov's risk-neutral measure.<br>
                                    
                 <!-- //////////NEW FOR THE X-BOX////////// -->
                     <div class="card-action-switches"><a href="#" target="_blank">View Ms-Thesis</a>
@@ -1490,10 +1491,25 @@
                       <!-- the id will be used in next <div></div> -->
                       <div class="switch-extra" 
                            onclick="openExtraModal(this, 'title-ms')"      
-                           data-story="Story about MS Thesis..." 
-                           data-why="Why Black-Scholes PDE..." 
-                           data-takeaway="Main takeaway of MS thesis..." 
-                           data-branches="Branches & future scope...">
+                           data-story="<p> >> \(\textbf{The thesis I almost did:}\) <br>I almost picked the <i>Schrödinger equation</i> for my MS-Thesis topic because I wanted to study one particular PDE in details. Well, that could have taken my life in a very different direction I guess.</p>
+                                       <p> >> \(\textbf{Once there lived a man who could not do simulations:}\) <br>When I did my thesis, I did not know how to do path simulations but my urge to add picture to the thesis led me to draw 100s of paths by hands! <br> You will still find them in the pdf. I never updated that.<br> I am never going to.</p>
+                                       <p> >> \(\textbf{Defeated defender:}\) <br>During my thesis defense, there was a room booking issue and I had to do the presentation in a different room. Naturally, my thesis presentation slides weren't on this room's computer. I tried transfering them over a wire and kept failing. The professors were right infront of me, looking at me and waiting for me to start. In case you've never been part of a defence, I should let you know, this is exactly what a bad start of a presentation looks like! <br> In these hard times, I realized I can simply log into Whatsapp Web on this computer. I had the pdf there. Download it on this device and we will be done. I did that.<br> Immediately.<br> Well, I shoudn't have. What I forgot, amidst all this chaos, was that the computer screen was already being shared and the professors could see it. My friends' texts were visible. And they were, let's just say, <i>not very kindly-worded!!</i> And, with this peaceful and calm mind, I proceeded to defend my thesis. <br> To this date, I think the professors did not notice them. I HAVE to believe that. They did take me up for a paid project later on though ... they must have not seen it then, right?</p>" 
+                           data-why="<p> Why Black-Scholes PDE? </p>
+                                     <p> Did you know, there are two types of trade we can do? One is exchange of product. These you see when you do informal exchanges or when you buy something. This is the boring one.
+                                        <br> The fun one is when You and I can come into contract even when neither one of us actually owns the object we are dealing with. We come into contract such as no matter what happens within 2 months I will fetch you the object in question. </p>
+                                     <p> But many things can go wrong. What if it gets very costly suddenly? I will still be bound by contract. I am bearing a risk, and, for that I would like get some money. </p>
+                                     <p> What is a fair value? How much is this risk worth? How do we account for all that could ahppen to the cost in future? That is what BS model does. It models the uncertainty. There are several variants ofcourse dependind on what type of contract it is: Europea call, European put, American call, American put.</p>
+                                     <p> \(\textbf{p.s. :}\) If you can see into future, you do not need BS model. Yay! Contact me though, we need to talk about Stocks-markets. For research purposes ofcourse. </p>"
+                           data-takeaway="<p> To appreciate this project truely, you need to have had seen Heat Equation modelling and Probablity Theory.</p>
+                                          <p> You will see to get the Heat equation we actually use the idea that temperature at a point is the average of the two neighbouring points. We extend this to continuous set up to get \(u_{t}=cu_{xx}\).
+                                              <br> The curious among you, might wonder, if averaging is involved then can we look at the same problem from the lens of Probability using Expectation? Well, you can. It is called the <i>Method of risk-neutral measure</i>.</p> 
+                                          <p>That is the main takeaway. How Expectations and diffusion are essentially the same thing but from two different perspective!</p>" 
+                           data-branches="<p>Branches & future scope</p>
+                                          <p> \(\bullet\) The Hurst exponent variant in fractional Brownian motion. [I did not explore yet]
+                                            <br> \(\bullet\) American Options that can be exercised any time before expiration and hence another variable worth of complexity is introduced.
+                                            <br> \(\bullet\) Jump-Diffusion models that accounts for how stock prices may be jumps.
+                                            <br> \(\bullet\) Numerical approximate solutions of BS-models.
+                                          </p>">
                          <span class="extra-label">extra</span>
                          <span class="x-box">X</span>
                       </div>
@@ -1615,23 +1631,45 @@
               </div>
             </li>
 
+            
             <!-- Project 4 -->
             <li>
               <div class="project-title-row"></div>
               <div style="margin-left: 14px; margin-top: 16px;">
                 <div class="project-header-flex">
                   <span class="shape-yellow-circle" style="margin-right: 6px;"></span> 
-                  <strong class="project-title-text">Efficiency of...</strong> <br>
+                  <strong class="project-title-text" id="title-p4">Efficiency of...</strong> <br>
                 </div>
-                <div class="project-subtitle"> Independent study 
+                <div class="project-subtitle">
+                <!-- <span style="display: inline-block; width: 1px;"></span> -->
+                Under Dr. Satyaki Mazumder, IISER Kolkata (2026)<a href="https://scholar.google.com/citations?user=4d6qQV0AAAAJ&hl=en" target="_blank" class="scholar-link">[Google Scholar]</a>
                 </div>
               </div>
-              <span class="tag" style="margin-left: 40px;">xyz</span>
+              <span class="tag" style="margin-left: 40px;">Python / Probability & Statistics</span>
               <div class="card">
-                Explore.
-                <br><a href="#" target="_blank">Notes</a>
+                <span class="shape-red-arrowhead"></span> ~summary~ <br>
+                <span class="shape-red-arrowhead"></span> ~summary~
+                              
+                              <!-- //////////NEW FOR THE X-BOX////////// -->
+                  <div class="card-action-switches"> <a href="#" target="_blank">View Report</a>
+                   <a class="switch-help" href="mailto:kalaap.ks@gmail.com?subject=Question:???? " title="Doubts? Tap to mail me">?</a>
+                   <!-- KEEP IN MIND TO UPDATE THE QUESTION IN PLACE OF 4?, THAT SHOWS IN THE LEFT BOTTOM CORNER WHEN YOU HOVER   -->
+                   <div class="switch-extra" 
+                        onclick="openExtraModal(this, 'title-p4')" 
+                        data-story="Story about Time Series..." 
+                        data-why="Why Time Series for Quant Finance..." 
+                        data-takeaway="Key takeaway..." 
+                        data-branches="GARCH, ARIMA...">
+                       <span class="extra-label">extra</span>
+                      <span class="x-box">X</span>
+                     </div>
+                  </div>
+
+                <!-- /////////////////////////////// -->               
+              
               </div>
             </li>
+
 
             <!-- Project 5 -->
             <li>
@@ -1639,25 +1677,44 @@
               <div style="margin-left: 14px; margin-top: 16px;">
                 <div class="project-header-flex">
                   <span class="shape-yellow-circle" style="margin-right: 6px;"></span> 
-                  <strong class="project-title-text">Geometry of...</strong> <br>
+                  <strong class="project-title-text" id="title-p5">Geometry of...</strong> <br>
                 </div>
-                <div class="project-subtitle"> Independent study 
+                <div class="project-subtitle">
+                <!-- <span style="display: inline-block; width: 1px;"></span> -->
+                Under Dr. Satyaki Mazumder, IISER Kolkata (2026)<a href="https://scholar.google.com/citations?user=4d6qQV0AAAAJ&hl=en" target="_blank" class="scholar-link">[Google Scholar]</a>
                 </div>
               </div>
-              <span class="tag" style="margin-left: 40px;">xyz</span>
+              <span class="tag" style="margin-left: 40px;">Python / Probability & Statistics</span>
               <div class="card">
-                Explore.
-                <br><a href="#" target="_blank">Notes</a>
+                <span class="shape-red-arrowhead"></span> ~summary~ <br>
+                <span class="shape-red-arrowhead"></span> ~summary~
+                              
+                              <!-- //////////NEW FOR THE X-BOX////////// -->
+                  <div class="card-action-switches"> <a href="#" target="_blank">View Report</a>
+                   <a class="switch-help" href="mailto:kalaap.ks@gmail.com?subject=Question:???? " title="Doubts? Tap to mail me">?</a>
+                   <!-- KEEP IN MIND TO UPDATE THE QUESTION IN PLACE OF 4?, THAT SHOWS IN THE LEFT BOTTOM CORNER WHEN YOU HOVER   -->
+                   <div class="switch-extra" 
+                        onclick="openExtraModal(this, 'title-p5')" 
+                        data-story="Story about Time Series..." 
+                        data-why="Why Time Series for Quant Finance..." 
+                        data-takeaway="Key takeaway..." 
+                        data-branches="GARCH, ARIMA...">
+                       <span class="extra-label">extra</span>
+                      <span class="x-box">X</span>
+                     </div>
+                  </div>
+
+                <!-- /////////////////////////////// -->               
+              
               </div>
             </li>
 
-
-          <!-- //////////////////////////// -->
-
+            
           </ul>
         </div>
       </section>
-    </div>
+    </div>        
+
 
     <!-- 4. FUN SECTION -->
     <div class="page-section" id="fun">
@@ -2275,7 +2332,8 @@
 /* ========================================= */
       /* EXTRA MODAL CONTROLS                      */
       /* ========================================= */
-      const modalOverlay = document.getElementById('extra-modal-overlay');
+
+const modalOverlay = document.getElementById('extra-modal-overlay');
       const modalTitle = document.getElementById('modal-project-title');
       const commentInput = document.getElementById('extra-comment-input');
 
@@ -2285,36 +2343,45 @@
         if (triggeringElement) {
           modalTitle.innerText = triggeringElement.innerText;
         }
-  
+
         // 2. Clear previous comment text
         commentInput.value = '';
 
-       // 3. Inject the specific text from that button into the tabs
-       if (btn) {
-        const storyPanel = document.getElementById('panel-story');
-        const whyPanel = document.getElementById('panel-why');
-        const takeawayPanel = document.getElementById('panel-takeaway');
-        const branchesPanel = document.getElementById('panel-custom1');
+        // 3. Inject HTML text (supports <p>, <i>, <br>, LaTeX) into tabs
+        if (btn) {
+          const storyPanel = document.getElementById('panel-story');
+          const whyPanel = document.getElementById('panel-why');
+          const takeawayPanel = document.getElementById('panel-takeaway');
+          const branchesPanel = document.getElementById('panel-custom1');
 
-        if (storyPanel && btn.dataset.story) storyPanel.innerText = btn.dataset.story;
-        if (whyPanel && btn.dataset.why) whyPanel.innerText = btn.dataset.why;
-        if (takeawayPanel && btn.dataset.takeaway) takeawayPanel.innerText = btn.dataset.takeaway;
-        if (branchesPanel && btn.dataset.branches) branchesPanel.innerText = btn.dataset.branches;
+          if (storyPanel && btn.dataset.story) storyPanel.innerHTML = btn.dataset.story;
+          if (whyPanel && btn.dataset.why) whyPanel.innerHTML = btn.dataset.why;
+          if (takeawayPanel && btn.dataset.takeaway) takeawayPanel.innerHTML = btn.dataset.takeaway;
+          if (branchesPanel && btn.dataset.branches) branchesPanel.innerHTML = btn.dataset.branches;
+
+          // Rerender LaTeX expressions inside the panels
+          if (window.MathJax && MathJax.typesetPromise) {
+            MathJax.typesetPromise([storyPanel, whyPanel, takeawayPanel, branchesPanel]);
+          } else if (window.renderMathInElement) {
+            const viewport = document.querySelector('.extra-content-viewport');
+            if (viewport) renderMathInElement(viewport);
+          }
+        }
+
+        // 4. Reset to 'story' tab being active
+        const allTabs = document.querySelectorAll('.extra-tab-link');
+        const allPanels = document.querySelectorAll('.extra-tab-panel');
+        allTabs.forEach(t => t.classList.remove('active'));
+        allPanels.forEach(p => p.classList.remove('active'));
+
+        const defaultTab = document.querySelector('.extra-tab-link[data-panel="panel-story"]');
+        const defaultPanel = document.getElementById('panel-story');
+        if (defaultTab) defaultTab.classList.add('active');
+        if (defaultPanel) defaultPanel.classList.add('active');
+
+        // 5. Open modal
+        modalOverlay.classList.add('is-visible');
       }
-
-      // 4. Reset to 'story' tab being active
-     const allTabs = document.querySelectorAll('.extra-tab-link');
-     const allPanels = document.querySelectorAll('.extra-tab-panel');
-     allTabs.forEach(t => t.classList.remove('active'));
-     allPanels.forEach(p => p.classList.remove('active'));
-
-     const defaultTab = document.querySelector('.extra-tab-link[data-panel="panel-story"]');
-     const defaultPanel = document.getElementById('panel-story');
-     if (defaultTab) defaultTab.classList.add('active');
-     if (defaultPanel) defaultPanel.classList.add('active');
-
-    // 5. Open modal
-    modalOverlay.classList.add('is-visible'); }
 
       function closeExtraModal() {
         modalOverlay.classList.remove('is-visible');
@@ -2346,12 +2413,14 @@
           window.location.href = `mailto:kalaap.ks@gmail.com?subject=${subject}&body=${body}`;
         }
       }
-
-      if (modalOverlay) {
-        modalOverlay.addEventListener('click', (e) => {
-          if (e.target === modalOverlay) closeExtraModal();
-        });
-      }
+       
+      // This will let the x-box vanish when we tap outise, removing it since this has a comment section and accidental outside-tap is possible
+      
+      // if (modalOverlay) {
+      //   modalOverlay.addEventListener('click', (e) => {
+      //     if (e.target === modalOverlay) closeExtraModal();
+      //   });
+      // }      
 
 
 /*=========================================*/
