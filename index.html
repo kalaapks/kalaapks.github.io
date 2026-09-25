@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>Kalaap Sadhu | Portfolio</title>
   
+  <!-- Favicon: Signature Circular KS Badge -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 38 38'><circle cx='19' cy='19' r='17' fill='%23161b22' stroke='%233fb950' stroke-width='2'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-family='monospace' font-weight='bold' font-size='14' fill='%233fb950'>KS</text></svg>">
+
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
@@ -34,8 +37,10 @@
       --text-mutedD: #777b80;
       --green: #3fb950;
       --accent: #58a6ff;
+      --red: #ff5f56;
       --overlay-bg: rgba(3, 7, 14, 0.85);
       --card-shadow: rgba(0, 0, 0, 0.6);
+      --canvas-bg: #0b1017;
     }
 
     body.light-mode {
@@ -49,8 +54,10 @@
       --text-muted: #69655b;
       --green: #2b7a3e;
       --accent: #1e6091;
+      --red: #cf222e;
       --overlay-bg: rgba(245, 243, 237, 0.92);
       --card-shadow: rgba(80, 75, 60, 0.16);
+      --canvas-bg: #fbf9f4;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -86,6 +93,18 @@
       z-index: 1;
     }
 
+    /* Fixed vector field sink canvas behind bottom-right portal */
+    #sinkCanvas {
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      width: 360px;
+      height: 360px;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    /* Sticky Navigation */
     .top-nav {
       position: sticky;
       top: 0;
@@ -127,6 +146,7 @@
       box-shadow: 0 0 10px rgba(63, 185, 80, 0.2);
       transition: all 0.2s ease;
       flex-shrink: 0;
+      text-decoration: none;
     }
 
     .ks-badge:hover, .ks-badge.active {
@@ -134,6 +154,34 @@
       background: var(--green);
       color: #0d1117;
       box-shadow: 0 0 16px rgba(63, 185, 80, 0.5);
+    }
+
+    /* Dedicated G Game Badge in Nav */
+    .game-nav-badge {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--card-bg);
+      border: 2px solid var(--accent);
+      color: var(--accent);
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(88, 166, 255, 0.2);
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+      text-decoration: none;
+    }
+
+    .game-nav-badge:hover {
+      transform: scale(1.08);
+      background: var(--accent);
+      color: #0d1117;
+      box-shadow: 0 0 16px rgba(88, 166, 255, 0.5);
     }
 
     .theme-toggle {
@@ -220,79 +268,68 @@
     }
     .dropdown.show .dropdown-content { display: block; }
 
-    /* Contact Quick-Drop on the left */
-.contact-dropdown {
-  position: relative;
-  display: inline-block;
-}
+    /* Contact Dropdown */
+    .contact-dropdown { position: relative; display: inline-block; }
 
-.contact-btn {
-  background: transparent;
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  height: 36px;
-  padding: 0 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-size: 0.78rem;
-  font-family: inherit;
-  font-weight: bold;
-  color: var(--text);
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-}
+    .contact-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      height: 36px;
+      padding: 0 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.78rem;
+      font-family: inherit;
+      font-weight: bold;
+      color: var(--text);
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
 
-.contact-btn:hover {
-  border-color: var(--green);
-  color: var(--green);
-  background: rgba(63, 185, 80, 0.08);
-}
+    .contact-btn:hover {
+      border-color: var(--green);
+      color: var(--green);
+      background: rgba(63, 185, 80, 0.08);
+    }
 
-/* Row of pure icons inside the dropdown menu */
-.contact-dropdown-content {
-  display: none;
-  position: absolute;
-  left: 0;
-  top: 115%;
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  box-shadow: 0 8px 24px var(--card-shadow);
-  z-index: 1100;
-  padding: 8px 10px;
-  gap: 12px;
-  align-items: center;
-}
+    .contact-dropdown-content {
+      display: none;
+      position: absolute;
+      left: 0;
+      top: 115%;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      box-shadow: 0 8px 24px var(--card-shadow);
+      z-index: 1100;
+      padding: 8px 10px;
+      gap: 12px;
+      align-items: center;
+    }
 
-.contact-dropdown.show .contact-dropdown-content {
-  display: flex;
-}
+    .contact-dropdown.show .contact-dropdown-content { display: flex; }
 
-.contact-drop-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 4px;
-  color: var(--text-muted);
-  text-decoration: none;
-  transition: all 0.2s ease;
-}
+    .contact-drop-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
 
-.contact-drop-icon svg {
-  width: 17px;
-  height: 17px;
-  fill: currentColor;
-}
-
-.contact-drop-icon:hover {
-  color: var(--green);
-  background: var(--inner-card-bg);
-  transform: translateY(-2px);
-}
+    .contact-drop-icon svg { width: 17px; height: 17px; fill: currentColor; }
+    .contact-drop-icon:hover {
+      color: var(--green);
+      background: var(--inner-card-bg);
+      transform: translateY(-2px);
+    }
 
     .container {
       max-width: 820px;
@@ -303,7 +340,6 @@
     }
 
     .page-section {
-      min-height: auto;
       margin: 32px 0;
       opacity: 0;
       transform: translateY(28px);
@@ -402,10 +438,29 @@
 
     .terminal-body { padding: 28px; }
 
-    .inftag { display: block; text-align: center; font-size: 0.75rem; background: var(--inner-card-bg); border: 1px solid var(--border); padding: 2px 8px; border-radius: 4px; margin-left: 70px; margin-right: 70px; color: var(--text-muted); }
+    .inftag {
+      display: block;
+      text-align: center;
+      font-size: 0.78rem;
+      background: var(--inner-card-bg);
+      border: 1px solid var(--border);
+      padding: 8px 16px;
+      border-radius: 6px;
+      margin: 24px auto;
+      max-width: 680px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .inftag a {
+      color: var(--accent);
+      font-weight: bold;
+      text-decoration: none;
+    }
+    .inftag a:hover { text-decoration: underline; }
+
     h1 { color: var(--green); font-size: 2.2rem; margin-bottom: 8px; line-height: 1.15; }
     h2 { color: var(--accent); font-size: 1.15rem; margin-bottom: 14px; border-bottom: 1px dashed var(--border); padding-bottom: 6px; }
-    .prompt { color: var(--green); font-weight: bold; }
     p { margin-bottom: 14px; }
     ul { list-style: none; padding-left: 0; }
     li { margin-bottom: 16px; }
@@ -413,24 +468,10 @@
     a:hover { text-decoration: underline; }
 
     .project-title-row { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
-
-    .project-title-row .shape-yellow-circle { flex-shrink: 0; align-self: center; }
-
-    /* ////////////////////////////////// */
-    /* for adjustment on a phone  */
-    /* ////////////////////////////////// */
-           /* Keeps the yellow dot and the title text in distinct columns */
-    
-    .project-header-flex { display: flex; align-items: baseline; gap: 8px;}
-
-    .project-title-text { font-size:1.3rem; font-weight: none; line-height: 1.35; color: var(--text);}
-
-    /* //////////////Conclude phne adjustment//////////////// */
-
+    .project-header-flex { display: flex; align-items: baseline; gap: 8px; }
+    .project-title-text { font-size: 1.3rem; line-height: 1.35; color: var(--text); }
     .project-subtitle { font-size: 0.90rem; color: var(--text-muted); margin-left: 25px; margin-top: 4px; line-height: 1.35; }
-
     .scholar-link { font-size: 0.68rem; color: #3b7fb3; margin-left: 6px; text-decoration: none; }
-    .scholar-link:hover { text-decoration: none; }
 
     .tag {
       font-size: 0.75rem;
@@ -452,326 +493,276 @@
       color: var(--text-muted); 
     }
 
-  /* //////////////////////////////////////////////////// */
+    /* Card Action Switches */
+    .card-action-switches {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 12px;
+      margin-top: 16px;
+      font-size: 0.8rem;
+      font-family: monospace;
+    }
 
-/* ========================================= */
-/* 1. Card Interaction Switches              */
-/* ========================================= */
-.card-action-switches {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 12px;
-  margin-top: 16px;
-  font-size: 0.8rem;
-  font-family: var(--font-mono, monospace);
-}
+    .switch-help {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 95, 86, 0.4);
+      background: rgba(255, 95, 86, 0.08);
+      color: #ff5f56;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-size: 0.72rem;
+      font-weight: bold;
+      line-height: 1;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+    .switch-help:hover {
+      background: rgba(255, 95, 86, 0.2);
+      border-color: #ff5f56;
+      transform: scale(1.08);
+    }
 
-/* Question Mark in Circle */
-.switch-help {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 95, 86, 0.4);
-  background: rgba(255, 95, 86, 0.08);
-  color: #ff5f56;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  font-size: 0.72rem;
-  font-weight: bold;
-  line-height: 1;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-}
-.switch-help:hover {
-  background: rgba(255, 95, 86, 0.2);
-  border-color: #ff5f56;
-  transform: scale(1.08);
-}
+    .switch-extra {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.2s ease;
+      user-select: none;
+    }
 
-/* Green-themed [X] Extra Toggle */
-.switch-extra {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  color: var(--text-muted);
-  transition: all 0.2s ease;
-  user-select: none;
-}
+    .x-box {
+      width: 17px;
+      height: 17px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 0.7rem;
+      font-weight: bold;
+      line-height: 1;
+      transition: all 0.2s ease;
+    }
 
-.x-box {
-  width: 17px;
-  height: 17px;
-  border: 1px solid var(--border);
-  border-radius: 3px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-muted);
-  font-size: 0.7rem;
-  font-weight: bold;
-  line-height: 1;
-  transition: all 0.2s ease;
-}
+    .extra-label {
+      opacity: 0;
+      max-width: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      font-size: 0.75rem;
+      transition: all 0.25s ease;
+    }
 
-.extra-label {
-  opacity: 0;
-  max-width: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  font-size: 0.75rem;
-  transition: all 0.25s ease;
-}
+    .switch-extra:hover .x-box {
+      border-color: var(--green);
+      color: var(--green);
+      background: rgba(63, 185, 80, 0.08);
+    }
+    .switch-extra:hover .extra-label {
+      color: var(--green);
+      opacity: 1;
+      max-width: 50px;
+      margin-right: 2px;
+    }
 
-/* Hover: Green accent */
-.switch-extra:hover .x-box {
-  border-color: var(--green, #3fb950);
-  color: var(--green, #3fb950);
-  background: rgba(63, 185, 80, 0.08);
-}
-.switch-extra:hover .extra-label {
-  color: var(--green, #3fb950);
-  opacity: 1;
-  max-width: 50px;
-  margin-right: 2px;
-}
+    /* Modal Architecture */
+    .floating-extra-title {
+      position: absolute;
+      top: -26px;
+      left: 14px;
+      z-index: 10;
+      background: var(--terminal-header);
+      border: 1px solid var(--border);
+      border-bottom: none;
+      padding: 3px 10px;
+      border-radius: 5px 5px 0 0;
+      font-family: monospace;
+      font-size: 0.68rem;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
 
-/* ========================================= */
-/* 2. Floating Title Badge (Fixed Display)   */
-/* ========================================= */
-.floating-extra-title {
-  position: absolute;
-  top: -26px;
-  left: 14px;
-  z-index: 10;
-  background: var(--terminal-header, #161b22);
-  border: 1px solid var(--border);
-  border-bottom: none;
-  padding: 3px 10px;
-  border-radius: 5px 5px 0 0;
-  font-family: var(--font-mono, monospace);
-  font-size: 0.68rem;
-  letter-spacing: 1px;
-  color: var(--text-muted);
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
+    .title-x-box {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 13px;
+      height: 13px;
+      border: 1px solid var(--green);
+      color: var(--green);
+      border-radius: 2px;
+      font-size: 0.6rem;
+      line-height: 1;
+    }
 
-.title-x-box {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 13px;
-  height: 13px;
-  border: 1px solid var(--green, #3fb950);
-  color: var(--green, #3fb950);
-  border-radius: 2px;
-  font-size: 0.6rem;
-  line-height: 1;
-}
+    .blinking-dot {
+      color: var(--green);
+      font-weight: bold;
+      animation: subtle-blink 1s steps(2, start) infinite;
+    }
 
-.blinking-dot {
-  color: var(--green, #3fb950);
-  font-weight: bold;
-  animation: subtle-blink 1s steps(2, start) infinite;
-}
+    @keyframes subtle-blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
 
-@keyframes subtle-blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
-}
+    #extra-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      z-index: 9999;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+      box-sizing: border-box;
+    }
 
-/* ========================================= */
-/* 3. Modal Architecture (Responsive & Phone) */
-/* ========================================= */
-#extra-modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  z-index: 9999;
-  display: none;
-  justify-content: center;
-  align-items: center;
-  padding: 16px;
-  box-sizing: border-box;
-}
+    #extra-modal-overlay.is-visible { display: flex; }
 
-#extra-modal-overlay.is-visible {
-  display: flex;
-}
+    .extra-window {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      width: 100%;
+      max-width: 840px;
+      max-height: 85vh;
+      border-radius: 6px;
+      position: relative;
+      overflow: visible;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
+    }
 
-.extra-window {
-  background: var(--card-bg, #0d1117);
-  border: 1px solid var(--border);
-  width: 100%;
-  max-width: 840px;
-  /* min-height: 420px; */  /* Gives it a taller, spacious feel on PC but it lower than 600px or else it messes with media order on phn BUT SMALL TABLES WITH NO CONTENT ARE ELONGATED WITH EMPTY SPACE SO DONT USE*/
-  max-height: 85vh;
-  border-radius: 6px;
-  position: relative;
-  /* CRITICAL: Must be visible so the top badge doesn't get clipped */
-  overflow: visible;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
-}
+    .extra-header {
+      background: var(--terminal-header);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      border-radius: 6px 6px 0 0;
+    }
 
-.extra-header {
-  background: var(--terminal-header, #161b22);
-  border-bottom: 1px solid var(--border);
-  padding: 10px 14px;
-  display: flex;
-  align-items: center;
-  border-radius: 6px 6px 0 0;
-}
+    #modal-project-title {
+      color: var(--text);
+      font-size: 0.82rem;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding-right: 12px;
+    }
 
-#modal-project-title {
-  color: var(--text);
-  font-size: 0.82rem;
-  font-weight: 600;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  padding-right: 12px;
-}
+    .close-extra-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      cursor: pointer;
+      margin-left: auto;
+      line-height: 1;
+    }
+    .close-extra-btn:hover { color: #ff5f56; }
 
-.close-extra-btn {
-  background: none;
-  border: none;
-  color: var(--text-muted);
-  font-size: 1.1rem;
-  cursor: pointer;
-  margin-left: auto;
-  line-height: 1;
-}
-.close-extra-btn:hover { color: #ff5f56; }
+    .extra-body {
+      padding: 16px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
 
-/* Scrollable Container */
-.extra-body {
-  padding: 16px;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  font-size: 0.78rem;
-  color: var(--text-muted);
-}
+    .extra-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+    }
 
-/* Tabs */
-.extra-tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 8px;
-}
+    .extra-tab-link {
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 3px 8px;
+      border-radius: 3px;
+      font-size: 0.72rem;
+      font-family: monospace;
+      transition: all 0.2s ease;
+    }
 
-.extra-tab-link {
-  color: var(--text-muted);
-  cursor: pointer;
-  padding: 3px 8px;
-  border-radius: 3px;
-  font-size: 0.72rem;
-  font-family: var(--font-mono, monospace);
-  transition: all 0.2s ease;
-}
+    .extra-tab-link:hover { background: var(--inner-card-bg); color: var(--text); }
+    .extra-tab-link.active { color: var(--green); background: rgba(63, 185, 80, 0.1); }
 
-.extra-tab-link:hover {
-  background: var(--inner-card-bg);
-  color: var(--text);
-}
+    .extra-tab-panel { display: none; line-height: 1.55; }
+    .extra-tab-panel.active { display: block; }
 
-.extra-tab-link.active {
-  color: var(--green, #3fb950);
-  background: rgba(63, 185, 80, 0.1);
-}
+    .extra-comment-title {
+      color: var(--text);
+      margin-bottom: 6px;
+      font-size: 0.75rem;
+      font-family: monospace;
+    }
 
-.extra-tab-panel {
-  display: none;
-  line-height: 1.55;
-}
-.extra-tab-panel.active {
-  display: block;
-}
+    #extra-comment-input {
+      width: 100%;
+      box-sizing: border-box;
+      background: var(--inner-card-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text);
+      padding: 8px 10px;
+      font-size: 0.75rem;
+      font-family: monospace;
+      resize: vertical;
+    }
 
-/* Comment Box */
-.extra-comment-title {
-  color: var(--text);
-  margin-bottom: 6px;
-  font-size: 0.75rem;
-  font-family: var(--font-mono, monospace);
-}
+    #extra-comment-input:focus { outline: none; border-color: var(--green); }
 
-#extra-comment-input {
-  width: 100%;
-  box-sizing: border-box;
-  background: var(--inner-card-bg);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  color: var(--text);
-  padding: 8px 10px;
-  font-size: 0.75rem;
-  font-family: var(--font-mono, monospace);
-  resize: vertical;
-}
+    .extra-footer {
+      padding: 10px 16px;
+      border-top: 1px solid var(--border);
+      background: var(--terminal-header);
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      border-radius: 0 0 6px 6px;
+    }
 
-#extra-comment-input::placeholder {
-  color: var(--text-muted);
-  opacity: 0.55;
-}
+    .modal-btn {
+      padding: 4px 12px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 0.72rem;
+      font-family: monospace;
+      border: 1px solid var(--border);
+    }
 
-#extra-comment-input:focus {
-  outline: none;
-  border-color: var(--green, #3fb950);
-}
+    .modal-btn-close { background: transparent; color: var(--text-muted); }
+    .modal-btn-close:hover { background: var(--inner-card-bg); }
 
-/* Footer & Buttons */
-.extra-footer {
-  padding: 10px 16px;
-  border-top: 1px solid var(--border);
-  background: var(--terminal-header, #161b22);
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  border-radius: 0 0 6px 6px;
-}
-
-.modal-btn {
-  padding: 4px 12px;
-  border-radius: 3px;
-  cursor: pointer;
-  font-size: 0.72rem;
-  font-family: var(--font-mono, monospace);
-  border: 1px solid var(--border);
-}
-
-.modal-btn-close {
-  background: transparent;
-  color: var(--text-muted);
-}
-.modal-btn-close:hover {
-  background: var(--inner-card-bg);
-}
-
-.modal-btn-post {
-  background: var(--green, #3fb950);
-  color: #0d1117;
-  border-color: var(--green, #3fb950);
-  font-weight: 600;
-}
-.modal-btn-post:hover {
-  opacity: 0.9;
-}
-
-
-/* //////////////////////////////////////////////////////// */
+    .modal-btn-post {
+      background: var(--green);
+      color: #0d1117;
+      border-color: var(--green);
+      font-weight: 600;
+    }
+    .modal-btn-post:hover { opacity: 0.9; }
 
     .contact-divider {
       border: none;
@@ -850,7 +841,6 @@
       line-height: 1.4;
     }
 
-    /* 3-in-a-row Games Grid */
     .games-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -896,22 +886,12 @@
       box-shadow: none;
     }
 
-    .game-icon-card.placeholder:hover {
-      border-color: var(--border);
-      transform: none;
-      box-shadow: none;
-    }
-
     .game-icon-svg {
       width: 44px;
       height: 44px;
       stroke: var(--green);
       fill: none;
       transition: transform 0.2s ease;
-    }
-
-    .game-icon-card:hover .game-icon-svg {
-      transform: scale(1.08);
     }
 
     .game-info {
@@ -1060,15 +1040,8 @@
       user-select: none;
     }
 
-    #typeLine2 {
-      font-size: 4.2rem;
-      min-height: 1.2em;
-    }
-
-    .cursor {
-      display: inline-block;
-      animation: blink 0.7s infinite;
-    }
+    #typeLine2 { font-size: 4.2rem; min-height: 1.2em; }
+    .cursor { display: inline-block; animation: blink 0.7s infinite; }
 
     @keyframes blink {
       0%, 49% { opacity: 1; }
@@ -1095,21 +1068,93 @@
       transition: transform 0.85s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease;
     }
 
-    /* Sink Vector Field & ~ Switch */
-    #sinkCanvas {
-      position: fixed;
-      bottom: 0;
-      right: 0;
-      width: 360px;
-      height: 360px;
-      pointer-events: none;
-      z-index: 5;
-    }
-
-    .sim-portal-switch {
+    /* ========================================================
+       FLOATING ACTIONS CLUSTER (Right Corner: Jump, Share, ~)
+       ======================================================== */
+    .floating-corner-actions {
       position: fixed;
       bottom: 24px;
       right: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      z-index: 900;
+      transition: transform 0.25s ease, bottom 0.25s ease;
+    }
+
+    .clean-float-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: color 0.2s ease, transform 0.2s ease;
+      opacity: 0;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .clean-float-btn.is-active {
+      opacity: 0.85;
+      pointer-events: auto;
+    }
+
+    .clean-float-btn:hover {
+      color: var(--green);
+      transform: translateY(-2px);
+      opacity: 1;
+    }
+
+    .float-arrowhead-icon {
+      width: 14px;
+      height: 14px;
+      border-top: 2.5px solid currentColor;
+      border-right: 2.5px solid currentColor;
+      transform: rotate(-45deg);
+      display: inline-block;
+      margin-top: 4px;
+    }
+
+    .float-share-icon {
+      width: 19px;
+      height: 19px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .clean-float-btn::before {
+      content: attr(data-tooltip);
+      position: absolute;
+      right: 125%;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 0.72rem;
+      font-family: inherit;
+      white-space: nowrap;
+      padding: 3px 8px;
+      border-radius: 4px;
+      box-shadow: 0 4px 12px var(--card-shadow);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .clean-float-btn:hover::before {
+      opacity: 1;
+    }
+
+    .sim-portal-switch {
       width: 44px;
       height: 44px;
       border-radius: 50%;
@@ -1123,7 +1168,6 @@
       font-size: 1.45rem;
       font-weight: bold;
       box-shadow: 0 6px 20px var(--card-shadow);
-      z-index: 900;
       line-height: 1;
       padding-bottom: 2px;
       transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
@@ -1135,40 +1179,202 @@
       box-shadow: 0 0 18px rgba(63, 185, 80, 0.4);
     }
 
-    @media (max-width: 600px) {
-      /* body {
-        padding-left: 0;
-        padding-right: 0;
-      } */
+    /* ========================================================
+       HORIZONTAL GAMES SHOWCASE CAROUSEL (Miniature Demo)
+       ======================================================== */
+    .games-showcase-container {
+      position: relative;
+      margin: 18px 0 28px 0;
+    }
 
+    .games-carousel-track {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      gap: 16px;
+      padding-bottom: 12px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .games-carousel-track::-webkit-scrollbar { height: 6px; }
+    .games-carousel-track::-webkit-scrollbar-track { background: transparent; }
+    .games-carousel-track::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    .game-demo-slide {
+      flex: 0 0 100%;
+      scroll-snap-align: start;
+      text-decoration: none !important;
+      color: inherit;
+      display: block;
+    }
+
+    .mini-game-terminal {
+      background: var(--card-bg);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 12px 30px var(--card-shadow);
+      transition: border-color 0.25s ease, transform 0.25s ease;
+      cursor: pointer;
+    }
+
+    .mini-game-terminal:hover {
+      border-color: var(--green);
+      transform: translateY(-3px);
+    }
+
+    .mini-game-header {
+      background: var(--terminal-header);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .mini-header-status {
+      font-size: 0.72rem;
+      color: var(--green);
+      font-weight: bold;
+      letter-spacing: 0.5px;
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .mini-header-status::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+      animation: subtle-blink 1.2s infinite;
+    }
+
+    .mini-game-body {
+      padding: 18px;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .mini-stage-wrap {
+      position: relative;
+      width: 260px;
+      height: 260px;
+      margin: 0 auto;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--canvas-bg);
+      overflow: hidden;
+    }
+
+    .mini-stage-wrap canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .mini-meta-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .mini-meta-title {
+      font-size: 1.15rem;
+      font-weight: bold;
+      color: var(--text);
+    }
+
+    .mini-meta-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    .mini-telemetry-box {
+      background: var(--inner-card-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 14px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .mini-telemetry-item { display: flex; flex-direction: column; }
+    .mini-tel-label { font-size: 0.68rem; color: var(--text-muted); }
+    .mini-tel-val { font-size: 0.95rem; font-weight: bold; color: var(--accent); }
+
+    .mini-verdict-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.78rem;
+      font-weight: bold;
+      font-family: inherit;
+      background: rgba(63, 185, 80, 0.1);
+      border: 1px solid var(--green);
+      color: var(--green);
+      width: fit-content;
+      transition: all 0.3s ease;
+    }
+
+    .carousel-nav-hint {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 8px;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      padding: 0 4px;
+    }
+
+    /* Footer Banner */
+    .site-footer-banner {
+      width: 100%;
+      border-top: 1px solid var(--border);
+      background: var(--terminal-header);
+      padding: 16px 20px;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-family: inherit;
+      position: relative;
+      z-index: 10;
+    }
+
+    @media (max-width: 600px) {
       html, body {
-         overflow-x: hidden;
-         max-width: 100vw;
-        }
-        
+        overflow-x: hidden;
+        max-width: 100vw;
+      }
 
       .page-section {
-        padding-left: 20px;
-        padding-right: 20px;
+        padding-left: 14px;
+        padding-right: 14px;
         box-sizing: border-box;
       }
-      .top-nav { padding: 6px 8px; }
-           /* added */
-           .nav-left {
-              gap: 4px; /* Tighter spacing between KS, Theme, Contact */
-               }
 
-            .nav-links {
-              gap: 1px; /* Tighter spacing between tabs */
-               }
-
-/* scales down the switches */
-      .ks-badge { width: 30px; height: 30px; font-size: 0.78rem; }
-      .contact-btn {height: 30px; padding: 0.6px; font-size: 0.72rem; }
-      .theme-toggle { width: 30px; height: 30px; font-size: 0.78rem; }
+      .top-nav { padding: 6px 10px; }
+      .nav-left { gap: 6px; }
       .nav-links { gap: 2px; }
+
+      .ks-badge, .game-nav-badge { width: 30px; height: 30px; font-size: 0.78rem; }
+      .contact-btn { height: 30px; padding: 0 6px; font-size: 0.72rem; }
+      .theme-toggle { width: 30px; height: 30px; font-size: 0.78rem; }
       .nav-btn { font-size: 0.74rem; padding: 4px 6px; }
-      .container { padding: 0 12px; }
+
+      .container { padding: 0 10px; }
       .terminal-body { padding: 18px 14px; }
       h1 { font-size: 1.7rem; }
       .hero-greeting { font-size: 2.2rem; margin-bottom: 20px; }
@@ -1176,81 +1382,17 @@
       #typeLine2 { font-size: 2.8rem; }
       .fun-grid { grid-template-columns: 1fr; }
       .games-grid { grid-template-columns: 1fr; gap: 20px; }
+
+      .mini-game-body { grid-template-columns: 1fr; gap: 14px; }
+      .mini-stage-wrap { width: 220px; height: 220px; }
       #sinkCanvas { width: 240px; height: 240px; }
-      .sim-portal-switch { bottom: 16px; right: 16px; width: 40px; height: 40px; font-size: 1.25rem; }
-      /* Scale title font down slightly and adjust left offset */
-      .project-title-text { font-size: 0.88rem; line-height: 1.3; }   /*like "time series analysis" alignment on the phn*/
-      .project-subtitle { font-size: 0.78rem; line-height: 1.3; margin-left: 25px; }    /*like "under anirvan sir" on the phn*/
-    }
 
-    .sink-section-wrapper {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      gap: 20px;
-      margin: 40px auto;
-      max-width: 900px;
-      padding: 0 16px;
-      box-sizing: border-box;
-    }
+      .floating-corner-actions { bottom: 18px; right: 18px; gap: 12px; }
+      .sim-portal-switch { width: 38px; height: 38px; font-size: 1.25rem; }
 
-    .sink-hint-popup {
-      position: relative;
-      max-width: 250px;
-      background: var(--inner-card-bg);
-      border: 1px solid rgba(88, 166, 255, 0.2);
-      border-radius: 6px;
-      padding: 10px 14px;
-      font-size: 0.82rem;
-      line-height: 1.4;
-      color: var(--text);
-      text-decoration: none;
-      cursor: pointer;
-      opacity: 0;
-      transform: translateX(-10px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-      pointer-events: none;
+      .project-title-text { font-size: 0.88rem; line-height: 1.3; }
+      .project-subtitle { font-size: 0.78rem; line-height: 1.3; margin-left: 25px; }
     }
-
-    .sink-hint-popup::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      right: -6px;
-      transform: translateY(-50%);
-      width: 0;
-      height: 0;
-      border-top: 6px solid transparent;
-      border-bottom: 6px solid transparent;
-      border-left: 6px solid rgba(88, 166, 255, 0.3);
-    }
-
-    .sink-hint-popup.is-visible {
-      opacity: 1;
-      transform: translateX(0);
-      pointer-events: auto;
-    }
-
-    .sink-hint-popup:hover {
-      border-color: rgba(88, 166, 255, 0.5);
-    }
-
-    @media (max-width: 768px) {
-      .sink-section-wrapper {
-        flex-direction: column;
-        gap: 16px;
-      }
-      .sink-hint-popup::after {
-        top: auto;
-        bottom: -6px;
-        right: 50%;
-        transform: translateX(50%);
-        border-left: 6px solid transparent;
-        border-right: 6px solid transparent;
-        border-top: 6px solid rgba(88, 166, 255, 0.3);
-      }
-    } 
   </style>
 </head>
 <body>
@@ -1273,48 +1415,37 @@
   <nav class="top-nav">
     <div class="nav-left">
       <button class="ks-badge" id="ksBtn" title="Toggle Task View">KS</button>
-      <button class="theme-toggle" id="themeBtn" title="Toggle Light / Dark Mode">💡</button>
+      <button class="theme-toggle" id="themeBtn" title="Toggle Light / Dark Mode"> 💡 </button>
 
       <div class="contact-dropdown" id="contactDropdown">
         <button class="contact-btn" id="contactBtn" title="Quick Contact">Contact ▾</button>
         <div class="contact-dropdown-content">
-      
-          <!-- Mail Icon -->
-           <a href="mailto:kalaap.ks@gmail.com" class="contact-drop-icon" title="Send Email">
-           <svg viewBox="0 0 24 24">
-           <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-           </svg>
-           </a>
-
-          <!-- GitHub Icon -->
-           <a href="https://github.com/kalaapks" target="_blank" class="contact-drop-icon" title="GitHub">
-           <svg viewBox="0 0 24 24">
-           <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
-           </svg>
-           </a>
-
-          <!-- LinkedIn Icon (replace YOUR_LINKEDIN_URL) -->
-           <a href="YOUR_LINKEDIN_URL" target="_blank" class="contact-drop-icon" title="LinkedIn">
-           <svg viewBox="0 0 24 24">
-           <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.65 1.65 0 1 0 0 3.3 1.65 1.65 0 0 0 0-3.3z"/>
-           </svg>
-           </a>
+          <a href="mailto:kalaap.ks@gmail.com" class="contact-drop-icon" title="Send Email">
+            <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+          </a>
+          <a href="https://github.com/kalaapks" target="_blank" class="contact-drop-icon" title="GitHub">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+          </a>
+          <a href="YOUR_LINKEDIN_URL" target="_blank" class="contact-drop-icon" title="LinkedIn">
+            <svg viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.65 1.65 0 1 0 0 3.3 1.65 1.65 0 0 0 0-3.3z"/></svg>
+          </a>
         </div>
-     </div>
+      </div>
 
+      <!-- Quick G Badge: Jump to Games section -->
+      <a href="#games" class="game-nav-badge" id="navGamesQuickBtn" title="Jump to Games">G</a>
     </div>
+
     <div class="nav-links">
-      <!-- same page links can be covered by #the_id that we put in <div class="" id="the_id"></div>. for different page links we must have href="index.html#the_id" -->
-      <a href="#me" class="nav-btn" id="nav-me">Me</a>
       <a href="#resume" class="nav-btn" id="nav-resume">Resume</a>
       <a href="#projects" class="nav-btn" id="nav-projects">Projects</a>
       
       <div class="dropdown" id="funDropdown">
         <button class="nav-btn" id="funBtn">Fun ▾</button>
         <div class="dropdown-content">
-          <a href="notes.html">> Notes</a>
-          <a href="simulated.html">> Simulations</a>
-          <a href="#games">> Games</a>
+          <a href="notes.html">&gt; Notes</a>
+          <a href="simulated.html">&gt; Simulations</a>
+          <a href="#games" id="dropdownGamesLink">&gt; Games</a>
         </div>
       </div>
     </div>
@@ -1326,13 +1457,30 @@
     <div class="task-view-hint">Task View: Click any window to switch • Esc or KS to exit</div>
   </div>
 
-  <!-- Vector Field Sink Canvas -->
+  <!-- FIXED VECTOR FIELD SINK CANVAS: Points directly into ~ switch -->
   <canvas id="sinkCanvas" width="360" height="360"></canvas>
 
-  <!-- "~" Portal Switch -->
-  <a href="simulated.html" class="sim-portal-switch" id="portalSwitch" title="Go to Simulations">
-    ~
-  </a>
+  <!-- FLOATING ACTIONS CLUSTER (Jump to Top, Share, ~ Switch) -->
+  <div class="floating-corner-actions" id="floatingCluster">
+    <!-- Clean Borderless Jump-To-Top Button -->
+    <button class="clean-float-btn" id="btnJumpTop" data-tooltip="Jump to top" aria-label="Jump to top">
+      <span class="float-arrowhead-icon"></span>
+    </button>
+
+    <!-- Clean Borderless Share Button -->
+    <button class="clean-float-btn" id="btnSharePage" data-tooltip="Share page" aria-label="Share page">
+      <svg class="float-share-icon" viewBox="0 0 24 24">
+        <circle cx="18" cy="5" r="3"></circle>
+        <circle cx="6" cy="12" r="3"></circle>
+        <circle cx="18" cy="19" r="3"></circle>
+        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+      </svg>
+    </button>
+
+    <!-- "~" Portal Switch -->
+    <a href="notes.html" class="sim-portal-switch" id="portalSwitch" title="Go to Notes">~</a>
+  </div>
 
   <!-- Main Container -->
   <div class="container" id="mainContainer">
@@ -1349,7 +1497,7 @@
         </div>
         <div class="terminal-body">
           <h1 style="font-size: 4rem; color: var(--green); font-weight: 100;">KALAAP SADHU</h1>
-          <p>Mathematics Postgrad, IISER Kolkata, India</p>
+          <p>MS Mathematics, IISER Kolkata, India</p>
           <p>Quantitative Finance | Stochastic Calculus | Scientific Computing</p>
 
           <hr class="contact-divider">
@@ -1382,10 +1530,103 @@
       </section>
     </div>
 
-    <div class="inftag">Do visit the <a href="simulated.html" style="color:var(--accent); font-weight:bold;">Simulations</a> & <a href="#games" style="color:var(--accent); font-weight:bold;">Games</a> sections.
+    <!-- ========================================================
+         2. LIVE GAMES SHOWCASE (AUTOPILOT DEMO & EXTENSIBLE TRACK)
+         ======================================================== -->
+    <div class="page-section" id="game-showcase">
+      <div class="games-showcase-container">
+        <div class="games-carousel-track" id="gamesShowcaseTrack">
+
+          <!-- SLIDE 1: ACTIVE LIVE MONTE CARLO DEMO (Tap to play game1.html) -->
+          <a href="game1.html" class="game-demo-slide" title="Click to play Game of Estimation">
+            <div class="mini-game-terminal">
+              <div class="mini-game-header">
+                <span class="shape-green-square"></span>
+                <span class="shape-yellow-circle"></span>
+                <span class="shape-red-arrowhead"></span>
+                <span class="terminal-header-title" id="miniTerminalTitle"> </span>
+                <span class="mini-header-status">AUTOPILOT</span>
+              </div>
+              <div class="mini-game-body">
+                <div class="mini-stage-wrap">
+                  <canvas id="miniShapeCanvas" width="260" height="260"></canvas>
+                  <canvas id="miniDrawCanvas" width="260" height="260"></canvas>
+                  <canvas id="miniMathCanvas" width="260" height="260"></canvas>
+                </div>
+                <div class="mini-meta-panel">
+                  <div class="mini-meta-title">Game of Estimation</div>
+                  <div class="mini-meta-desc" id="miniDescText">
+                    Rejection sampling over Level 3 Topology (<strong>Shape 'K'</strong>). The live engine samples uniform proposals, separates domain vs. shaded points, and determines empirical area coverage.
+                  </div>
+                  <div class="mini-telemetry-box">
+                    <div class="mini-telemetry-item">
+                      <span class="mini-tel-label">Target Area</span>
+                      <span class="mini-tel-val" id="miniTargetVal">--%</span>
+                    </div>
+                    <div class="mini-telemetry-item">
+                      <span class="mini-tel-label">Empirical p̂</span>
+                      <span class="mini-tel-val" id="miniPHatVal" style="color: var(--green);">0.0%</span>
+                    </div>
+                    <div class="mini-telemetry-item">
+                      <span class="mini-tel-label">Samples (N)</span>
+                      <span class="mini-tel-val" id="miniNSamples">0 pts</span>
+                    </div>
+                    <div class="mini-telemetry-item">
+                      <span class="mini-tel-label">Absolute Error</span>
+                      <span class="mini-tel-val" id="miniErrVal">--%</span>
+                    </div>
+                  </div>
+                  <div class="mini-verdict-pill" id="miniVerdictBadge">   Shading target area...</div>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <!-- SLIDE 2: FUTURE GAME 02 PLACEHOLDER (EXTENSIBLE TRACK) -->
+          <!-- 
+          <a href="#" class="game-demo-slide" style="pointer-events: none;" title="Game 02 Coming Soon">
+            <div class="mini-game-terminal" style="opacity: 0.7; border-style: dashed;">
+              <div class="mini-game-header">
+                <span class="shape-green-square"></span>
+                <span class="shape-yellow-circle"></span>
+                <span class="shape-red-arrowhead"></span>
+                <span class="terminal-header-title">bash ~ /games/Game02 [Coming Soon]</span>
+              </div>
+              <div class="mini-game-body" style="grid-template-columns: 1fr; text-align: center; padding: 48px 24px;">
+                <div class="mini-meta-title" style="color: var(--text-muted);">Game 02: Brownian Path Finder</div>
+                <div class="mini-meta-desc">Stochastic random walk simulations through dynamic obstacles. Coming soon!</div>
+              </div>
+            </div>
+          </a>
+          -->
+
+          <!-- SLIDE 3: FUTURE GAME 03 PLACEHOLDER (EXTENSIBLE TRACK) -->
+          <!--
+          <a href="#" class="game-demo-slide" style="pointer-events: none;" title="Game 03 Coming Soon">
+            <div class="mini-game-terminal" style="opacity: 0.7; border-style: dashed;">
+              <div class="mini-game-header">
+                <span class="shape-green-square"></span>
+                <span class="shape-yellow-circle"></span>
+                <span class="shape-red-arrowhead"></span>
+                <span class="terminal-header-title">bash ~ /games/Game03 [Coming Soon]</span>
+              </div>
+              <div class="mini-game-body" style="grid-template-columns: 1fr; text-align: center; padding: 48px 24px;">
+                <div class="mini-meta-title" style="color: var(--text-muted);">Game 03: Markov Chain Maze</div>
+                <div class="mini-meta-desc">Probability state transitions and absorbing boundary puzzles. Coming soon!</div>
+              </div>
+            </div>
+          </a>
+          -->
+
+        </div>
+        <div class="carousel-nav-hint">
+          <span>&gt; Live interactive preview</span>
+          <span>Click to launch game &bull; Scroll track for upcoming modules &rarr;</span>
+        </div>
+      </div>
     </div>
 
-    <!-- 2. RESUME SECTION -->
+    <!-- 3. RESUME SECTION -->
     <div class="page-section" id="resume">
       <section class="terminal-window" data-title="bash: Resume (cv)">
         <div class="terminal-header">
@@ -1417,48 +1658,34 @@
             </p>
           </div>
 
-          
-          
-           <!-- Branch 2: Yellow Circle - Current Interests -->
           <div style="margin-left: 14px; margin-top: 18px; margin-bottom: 20px;">
-              <div style="display: flex; align-items: center; gap: 8px; font-weight: bold; margin-bottom: 8px; color: var(--text);">
-                <span class="shape-yellow-circle"></span>
-                <span>Current Interests</span>
-              </div>
+            <div style="display: flex; align-items: center; gap: 8px; font-weight: bold; margin-bottom: 8px; color: var(--text);">
+              <span class="shape-yellow-circle"></span>
+              <span>Current Interests</span>
+            </div>
 
-           <!-- Inset Box for Topics -->
-           <div class="card" style="margin-left: 18px; margin-top: 6px; padding: 12px 16px;">
-             <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px;">
-      
-              <!-- Interest 1 -->
-              <li style="display: flex; align-items: center; gap: 10px; margin-bottom: 0;">
-               <span class="shape-red-arrowhead" style="margin-left: 0; flex-shrink: 0;"></span>
-               <span>American Option pricing</span>
-              </li>
-
-             <!-- Interest 2 -->
-              <li style="display: flex; align-items: center; gap: 10px; margin-bottom: 0;">
-               <span class="shape-red-arrowhead" style="margin-left: 0; flex-shrink: 0;"></span>
-               <span>Multidimensional Statistical modelling</span>
-              </li>
-
-             <!-- Interest 3 (Replace YOUR_THIRD_INTEREST_HERE) -->
-              <li style="display: flex; align-items: center; gap: 10px; margin-bottom: 0;">
-               <span class="shape-red-arrowhead" style="margin-left: 0; flex-shrink: 0;"></span>
-               <span>Game based on probalistic propagation (like <a href="https://kalaapks.github.io/#fun" style="color:var(--accent); font-weight:bold;">Game 1</a>).</span>
-              </li>
-
-             </ul>
-           </div>
+            <div class="card" style="margin-left: 18px; margin-top: 6px; padding: 12px 16px;">
+              <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px;">
+                <li style="display: flex; align-items: center; gap: 10px; margin-bottom: 0;">
+                  <span class="shape-red-arrowhead" style="margin-left: 0; flex-shrink: 0;"></span>
+                  <span>American Option pricing</span>
+                </li>
+                <li style="display: flex; align-items: center; gap: 10px; margin-bottom: 0;">
+                  <span class="shape-red-arrowhead" style="margin-left: 0; flex-shrink: 0;"></span>
+                  <span>Multidimensional Statistical modelling</span>
+                </li>
+                <li style="display: flex; align-items: center; gap: 10px; margin-bottom: 0;">
+                  <span class="shape-red-arrowhead" style="margin-left: 0; flex-shrink: 0;"></span>
+                  <span>Game based on probabilistic propagation (like <a href="#games" style="color:var(--accent); font-weight:bold;">Game 1</a>).</span>
+                </li>
+              </ul>
+            </div>
           </div>
-
-          <!-- /////////////////////////////////////// -->
-
         </div>
       </section>
     </div>
 
-    <!-- 3. PROJECTS & RESEARCH SECTION -->
+    <!-- 4. PROJECTS & RESEARCH SECTION -->
     <div class="page-section" id="projects">
       <section class="terminal-window" data-title="bash: Projects">
         <div class="terminal-header">
@@ -1471,16 +1698,13 @@
           <h2><span style="display:inline-block; width:12px; height:12px; background-color: var(--green); margin-right:8px;"></span>Projects</h2>
           <ul>
 
-
-            <!-- ////////////////////////////// -->
             <!-- MS Project -->
             <li>
               <div class="project-title-row"></div>
               <div style="margin-left: 14px; margin-top: 16px;">
                 <div class="project-header-flex">
                   <span class="shape-yellow-circle" style="margin-right: 6px;"></span> 
-                  <strong class="project-title-text" id="title-ms">Stochastic Calculus and Black Scholes PDE</strong> <br>                     
-                   <!-- this id is unique to this project, change it for each and use the id in .card block -->
+                  <strong class="project-title-text" id="title-ms">Stochastic Calculus and Black Scholes PDE</strong> <br>
                 </div>
                 <div class="project-subtitle"> Under Dr. Anirvan Chakraborty , IISER Kolkata (2025-2026)<a href="https://scholar.google.com/citations?user=8zOX2SoAAAAJ&hl=en" target="_blank" class="scholar-link">[Google Scholar]</a>
                 </div>
@@ -1490,52 +1714,32 @@
                 <span class="shape-red-arrowhead"></span> Levy and Random-walk construction of Brownian motion and its properties in \(\mathbb{R}^d\).<br> 
                 <span class="shape-red-arrowhead"></span> Developed stochastic calculus from foundational measure-theoretic concepts and applied it to solve the standard Black-Scholes PDE for European option pricing using Gaussian kernel and Girsanov's risk-neutral measure.<br>
                                    
-                <!-- //////////NEW FOR THE X-BOX////////// -->
-                    <div class="card-action-switches"><a href="#" target="_blank">View Ms-Thesis</a>
-                    <a class="switch-help" href="mailto:kalaap.ks@gmail.com?subject=Question: MS Thesis" title="Doubts? Tap to mail me">?</a>
-                      <!-- the id will be used in next <div></div> -->
-                      <div class="switch-extra" 
-                           onclick="openExtraModal(this, 'title-ms')"      
-                           data-story="<p> >> \(\textbf{The thesis I almost did:}\) <br>I almost picked the <i>Schrödinger equation</i> for my MS-Thesis topic because I wanted to study one particular PDE in details. Well, that could have taken my life in a very different direction I guess.</p>
-                                       <p> >> \(\textbf{Once there lived a man who could not do simulations:}\) <br>When I did my thesis, I did not know how to do path simulations but my urge to add picture to the thesis led me to draw 100s of paths by hands! <br> You will still find them in the pdf. I never updated that.<br> I am never going to.</p>
-                                       <p> >> \(\textbf{Defeated defender:}\) <br>During my thesis defense, there was a room booking issue and I had to do the presentation in a different room. Naturally, my thesis presentation slides weren't on this room's computer. I tried transferring them over a wire and kept failing. The professors were right infront of me, looking at me and waiting for me to start. In case you've never been part of a defence, I should let you know, this is exactly what a bad start of a presentation looks like! <br> In these hard times, I realized I can simply log into Whatsapp Web on this computer. I had the pdf there. Download it on this device and we will be done. I did that.<br> Immediately.<br> Well, I shouldn't have. What I forgot, amidst all this chaos, was that the computer screen was already being shared and the professors could see it. My friends' texts were visible. And they were, let's just say, <i>not very kindly-worded!!</i> And, with this peaceful and calm mind, I proceeded to defend my thesis. <br> To this date, I think the professors did not notice them. I HAVE to believe that. They did take me up for a paid project later on though ... they must have not seen it then, right?</p>" 
-                           data-why="<p> Why Black-Scholes PDE? </p>
-                                     <p> Did you know, there are two types of trade we can do? One is exchange of product. These you see when you do informal exchanges or when you buy something. This is the boring one.
-                                        <br> The fun one is when You and I can come into contract even when neither one of us actually owns the object we are dealing with. We come into contract such as no matter what happens within 2 months I will fetch you the object in question. </p>
-                                     <p> But many things can go wrong. What if it gets very costly suddenly? I will still be bound by contract. I am bearing a risk, and, for that I would like get some money. </p>
-                                     <p> What is a fair value? How much is this risk worth? How do we account for all that could happen to the cost in future? That is what BS model does. It models the uncertainty in a way that we can tell a fair value today based on future possible payoffs. There are several variants of course depending on what type of contract it is: Europea call, American put, etc.</p>
-                                     <p> \(\textbf{p.s. :}\) If you can see into future, you do not need BS model. Yay! Contact me though, we need to talk about Stocks-markets. For research purposes ofcourse. </p>"
-                           data-takeaway="<p> To appreciate this project truly, you need to have had seen Heat Equation modelling and Probability Theory.</p>
-                                          <p> You will see to get the Heat equation we actually use the idea that temperature at a point is the average of the neighbouring points in discrete set up. We extend this to continuous set up to get \(u_{t}=cu_{xx}\).
-                                              <br> The curious among you, might wonder, if averaging is involved then can we look at the same problem from the lens of Probability using Expectation? Well, you can. It is called the <i>Method of risk-neutral measure</i>.</p> 
-                                          <p>That is the main takeaway. How Expectations and diffusion are essentially the same thing but from two different perspective!</p>" 
-                           data-branches="<p>Branches & future scope</p>
-                                          <p> \(\bullet\) The Hurst exponent variant in fractional Brownian motion. [I did not explore yet]
-                                            <br> \(\bullet\) American Options that can be exercised any time before expiration and hence another variable worth of complexity is introduced.
-                                            <br> \(\bullet\) Jump-Diffusion models that accounts for how stock prices may have jumps.
-                                            <br> \(\bullet\) Numerical approximate solutions of BS-models.
-                                          </p>">
-                         <span class="extra-label">extra</span>
-                         <span class="x-box">X</span>
-                      </div>
-                    </div>
-
-                <!-- /////////////////////////////// -->
+                <div class="card-action-switches">
+                  <a href="#" target="_blank">View Ms-Thesis</a>
+                  <a class="switch-help" href="mailto:kalaap.ks@gmail.com?subject=Question: MS Thesis" title="Doubts? Tap to mail me">?</a>
+                  <div class="switch-extra" 
+                       onclick="openExtraModal(this, 'title-ms')"      
+                       data-story="<p> >> \(\textbf{The thesis I almost did:}\) <br>I almost picked the <i>Schrödinger equation</i> for my MS-Thesis topic because I wanted to study one particular PDE in details. Well, that could have taken my life in a very different direction I guess.</p><p> >> \(\textbf{Once there lived a man who could not do simulations:}\) <br>When I did my thesis, I did not know how to do path simulations but my urge to add picture to the thesis led me to draw 100s of paths by hands! <br> You will still find them in the pdf. I never updated that.<br> I am never going to.</p><p> >> \(\textbf{Defeated defender:}\) <br>During my thesis defense, there was a room booking issue and I had to do the presentation in a different room. Naturally, my thesis presentation slides weren't on this room's computer. I tried transferring them over a wire and kept failing. The professors were right infront of me, looking at me and waiting for me to start. In case you've never been part of a defence, I should let you know, this is exactly what a bad start of a presentation looks like! <br> In these hard times, I realized I can simply log into Whatsapp Web on this computer. I had the pdf there. Download it on this device and we will be done. I did that.<br> Immediately.<br> Well, I shouldn't have. What I forgot, amidst all this chaos, was that the computer screen was already being shared and the professors could see it. My friends' texts were visible. And they were, let's just say, <i>not very kindly-worded!!</i> And, with this peaceful and calm mind, I proceeded to defend my thesis. <br> To this date, I think the professors did not notice them. I HAVE to believe that. They did take me up for a paid project later on though ... they must have not seen it then, right?</p>" 
+                       data-why="<p> Why Black-Scholes PDE? </p><p> Did you know, there are two types of trade we can do? One is exchange of product. These you see when you do informal exchanges or when you buy something. This is the boring one. <br> The fun one is when You and I can come into contract even when neither one of us actually owns the object we are dealing with. We come into contract such as no matter what happens within 2 months I will fetch you the object in question. </p><p> But many things can go wrong. What if it gets very costly suddenly? I will still be bound by contract. I am bearing a risk, and, for that I would like be compensated for that. </p><p> What is a fair value? How much is this risk worth? How do we account for all that could happen to the cost in future? That is what BS model does. It models the uncertainty in a way that we can tell a fair value today based on future possible payoffs. There are several variants of course depending on what type of contract it is: European call, American put, etc.</p><p> \(\textbf{p.s. :}\) If you can see into future, you do not need BS model. Yay! Contact me though, we need to talk about Stocks-markets. For research purposes of course. </p>"
+                       data-takeaway="<p> To appreciate this project truly, you need to have had seen Heat Equation modelling and Probability Theory.</p><p> You will see to get the Heat equation we actually use the idea that temperature at a point is the average of the neighbouring points in discrete set up. We extend this to continuous set up to get \(u_{t}=cu_{xx}\). <br> The curious among you, might wonder, if averaging is involved then can we look at the same problem from the lens of Probability using Expectation? Well, you can. It is called the <i>Method of risk-neutral measure</i>.</p><p>That is the main takeaway. How Expectations(under a very specific type of measure) and diffusion are essentially the same thing but from two different perspective!</p>" 
+                       data-branches="<p>Branches & future scopes you can explore.</p><p> \(\bullet\) The Hurst exponent variant in fractional Brownian motion. [I did not explore yet]<br> \(\bullet\) Black-Scholes model in \(\mathbb{R}^d\) that can model multiple risky assets.<br> \(\bullet\) American Options that can be exercised any time before expiration and hence another variable worth of complexity is introduced.<br> \(\bullet\) Jump-Diffusion models that accounts for how stock prices may have jumps.<br> \(\bullet\) Numerical approximate solutions of BS-models.</p>">
+                    <span class="extra-label">extra</span>
+                    <span class="x-box">X</span>
+                  </div>
+                </div>
               </div>
             </li>
-
 
             <!-- Project 1 -->
             <li>
               <div class="project-title-row"></div>
               <div style="margin-left: 14px; margin-top: 16px;">
-                <div class="project-header-flex">              <!--In general alignmnet is fixed, but on a phone we need to fix alignment and wrap because these titles gets long, this does that -->
+                <div class="project-header-flex">
                   <span class="shape-yellow-circle" style="margin-right: 6px;"></span> 
                   <strong class="project-title-text" id="title-ts">Time Series Analysis for Quantitative Finance</strong><br>
                 </div>
                 <div class="project-subtitle">
-                <!-- <span style="display: inline-block; width: 1px;"></span> -->
-                Under Dr. Anirvan Chakraborty , IISER Kolkata (2026)<a href="https://scholar.google.com/citations?user=8zOX2SoAAAAJ&hl=en" target="_blank" class="scholar-link">[Google Scholar]</a>
+                  Under Dr. Anirvan Chakraborty , IISER Kolkata (2026)<a href="https://scholar.google.com/citations?user=8zOX2SoAAAAJ&hl=en" target="_blank" class="scholar-link">[Google Scholar]</a>
                 </div>
               </div>
               <span class="tag" style="margin-left: 40px;">R Studios / Stochastic Processes</span>
@@ -1543,21 +1747,19 @@
                 <span class="shape-red-arrowhead"></span> Blahhh. <br>
                 <span class="shape-red-arrowhead"></span> Blahhh.
 
-                <!-- //////////NEW FOR THE X-BOX////////// -->
-                  <div class="card-action-switches"> <a href="#" target="_blank">View Report</a>
-                   <a class="switch-help" href="mailto:kalaap.ks@gmail.com?subject=Question: Time Series" title="Doubts? Tap to mail me">?</a>
-                     <div class="switch-extra" 
-                        onclick="openExtraModal(this, 'title-ts')" 
-                        data-story="Story about Time Series..." 
-                        data-why="Why Time Series for Quant Finance..." 
-                        data-takeaway="Key takeaway..." 
-                        data-branches="GARCH, ARIMA...">
-                       <span class="extra-label">extra</span>
-                      <span class="x-box">X</span>
-                     </div>
+                <div class="card-action-switches">
+                  <a href="#" target="_blank">View Report</a>
+                  <a class="switch-help" href="mailto:kalaap.ks@gmail.com?subject=Question: Time Series" title="Doubts? Tap to mail me">?</a>
+                  <div class="switch-extra" 
+                       onclick="openExtraModal(this, 'title-ts')" 
+                       data-story="Story about Time Series..." 
+                       data-why="Why Time Series for Quant Finance..." 
+                       data-takeaway="Key takeaway..." 
+                       data-branches="GARCH, ARIMA...">
+                    <span class="extra-label">extra</span>
+                    <span class="x-box">X</span>
                   </div>
-
-                <!-- /////////////////////////////// --> 
+                </div>
               </div>
             </li>
 
@@ -1565,13 +1767,12 @@
             <li>
               <div class="project-title-row"></div>
               <div style="margin-left: 14px; margin-top: 16px;">
-                <div class="project-header-flex">          
+                <div class="project-header-flex">
                   <span class="shape-yellow-circle" style="margin-right: 6px;"></span> 
                   <strong class="project-title-text" id="title-na">Numerical approximation of multi-dimensional Jump-diffusuion model for European options</strong>
                 </div>  
                 <div class="project-subtitle">
-                <!-- <span style="display: inline-block; width: 1px;"></span> -->
-                Under Dr. Rajib Dutta , IISER Kolkata (2026-2027)<a href="https://scholar.google.com/citations?user=tedFiUUAAAAJ&hl=en" target="_blank" class="scholar-link">[Google Scholar]</a>
+                  Under Dr. Rajib Dutta , IISER Kolkata (2026-2027)<a href="https://scholar.google.com/citations?user=tedFiUUAAAAJ&hl=en" target="_blank" class="scholar-link">[Google Scholar]</a>
                 </div>
               </div>  
               <span class="tag" style="margin-left: 40px;">Python / Finite Differences</span>
@@ -1579,23 +1780,19 @@
                 <span class="shape-red-arrowhead"></span> ~summary~ <br>
                 <span class="shape-red-arrowhead"></span> ~summary~
 
-                              <!-- //////////NEW FOR THE X-BOX////////// -->
-                    <div class="card-action-switches"><a href="#" target="_blank">View Report</a>
-                    <a class="switch-help" href="mailto:kalaap.ks@gmail.com?subject=Question: Numerical approx J-D" title="Doubts? Tap to mail me">?</a>
-                      <!-- KEEP in mind to update the Question, it shows in the bottom when you hover,;the id will be used in next <div></div> -->
-                      <div class="switch-extra" 
-                           onclick="openExtraModal(this, 'title-na')"      
-                           data-story="Story about MS Thesis..." 
-                           data-why="Why Black-Scholes PDE..." 
-                           data-takeaway="Main takeaway of MS thesis..." 
-                           data-branches="Branches & future scope...">
-                         <span class="extra-label">extra</span>
-                         <span class="x-box">X</span>
-                      </div>
-                    </div>
-
-                <!-- /////////////////////////////// -->
-
+                <div class="card-action-switches">
+                  <a href="#" target="_blank">View Report</a>
+                  <a class="switch-help" href="mailto:kalaap.ks@gmail.com?subject=Question: Numerical approx J-D" title="Doubts? Tap to mail me">?</a>
+                  <div class="switch-extra" 
+                       onclick="openExtraModal(this, 'title-na')"      
+                       data-story="Story about MS Thesis..." 
+                       data-why="Why Black-Scholes PDE..." 
+                       data-takeaway="Main takeaway of MS thesis..." 
+                       data-branches="Branches & future scope...">
+                    <span class="extra-label">extra</span>
+                    <span class="x-box">X</span>
+                  </div>
+                </div>
               </div>
             </li>
 
@@ -1608,8 +1805,7 @@
                   <strong class="project-title-text" id="title-MC">Markov Chain Monte Carlo methods</strong> <br>
                 </div>
                 <div class="project-subtitle">
-                <!-- <span style="display: inline-block; width: 1px;"></span> -->
-                Under Dr. Satyaki Mazumder, IISER Kolkata (2026)<a href="https://scholar.google.com/citations?user=4d6qQV0AAAAJ&hl=en" target="_blank" class="scholar-link">[Google Scholar]</a>
+                  Under Dr. Satyaki Mazumder, IISER Kolkata (2026)<a href="https://scholar.google.com/citations?user=4d6qQV0AAAAJ&hl=en" target="_blank" class="scholar-link">[Google Scholar]</a>
                 </div>
               </div>
               <span class="tag" style="margin-left: 40px;">Python / Probability & Statistics</span>
@@ -1617,26 +1813,22 @@
                 <span class="shape-red-arrowhead"></span> ~summary~ <br>
                 <span class="shape-red-arrowhead"></span> ~summary~
                               
-                              <!-- //////////NEW FOR THE X-BOX////////// -->
-                  <div class="card-action-switches"> <a href="#" target="_blank">View Report</a>
-                   <a class="switch-help" href="mailto:kalaap.ks@gmail.com?subject=Question: Markov Chains" title="Doubts? Tap to mail me">?</a>
-                     <div class="switch-extra" 
-                        onclick="openExtraModal(this, 'title-MC')" 
-                        data-story="Story about Time Series..." 
-                        data-why="Why Time Series for Quant Finance..." 
-                        data-takeaway="Key takeaway..." 
-                        data-branches="GARCH, ARIMA...">
-                       <span class="extra-label">extra</span>
-                      <span class="x-box">X</span>
-                     </div>
+                <div class="card-action-switches">
+                  <a href="#" target="_blank">View Report</a>
+                  <a class="switch-help" href="mailto:kalaap.ks@gmail.com?subject=Question: Markov Chains" title="Doubts? Tap to mail me">?</a>
+                  <div class="switch-extra" 
+                       onclick="openExtraModal(this, 'title-MC')" 
+                       data-story="Story about Time Series..." 
+                       data-why="Why Time Series for Quant Finance..." 
+                       data-takeaway="Key takeaway..." 
+                       data-branches="GARCH, ARIMA...">
+                    <span class="extra-label">extra</span>
+                    <span class="x-box">X</span>
                   </div>
-
-                <!-- /////////////////////////////// -->               
-              
+                </div>
               </div>
             </li>
 
-            
             <!-- Project 4 -->
             <li>
               <div class="project-title-row"></div>
@@ -1646,8 +1838,7 @@
                   <strong class="project-title-text" id="title-p4">Efficiency of...</strong> <br>
                 </div>
                 <div class="project-subtitle">
-                <!-- <span style="display: inline-block; width: 1px;"></span> -->
-                Under Dr. Satyaki Mazumder, IISER Kolkata (2026)<a href="https://scholar.google.com/citations?user=4d6qQV0AAAAJ&hl=en" target="_blank" class="scholar-link">[Google Scholar]</a>
+                  Under Dr. Satyaki Mazumder, IISER Kolkata (2026)<a href="https://scholar.google.com/citations?user=4d6qQV0AAAAJ&hl=en" target="_blank" class="scholar-link">[Google Scholar]</a>
                 </div>
               </div>
               <span class="tag" style="margin-left: 40px;">Python / Probability & Statistics</span>
@@ -1655,26 +1846,21 @@
                 <span class="shape-red-arrowhead"></span> ~summary~ <br>
                 <span class="shape-red-arrowhead"></span> ~summary~
                               
-                              <!-- //////////NEW FOR THE X-BOX////////// -->
-                  <div class="card-action-switches"> <a href="#" target="_blank">View Report</a>
-                   <a class="switch-help" href="mailto:kalaap.ks@gmail.com?subject=Question:???? " title="Doubts? Tap to mail me">?</a>
-                   <!-- KEEP IN MIND TO UPDATE THE QUESTION IN PLACE OF 4?, THAT SHOWS IN THE LEFT BOTTOM CORNER WHEN YOU HOVER   -->
-                   <div class="switch-extra" 
-                        onclick="openExtraModal(this, 'title-p4')" 
-                        data-story="Story about Time Series..." 
-                        data-why="Why Time Series for Quant Finance..." 
-                        data-takeaway="Key takeaway..." 
-                        data-branches="GARCH, ARIMA...">
-                       <span class="extra-label">extra</span>
-                      <span class="x-box">X</span>
-                     </div>
+                <div class="card-action-switches">
+                  <a href="#" target="_blank">View Report</a>
+                  <a class="switch-help" href="mailto:kalaap.ks@gmail.com?subject=Question:???? " title="Doubts? Tap to mail me">?</a>
+                  <div class="switch-extra" 
+                       onclick="openExtraModal(this, 'title-p4')" 
+                       data-story="Story about Time Series..." 
+                       data-why="Why Time Series for Quant Finance..." 
+                       data-takeaway="Key takeaway..." 
+                       data-branches="GARCH, ARIMA...">
+                    <span class="extra-label">extra</span>
+                    <span class="x-box">X</span>
                   </div>
-
-                <!-- /////////////////////////////// -->               
-              
+                </div>
               </div>
             </li>
-
 
             <!-- Project 5 -->
             <li>
@@ -1685,8 +1871,7 @@
                   <strong class="project-title-text" id="title-p5">Geometry of...</strong> <br>
                 </div>
                 <div class="project-subtitle">
-                <!-- <span style="display: inline-block; width: 1px;"></span> -->
-                Under Dr. Satyaki Mazumder, IISER Kolkata (2026)<a href="https://scholar.google.com/citations?user=4d6qQV0AAAAJ&hl=en" target="_blank" class="scholar-link">[Google Scholar]</a>
+                  Under Dr. Satyaki Mazumder, IISER Kolkata (2026)<a href="https://scholar.google.com/citations?user=4d6qQV0AAAAJ&hl=en" target="_blank" class="scholar-link">[Google Scholar]</a>
                 </div>
               </div>
               <span class="tag" style="margin-left: 40px;">Python / Probability & Statistics</span>
@@ -1694,34 +1879,27 @@
                 <span class="shape-red-arrowhead"></span> ~summary~ <br>
                 <span class="shape-red-arrowhead"></span> ~summary~
                               
-                              <!-- //////////NEW FOR THE X-BOX////////// -->
-                  <div class="card-action-switches"> <a href="#" target="_blank">View Report</a>
-                   <a class="switch-help" href="mailto:kalaap.ks@gmail.com?subject=Question:???? " title="Doubts? Tap to mail me">?</a>
-                   <!-- KEEP IN MIND TO UPDATE THE QUESTION IN PLACE OF 4?, THAT SHOWS IN THE LEFT BOTTOM CORNER WHEN YOU HOVER   -->
-                   <div class="switch-extra" 
-                        onclick="openExtraModal(this, 'title-p5')" 
-                        data-story="Story about Time Series..." 
-                        data-why="Why Time Series for Quant Finance..." 
-                        data-takeaway="Key takeaway..." 
-                        data-branches="GARCH, ARIMA...">
-                       <span class="extra-label">extra</span>
-                      <span class="x-box">X</span>
-                     </div>
+                <div class="card-action-switches">
+                  <a href="#" target="_blank">View Report</a>
+                  <a class="switch-help" href="mailto:kalaap.ks@gmail.com?subject=Question:???? " title="Doubts? Tap to mail me">?</a>
+                  <div class="switch-extra" 
+                       onclick="openExtraModal(this, 'title-p5')" 
+                       data-story="Story about Time Series..." 
+                       data-why="Why Time Series for Quant Finance..." 
+                       data-takeaway="Key takeaway..." 
+                       data-branches="GARCH, ARIMA...">
+                    <span class="extra-label">extra</span>
+                    <span class="x-box">X</span>
                   </div>
-
-                <!-- /////////////////////////////// -->               
-              
+                </div>
               </div>
             </li>
-
-            
           </ul>
         </div>
       </section>
     </div>        
 
-
-    <!-- 4. FUN SECTION -->
+    <!-- 5. FUN SECTION -->
     <div class="page-section" id="fun">
       <section class="terminal-window" data-title="bash: The Fun">
         <div class="terminal-header">
@@ -1734,8 +1912,6 @@
           <h2><span style="display:inline-block; width:12px; height:12px; background-color: var(--green); margin-right:8px;"></span>Let there be... Fun</h2>
           <p style="font-size: 0.88rem; color: var(--text-mutedD); margin-bottom: 12px;">Curated notes, computational graphics, and mini-games created during study & research.</p>
           
-          
-          <!-- Row 1: Notes & Simulated side-by-side -->
           <div class="fun-grid">
             <a href="notes.html" class="fun-card">
               <div>
@@ -1754,18 +1930,15 @@
             </a>
           </div>
 
-          <!-- Row 2: Games Heading -->
           <div style="margin-top: 32px; border-top: 1px dashed var(--border); padding-top: 20px;">
-            <div class="fun-card-title" style="font-size: 1.2rem; margin-bottom: 4px; " id="games">Games</div>
+            <div class="fun-card-title" style="font-size: 1.2rem; margin-bottom: 4px;" id="games">Games</div>
             <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 12px;">Interactive mathematical puzzles and visual estimation experiments.</p>
             
-            <!-- Auto-wrapping 3-per-row grid (1 to 3 in first row, 4 to 6 in second row) -->
             <div class="games-grid">
               
               <!-- Game 01: Active Game of Estimation -->
               <div class="game-box-item">
                 <a href="game1.html" class="game-icon-card" title="Play Game of Estimation">
-                  <!-- Vector icon depicting shape estimation & Monte Carlo points -->
                   <svg class="game-icon-svg" viewBox="0 0 64 64">
                     <circle cx="32" cy="32" r="24" stroke-width="2.2" stroke-dasharray="3 3"/>
                     <path d="M 32 8 A 24 24 0 0 1 54 42 L 32 32 Z" fill="rgba(63, 185, 80, 0.35)" stroke-width="2.2"/>
@@ -1802,134 +1975,71 @@
                   <div class="game-tags-card" style="opacity: 0.6;">Game 03</div>
                 </div>
               </div>
-
-              <!-- Game 04 Placeholder (Wraps to second row) -->
-
-              <!-- <div class="game-box-item">
-                <div class="game-icon-card placeholder" title="Coming Soon">
-                  <span style="font-size: 1.5rem; color: var(--border);">+</span>
-                </div>
-                <div class="game-info">
-                  <div class="game-title" style="color: var(--text-muted);">Coming Soon</div>
-                  <div class="game-tags-card" style="opacity: 0.6;">Game 04</div>
-                </div>
-              </div> -->
-
-              <!-- Game 05 Placeholder -->
-              
-              <!-- <div class="game-box-item">
-                <div class="game-icon-card placeholder" title="Coming Soon">
-                  <span style="font-size: 1.5rem; color: var(--border);">+</span>
-                </div>
-                <div class="game-info">
-                  <div class="game-title" style="color: var(--text-muted);">Coming Soon</div>
-                  <div class="game-tags-card" style="opacity: 0.6;">Game 05</div>
-                </div>
-              </div> -->
-
-              <!-- Game 06 Placeholder -->
-              
-              <!-- <div class="game-box-item">
-                <div class="game-icon-card placeholder" title="Coming Soon">
-                  <span style="font-size: 1.5rem; color: var(--border);">+</span>
-                </div>
-                <div class="game-info">
-                  <div class="game-title" style="color: var(--text-muted);">Coming Soon</div>
-                  <div class="game-tags-card" style="opacity: 0.6;">Game 06</div>
-                </div>
-              </div> -->
-
-            
             </div>
           </div>
-
         </div>
       </section>
     </div>
 
-    <!-- Sink Pop-up Section -->
-    <div class="sink-section-wrapper" id="sink-container">
-      <a href="YOUR_LINK_HERE"
-         target="_blank" 
-         class="sink-hint-popup" 
-         id="sinkHint"
-         style="transform: translate(60px, 100px);">
-        <span style="color: var(--accent); font-weight: bold;">*</span>
-        Did you know? These background animations are motivated from Probability density ribbons and an sink-flow vector field.
-      </a>
+      <!-- Controls the gap at the bottom of the home page -->
+  <div style="height: 20vh;"></div>
 
-      <!-- Exact 360x360 sink canvas -->
-      <canvas id="sinkCanvas" width="360" height="360"></canvas>
+    <!-- 6. CLEAN INFTAG AT THE BOTTOM -->
+    <div style="text-align: center; margin: 30px auto 40px auto;">
+      <div class="inftag">
+        Did you know? These background animations are motivated from Probability density ribbons (Fokker-Planck equation) and a sink-flow vector field (-x,-y). 
+        <a href="simulated.html" target="_blank">Explore the math &rarr;</a>
+      </div>
     </div>
 
   </div>
 
-
-<!-- /////////////////////////////////////////////////// -->
- <!-- ///////////////////////////////////////////// -->
-
-  <!-- ================================================= -->
-    <!-- PASTE THE MODAL HTML HERE (Right before <script>) -->
-    <!-- ================================================= -->
-      <div id="extra-modal-overlay">
-  <div class="extra-window">
-    
-    <!-- Floating Title Badge -->
-    <div class="floating-extra-title">
-      E<span class="title-x-box">X</span>TRA<span class="blinking-dot">.</span>
-    </div>
-
-    <!-- Terminal-like Header -->
-    <div class="extra-header">
-      <span id="modal-project-title">Project Title</span>
-      <button class="close-extra-btn" onclick="closeExtraModal()">×</button>
-    </div>
-
-    <!-- Main Content Area -->
-    <div class="extra-body">
-      <div class="extra-tabs">
-        <div class="extra-tab-link active" data-panel="panel-story">story</div>
-        <div class="extra-tab-link" data-panel="panel-why">why</div>
-        <div class="extra-tab-link" data-panel="panel-takeaway">main takeaway</div>
-        <div class="extra-tab-link" data-panel="panel-custom1">branches</div>
-        <div class="extra-tab-link" data-panel="panel-custom2">[add]</div>
+  <!-- MODAL ARCHITECTURE -->
+  <div id="extra-modal-overlay">
+    <div class="extra-window">
+      <div class="floating-extra-title">
+        E<span class="title-x-box">X</span>TRA<span class="blinking-dot">.</span>
       </div>
 
-      <div class="extra-content-viewport">
-        <div class="extra-tab-panel active" id="panel-story">
-          How I almost picked Schrödinger's Equation before realizing the deep probabilistic elegance of Black-Scholes. The foundational measure-theoretic construction of Brownian Motion provided the necessary toolkit. It was a fascinating transition.
+      <div class="extra-header">
+        <span id="modal-project-title">Project Title</span>
+        <button class="close-extra-btn" onclick="closeExtraModal()">×</button>
+      </div>
+
+      <div class="extra-body">
+        <div class="extra-tabs">
+          <div class="extra-tab-link active" data-panel="panel-story">story</div>
+          <div class="extra-tab-link" data-panel="panel-why">why</div>
+          <div class="extra-tab-link" data-panel="panel-takeaway">main takeaway</div>
+          <div class="extra-tab-link" data-panel="panel-custom1">branches</div>
+          <div class="extra-tab-link" data-panel="panel-custom2">books</div>
         </div>
-        <div class="extra-tab-panel" id="panel-why">
-          BSM provides a definitive PDE that elegantly links the price of an option directly to its underlying stochastic volatility and risk-neutral drift. It's the cornerstone of modern quantitative finance.
+
+        <div class="extra-content-viewport">
+          <div class="extra-tab-panel active" id="panel-story">story text</div>
+          <div class="extra-tab-panel" id="panel-why">data on why</div>
+          <div class="extra-tab-panel" id="panel-takeaway">takeaway text</div>
+          <div class="extra-tab-panel" id="panel-custom1">text</div>
+          <div class="extra-tab-panel" id="panel-custom2">text</div>
         </div>
-        <div class="extra-tab-panel" id="panel-takeaway">
-          The core takeaway will go here...
-        </div>
-        <div class="extra-tab-panel" id="panel-custom1">
-          Branching concepts, extensions like stochastic volatility models...
-        </div>
-        <div class="extra-tab-panel" id="panel-custom2">
-          Placeholder for future template expansion...
+
+        <div class="extra-comment-section">
+          <div class="extra-comment-title">Comments or Questions</div>
+          <textarea id="extra-comment-input" rows="3" placeholder="feel free to leave informal comments"></textarea>
         </div>
       </div>
 
-      <div class="extra-comment-section">
-        <div class="extra-comment-title">Comments or Questions</div>
-        <textarea id="extra-comment-input" rows="3" placeholder="feel free to leave informal comments"></textarea>
+      <div class="extra-footer">
+        <button class="modal-btn modal-btn-close" onclick="closeExtraModal()">Close</button>
+        <button class="modal-btn modal-btn-post" onclick="postExtraComment()">Post</button>
       </div>
-    </div>
-
-    <div class="extra-footer">
-      <button class="modal-btn modal-btn-close" onclick="closeExtraModal()">Close</button>
-      <button class="modal-btn modal-btn-post" onclick="postExtraComment()">Post</button>
     </div>
   </div>
-</div>
 
-
-<!-- /////////////////////////////////////////////// -->
-<!-- /////////////////////////////////////////////// -->
-<!-- /////////////////////////////////////////////// -->
+  <!-- FOOTER BANNER -->
+  <footer class="site-footer-banner" id="siteFooter">
+    &copy; 2026 Kalaap Sadhu. All rights reserved.
+  </footer>
 
   <script>
     /* ========================================================
@@ -1958,23 +2068,18 @@
 
       for (let r = 0; r < NUM_RIBBONS; r++) {
         const baseY = bgHeight * (0.32 + r * 0.12);
-
         const mu1 = bgWidth * (0.32 + 0.20 * Math.sin(ribbonTime * 0.6 + r * 0.8));
         const sigma1 = bgWidth * (0.13 + 0.04 * Math.cos(ribbonTime * 0.4 + r));
-
         const mu2 = bgWidth * (0.68 + 0.18 * Math.cos(ribbonTime * 0.5 - r * 0.7));
         const sigma2 = bgWidth * (0.11 + 0.03 * Math.sin(ribbonTime * 0.7 + r));
-
         const amplitude = bgHeight * 0.17;
 
         bgCtx.beginPath();
         for (let i = 0; i <= RESOLUTION; i++) {
           const x = (i / RESOLUTION) * bgWidth;
-
           const g1 = Math.exp(-Math.pow(x - mu1, 2) / (2 * sigma1 * sigma1));
           const g2 = Math.exp(-Math.pow(x - mu2, 2) / (2 * sigma2 * sigma2));
           const density = (g1 * 0.65 + g2 * 0.55);
-
           const y = baseY - density * amplitude + Math.sin(x * 0.0035 + ribbonTime + r) * 5;
 
           if (i === 0) bgCtx.moveTo(x, y);
@@ -2067,24 +2172,33 @@
     }
 
     /* ========================================================
-       3. VECTOR FIELD SINK (-x, -y)
+       3. VECTOR FIELD SINK (-x, -y) TARGETING THE '~' SWITCH
        ======================================================== */
-    const canvas = document.getElementById('sinkCanvas');
-    const ctx = canvas.getContext('2d');
+    const sinkCanvas = document.getElementById('sinkCanvas');
+    const sinkCtx = sinkCanvas.getContext('2d');
+    const portalSwitch = document.getElementById('portalSwitch');
 
     const numParticles = 45;
     const particles = [];
     const R_max = 210;
     const r_min = 22;
 
-    function resizeCanvas() {
-      canvas.width = 360;
-      canvas.height = 360;
+    function resizeSinkCanvas() {
+      sinkCanvas.width = 360;
+      sinkCanvas.height = 360;
     }
-    resizeCanvas();
+    resizeSinkCanvas();
+    window.addEventListener('resize', resizeSinkCanvas);
 
+    // Calculate center dynamically by reading the exact viewport coordinates of the portal switch
     function getSinkOrigin() {
-      return { x: 360 - 24 - 22, y: 360 - 24 - 22 };
+      if (!portalSwitch) return { x: 360 - 24 - 22, y: 360 - 24 - 22 };
+      const pRect = portalSwitch.getBoundingClientRect();
+      const sRect = sinkCanvas.getBoundingClientRect();
+      return {
+        x: (pRect.left + pRect.width / 2) - sRect.left,
+        y: (pRect.top + pRect.height / 2) - sRect.top
+      };
     }
 
     class Particle {
@@ -2101,37 +2215,32 @@
 
       update() {
         this.r -= this.speed;
-        if (this.r <= r_min) {
-          this.reset();
-        }
+        if (this.r <= r_min) this.reset();
       }
 
       draw(origin) {
         const x = origin.x + this.r * Math.cos(this.theta);
         const y = origin.y + this.r * Math.sin(this.theta);
-
         const fadeDist = 35;
         let opacity = 0.24;
         if (this.r - r_min < fadeDist) {
           opacity *= (this.r - r_min) / fadeDist;
         }
 
-        ctx.fillStyle = document.body.classList.contains('light-mode') 
+        sinkCtx.fillStyle = document.body.classList.contains('light-mode') 
           ? `rgba(35, 39, 45, ${opacity * 1.5})` 
           : `rgba(63, 185, 80, ${opacity})`;
 
-        ctx.beginPath();
-        ctx.arc(x, y, 1.2, 0, Math.PI * 2);
-        ctx.fill();
+        sinkCtx.beginPath();
+        sinkCtx.arc(x, y, 1.2, 0, Math.PI * 2);
+        sinkCtx.fill();
       }
     }
 
-    for (let i = 0; i < numParticles; i++) {
-      particles.push(new Particle());
-    }
+    for (let i = 0; i < numParticles; i++) particles.push(new Particle());
 
     function animateSink() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      sinkCtx.clearRect(0, 0, sinkCanvas.width, sinkCanvas.height);
       const origin = getSinkOrigin();
 
       for (let p of particles) {
@@ -2143,11 +2252,10 @@
     animateSink();
 
     /* ========================================================
-       4. SCROLL SPY - ACTIVE TAB GLOW
+       4. SCROLL SPY, ACTIVE TAB & DYNAMIC DOCKING
        ======================================================== */
     const sectionsObs = document.querySelectorAll('.page-section');
     const navItems = {
-      'me': document.getElementById('nav-me'),
       'resume': document.getElementById('nav-resume'),
       'projects': document.getElementById('nav-projects'),
       'fun': document.getElementById('funBtn')
@@ -2157,7 +2265,6 @@
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('is-revealed');
-
           const id = entry.target.id;
           Object.values(navItems).forEach(btn => btn && btn.classList.remove('active-tab'));
           if (navItems[id]) {
@@ -2173,6 +2280,66 @@
 
     sectionsObs.forEach(sec => scrollObserver.observe(sec));
 
+    // Floating Cluster: Appear past ME section & adjust above footer
+    const floatingCluster = document.getElementById('floatingCluster');
+    const btnJumpTop = document.getElementById('btnJumpTop');
+    const btnSharePage = document.getElementById('btnSharePage');
+    const siteFooter = document.getElementById('siteFooter');
+
+    window.addEventListener('scroll', () => {
+      const meSection = document.getElementById('me');
+      const meBottom = meSection ? meSection.getBoundingClientRect().bottom : 300;
+
+      // Reveal Jump-To-Top and Share after scrolling past ME
+      if (meBottom < 100) {
+        btnJumpTop.classList.add('is-active');
+        btnSharePage.classList.add('is-active');
+      } else {
+        btnJumpTop.classList.remove('is-active');
+        btnSharePage.classList.remove('is-active');
+      }
+
+      // Lift cluster and shift canvas when nearing the bottom footer banner
+      const footerRect = siteFooter.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      if (footerRect.top < viewportHeight) {
+        const overlap = viewportHeight - footerRect.top;
+        floatingCluster.style.bottom = `${overlap + 20}px`;
+        sinkCanvas.style.bottom = `${overlap}px`;
+      } else {
+        floatingCluster.style.bottom = window.innerWidth <= 600 ? '18px' : '24px';
+        sinkCanvas.style.bottom = '0px';
+      }
+    });
+
+    // Jump to top smooth scroll
+    btnJumpTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Native Web Share / Clipboard Copy with Tooltip Feedback
+    btnSharePage.addEventListener('click', async () => {
+      const shareData = {
+        title: 'Kalaap Sadhu | Portfolio',
+        text: 'Explore quantitative finance, stochastic calculus notes, and interactive estimation games.',
+        url: window.location.href
+      };
+
+      if (navigator.share) {
+        try {
+          await navigator.share(shareData);
+        } catch (e) {
+          console.log('Share canceled');
+        }
+      } else {
+        navigator.clipboard.writeText(window.location.href);
+        btnSharePage.setAttribute('data-tooltip', 'Link Copied!');
+        setTimeout(() => {
+          btnSharePage.setAttribute('data-tooltip', 'Share page');
+        }, 2200);
+      }
+    });
+
     /* ========================================================
        5. THEME TOGGLE & TASK VIEW LOGIC
        ======================================================== */
@@ -2185,23 +2352,9 @@
       document.body.classList.toggle('light-mode');
       const isLight = document.body.classList.contains('light-mode');
       localStorage.setItem('site-theme', isLight ? 'light' : 'dark');
+      renderMiniScene();
     });
 
-    // const funDropdown = document.getElementById('funDropdown');
-    // const funBtn = document.getElementById('funBtn');
-
-    // funBtn.addEventListener('click', (e) => {
-    //   e.stopPropagation();
-    //   funDropdown.classList.toggle('show');
-    // });
-
-    // window.addEventListener('click', () => {
-    //   if (funDropdown.classList.contains('show')) {
-    //     funDropdown.classList.remove('show');
-    //   }
-    // });
-
-        /* --- Fun Dropdown Logic --- */
     const funDropdown = document.getElementById('funDropdown');
     const funBtn = document.getElementById('funBtn');
 
@@ -2213,7 +2366,6 @@
       }
     });
 
-    /* --- Contact Dropdown Logic --- */
     const contactDropdown = document.getElementById('contactDropdown');
     const contactBtn = document.getElementById('contactBtn');
 
@@ -2227,21 +2379,16 @@
       });
     }
 
-    /* --- Close Dropdowns on Click Outside --- */
     window.addEventListener('click', () => {
-      if (funDropdown && funDropdown.classList.contains('show')) {
-        funDropdown.classList.remove('show');
-      }
-      if (contactDropdown && contactDropdown.classList.contains('show')) {
-        contactDropdown.classList.remove('show');
-      }
+      if (funDropdown && funDropdown.classList.contains('show')) funDropdown.classList.remove('show');
+      if (contactDropdown && contactDropdown.classList.contains('show')) contactDropdown.classList.remove('show');
     });
 
     const dropdownGamesLink = document.getElementById('dropdownGamesLink');
-      if (dropdownGamesLink) {
+    if (dropdownGamesLink) {
       dropdownGamesLink.addEventListener('click', () => {
-      funDropdown.classList.remove('show');
-    });
+        funDropdown.classList.remove('show');
+      });
     }
 
     const ksBtn = document.getElementById('ksBtn');
@@ -2304,137 +2451,347 @@
     });
 
     /* ========================================================
-       6. SINK POP-UP OBSERVER
+       6. EXTRA MODAL CONTROLS
        ======================================================== */
-    const sinkContainer = document.getElementById('sink-container');
-    const sinkHint = document.getElementById('sinkHint');
+    const modalOverlay = document.getElementById('extra-modal-overlay');
+    const modalTitle = document.getElementById('modal-project-title');
+    const commentInput = document.getElementById('extra-comment-input');
 
-    if (sinkContainer && sinkHint) {
-      let hasTriggered = false;
+    function openExtraModal(btn, projectTitleId) {
+      const triggeringElement = document.getElementById(projectTitleId);
+      if (triggeringElement) {
+        modalTitle.innerText = triggeringElement.innerText;
+      }
 
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting && !hasTriggered) {
-            hasTriggered = true;
-            sinkHint.classList.add('is-visible');
+      commentInput.value = '';
 
-            setTimeout(() => {
-              sinkHint.classList.remove('is-visible');
-              setTimeout(() => {
-                sinkHint.style.display = 'none';
-              }, 600);
-            }, 8000);
+      if (btn) {
+        const storyPanel = document.getElementById('panel-story');
+        const whyPanel = document.getElementById('panel-why');
+        const takeawayPanel = document.getElementById('panel-takeaway');
+        const branchesPanel = document.getElementById('panel-custom1');
 
-            observer.unobserve(sinkContainer);
-          }
-        });
-      }, { threshold: 0.35 });
+        if (storyPanel && btn.dataset.story) storyPanel.innerHTML = btn.dataset.story;
+        if (whyPanel && btn.dataset.why) whyPanel.innerHTML = btn.dataset.why;
+        if (takeawayPanel && btn.dataset.takeaway) takeawayPanel.innerHTML = btn.dataset.takeaway;
+        if (branchesPanel && btn.dataset.branches) branchesPanel.innerHTML = btn.dataset.branches;
 
-      observer.observe(sinkContainer);
+        if (window.MathJax && MathJax.typesetPromise) {
+          MathJax.typesetPromise([storyPanel, whyPanel, takeawayPanel, branchesPanel]);
+        }
+      }
+
+      const allTabs = document.querySelectorAll('.extra-tab-link');
+      const allPanels = document.querySelectorAll('.extra-tab-panel');
+      allTabs.forEach(t => t.classList.remove('active'));
+      allPanels.forEach(p => p.classList.remove('active'));
+
+      const defaultTab = document.querySelector('.extra-tab-link[data-panel="panel-story"]');
+      const defaultPanel = document.getElementById('panel-story');
+      if (defaultTab) defaultTab.classList.add('active');
+      if (defaultPanel) defaultPanel.classList.add('active');
+
+      modalOverlay.classList.add('is-visible');
     }
 
+    function closeExtraModal() {
+      modalOverlay.classList.remove('is-visible');
+    }
 
-/* ========================================= */
-      /* EXTRA MODAL CONTROLS                      */
-      /* ========================================= */
+    const extraTabsContainer = document.querySelector('.extra-tabs');
+    if (extraTabsContainer) {
+      extraTabsContainer.addEventListener('click', (e) => {
+        if (e.target.classList.contains('extra-tab-link')) {
+          const allTabs = document.querySelectorAll('.extra-tab-link');
+          const allPanels = document.querySelectorAll('.extra-tab-panel');
 
-const modalOverlay = document.getElementById('extra-modal-overlay');
-      const modalTitle = document.getElementById('modal-project-title');
-      const commentInput = document.getElementById('extra-comment-input');
+          allTabs.forEach(t => t.classList.remove('active'));
+          allPanels.forEach(p => p.classList.remove('active'));
 
-      function openExtraModal(btn, projectTitleId) {
-        // 1. Grab the title from the card that was clicked
-        const triggeringElement = document.getElementById(projectTitleId);
-        if (triggeringElement) {
-          modalTitle.innerText = triggeringElement.innerText;
+          e.target.classList.add('active');
+          const targetPanel = document.getElementById(e.target.dataset.panel);
+          if (targetPanel) targetPanel.classList.add('active');
         }
+      });
+    }
 
-        // 2. Clear previous comment text
-        commentInput.value = '';
+    function postExtraComment() {
+      const comment = commentInput.value.trim();
+      const activeProject = modalTitle.innerText;
+      if (comment) {
+        const subject = encodeURIComponent(`Comment on project: ${activeProject}`);
+        const body = encodeURIComponent(`Project: ${activeProject}\n\nComment:\n${comment}`);
+        window.location.href = `mailto:kalaap.ks@gmail.com?subject=${subject}&body=${body}`;
+      }
+    }
 
-        // 3. Inject HTML text (supports <p>, <i>, <br>, LaTeX) into tabs
-        if (btn) {
-          const storyPanel = document.getElementById('panel-story');
-          const whyPanel = document.getElementById('panel-why');
-          const takeawayPanel = document.getElementById('panel-takeaway');
-          const branchesPanel = document.getElementById('panel-custom1');
+    /* ========================================================
+       7. MINIATURE AUTOPILOT GAME DEMO (Alternates K <-> S)
+       ======================================================== */
+    const miniShapeCanvas = document.getElementById('miniShapeCanvas');
+    const miniShapeCtx = miniShapeCanvas.getContext('2d');
 
-          if (storyPanel && btn.dataset.story) storyPanel.innerHTML = btn.dataset.story;
-          if (whyPanel && btn.dataset.why) whyPanel.innerHTML = btn.dataset.why;
-          if (takeawayPanel && btn.dataset.takeaway) takeawayPanel.innerHTML = btn.dataset.takeaway;
-          if (branchesPanel && btn.dataset.branches) branchesPanel.innerHTML = btn.dataset.branches;
+    const miniDrawCanvas = document.getElementById('miniDrawCanvas');
+    const miniDrawCtx = miniDrawCanvas.getContext('2d');
 
-          // Rerender LaTeX expressions inside the panels
-          if (window.MathJax && MathJax.typesetPromise) {
-            MathJax.typesetPromise([storyPanel, whyPanel, takeawayPanel, branchesPanel]);
-          } else if (window.renderMathInElement) {
-            const viewport = document.querySelector('.extra-content-viewport');
-            if (viewport) renderMathInElement(viewport);
+    const miniMathCanvas = document.getElementById('miniMathCanvas');
+    const miniMathCtx = miniMathCanvas.getContext('2d');
+
+    // Dedicated offscreen mask for exact mathematical domain \Omega
+    const miniMaskCanvas = document.createElement('canvas');
+    miniMaskCanvas.width = 260;
+    miniMaskCanvas.height = 260;
+    const miniMaskCtx = miniMaskCanvas.getContext('2d');
+
+    const MW = 260;
+    const MH = 260;
+    const S = MW / 480; // Scale coordinate factor from 480x480 to 260x260
+
+    let currentMiniShape = 'K'; // Starts on K, alternates to S
+
+    function drawCurrentShapePath(ctx) {
+      ctx.beginPath();
+      if (currentMiniShape === 'K') {
+        ctx.moveTo(90 * S, 60 * S);
+        ctx.lineTo(165 * S, 60 * S);
+        ctx.lineTo(165 * S, 205 * S);
+        ctx.lineTo(315 * S, 60 * S);
+        ctx.lineTo(410 * S, 60 * S);
+        ctx.lineTo(240 * S, 240 * S);
+        ctx.lineTo(415 * S, 420 * S);
+        ctx.lineTo(315 * S, 420 * S);
+        ctx.lineTo(165 * S, 270 * S);
+        ctx.lineTo(165 * S, 420 * S);
+        ctx.lineTo(90 * S, 420 * S);
+        ctx.closePath();
+      } else {
+        // Shape 'S' exactly from game1.html
+        ctx.moveTo(110 * S, 60 * S);
+        ctx.lineTo(390 * S, 60 * S);
+        ctx.lineTo(390 * S, 190 * S);
+        ctx.lineTo(200 * S, 190 * S);
+        ctx.lineTo(200 * S, 230 * S);
+        ctx.lineTo(390 * S, 230 * S);
+        ctx.lineTo(390 * S, 420 * S);
+        ctx.lineTo(110 * S, 420 * S);
+        ctx.lineTo(110 * S, 290 * S);
+        ctx.lineTo(300 * S, 290 * S);
+        ctx.lineTo(300 * S, 250 * S);
+        ctx.lineTo(110 * S, 250 * S);
+        ctx.closePath();
+      }
+    }
+
+    function renderMiniScene() {
+      const isLight = document.body.classList.contains('light-mode');
+      const strokeColor = isLight ? '#23272d' : '#c9d1d9';
+      const fillColor = isLight ? 'rgba(0, 0, 0, 0.04)' : 'rgba(255, 255, 255, 0.04)';
+
+      miniShapeCtx.clearRect(0, 0, MW, MH);
+      miniMaskCtx.clearRect(0, 0, MW, MH);
+
+      // Binary mask: Solid fill strictly for mathematical domain hits
+      miniMaskCtx.fillStyle = '#ffffff';
+      drawCurrentShapePath(miniMaskCtx);
+      miniMaskCtx.fill();
+
+      // Visual shape: Aesthetic outline & subtle fill (Gridless L3)
+      miniShapeCtx.strokeStyle = strokeColor;
+      miniShapeCtx.fillStyle = fillColor;
+      miniShapeCtx.lineWidth = 2;
+      drawCurrentShapePath(miniShapeCtx);
+      miniShapeCtx.stroke();
+      miniShapeCtx.fill();
+    }
+    renderMiniScene();
+
+    // Autopilot State Machine
+    let miniTarget = Math.floor(Math.random() * 70) + 15;
+    let demoState = 'paint'; // 'paint' | 'sample' | 'verdict' | 'pause'
+    let sweepProgress = 0;
+    let miniSamples = [];
+    let miniNOmega = 0;
+    let miniNShaded = 0;
+    let demoTimer = 0;
+    let isVisibleOnScreen = true;
+
+    // Power saving: pause simulator when scrolled out of view
+    const demoObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => { isVisibleOnScreen = e.isIntersecting; });
+    }, { threshold: 0.1 });
+    demoObserver.observe(document.getElementById('game-showcase'));
+
+    function resetDemoLoop() {
+      // Alternate between K and S
+      currentMiniShape = (currentMiniShape === 'K') ? 'S' : 'K';
+
+      document.getElementById('miniTerminalTitle').textContent = 
+        `[${currentMiniShape}] • Click to Play`;
+      document.getElementById('miniDescText').innerHTML = 
+        `Rejection sampling over Level 3 Topology (<strong>Shape '${currentMiniShape}'</strong>). The live engine samples uniform proposals, separates domain vs. shaded points, and determines empirical area coverage.`;
+
+      renderMiniScene();
+
+      miniTarget = Math.floor(Math.random() * 70) + 15;
+      document.getElementById('miniTargetVal').textContent = `${miniTarget}%`;
+      document.getElementById('miniPHatVal').textContent = `0.0%`;
+      document.getElementById('miniNSamples').textContent = `0 pts`;
+      document.getElementById('miniErrVal').textContent = `--%`;
+      document.getElementById('miniVerdictBadge').textContent = '   Shading target area...';
+      document.getElementById('miniVerdictBadge').style.borderColor = 'var(--green)';
+      document.getElementById('miniVerdictBadge').style.color = 'var(--green)';
+
+      miniDrawCtx.clearRect(0, 0, MW, MH);
+      miniMathCtx.clearRect(0, 0, MW, MH);
+
+      sweepProgress = 0;
+      miniSamples = [];
+      miniNOmega = 0;
+      miniNShaded = 0;
+      demoTimer = 0;
+      demoState = 'paint';
+    }
+
+    function runMiniMonteCarloSampling() {
+      const maskImg = miniMaskCtx.getImageData(0, 0, MW, MH).data;
+      const drawImg = miniDrawCtx.getImageData(0, 0, MW, MH).data;
+      const N = 1000;
+      miniSamples = [];
+      miniNOmega = 0;
+      miniNShaded = 0;
+
+      for (let i = 0; i < N; i++) {
+        const x = Math.floor(Math.random() * MW);
+        const y = Math.floor(Math.random() * MH);
+        const idx = (y * MW + x) * 4 + 3;
+
+        const inDom = maskImg[idx] > 100;
+        const inShd = inDom && (drawImg[idx] > 20);
+
+        if (inDom) miniNOmega++;
+        if (inShd) miniNShaded++;
+
+        miniSamples.push({ x, y, inDom, inShd });
+      }
+    }
+
+    let sampleIdx = 0;
+
+    function miniDemoTick() {
+      if (!isVisibleOnScreen) {
+        requestAnimationFrame(miniDemoTick);
+        return;
+      }
+
+      if (demoState === 'paint') {
+        // 3x Slower brush sweep (0.010 per frame vs 0.035)
+        sweepProgress += 0.010;
+        const cutoffY = (60 + (360 * (miniTarget / 100)) * Math.min(sweepProgress, 1)) * S;
+
+        miniDrawCtx.save();
+        miniDrawCtx.lineWidth = 18 * S;
+        miniDrawCtx.lineCap = 'round';
+        miniDrawCtx.lineJoin = 'round';
+        miniDrawCtx.strokeStyle = 'rgba(88, 166, 255, 0.20)';
+
+        miniDrawCtx.beginPath();
+        if (currentMiniShape === 'K') {
+          miniDrawCtx.moveTo(110 * S, 70 * S);
+          miniDrawCtx.lineTo(150 * S, Math.min(cutoffY, 410 * S));
+          miniDrawCtx.stroke();
+
+          if (cutoffY > 150 * S) {
+            miniDrawCtx.beginPath();
+            miniDrawCtx.moveTo(165 * S, 205 * S);
+            miniDrawCtx.lineTo(Math.min(300 * S, 165 * S + (cutoffY - 150 * S)), cutoffY);
+            miniDrawCtx.stroke();
           }
-        }
-
-        // 4. Reset to 'story' tab being active
-        const allTabs = document.querySelectorAll('.extra-tab-link');
-        const allPanels = document.querySelectorAll('.extra-tab-panel');
-        allTabs.forEach(t => t.classList.remove('active'));
-        allPanels.forEach(p => p.classList.remove('active'));
-
-        const defaultTab = document.querySelector('.extra-tab-link[data-panel="panel-story"]');
-        const defaultPanel = document.getElementById('panel-story');
-        if (defaultTab) defaultTab.classList.add('active');
-        if (defaultPanel) defaultPanel.classList.add('active');
-
-        // 5. Open modal
-        modalOverlay.classList.add('is-visible');
-      }
-
-      function closeExtraModal() {
-        modalOverlay.classList.remove('is-visible');
-      }
-
-      const extraTabsContainer = document.querySelector('.extra-tabs');
-      if (extraTabsContainer) {
-        extraTabsContainer.addEventListener('click', (e) => {
-          if (e.target.classList.contains('extra-tab-link')) {
-            const allTabs = document.querySelectorAll('.extra-tab-link');
-            const allPanels = document.querySelectorAll('.extra-tab-panel');
-
-            allTabs.forEach(t => t.classList.remove('active'));
-            allPanels.forEach(p => p.classList.remove('active'));
-
-            e.target.classList.add('active');
-            const targetPanel = document.getElementById(e.target.dataset.panel);
-            if (targetPanel) targetPanel.classList.add('active');
+        } else {
+          // Shape 'S' programmatic shading
+          miniDrawCtx.moveTo(130 * S, 80 * S);
+          miniDrawCtx.lineTo(Math.min(370 * S, (130 + 240 * sweepProgress) * S), 80 * S);
+          if (cutoffY > 140 * S) {
+            miniDrawCtx.lineTo(370 * S, Math.min(cutoffY, 180 * S));
+            miniDrawCtx.lineTo(Math.max(130 * S, 370 * S - (cutoffY - 140 * S)), 210 * S);
           }
-        });
-      }
+          if (cutoffY > 260 * S) {
+            miniDrawCtx.lineTo(370 * S, 240 * S);
+            miniDrawCtx.lineTo(370 * S, Math.min(cutoffY, 400 * S));
+            miniDrawCtx.lineTo(130 * S, 400 * S);
+          }
+          miniDrawCtx.stroke();
+        }
+        miniDrawCtx.restore();
 
-      function postExtraComment() {
-        const comment = commentInput.value.trim();
-        const activeProject = modalTitle.innerText;
-        if (comment) {
-          const subject = encodeURIComponent(`Comment on project: ${activeProject}`);
-          const body = encodeURIComponent(`Project: ${activeProject}\n\nComment:\n${comment}`);
-          window.location.href = `mailto:kalaap.ks@gmail.com?subject=${subject}&body=${body}`;
+        if (sweepProgress >= 1) {
+          runMiniMonteCarloSampling();
+          sampleIdx = 0;
+          demoState = 'sample';
+          document.getElementById('miniVerdictBadge').textContent = '⚡ Monte Carlo sampling...';
+        }
+      } else if (demoState === 'sample') {
+        // 3x Slower Monte Carlo Rain: 10 dots/frame (batch of 10 instead of 35)
+        const batch = 10;
+        const limit = Math.min(sampleIdx + batch, miniSamples.length);
+
+        for (; sampleIdx < limit; sampleIdx++) {
+          const pt = miniSamples[sampleIdx];
+          miniMathCtx.beginPath();
+          miniMathCtx.arc(pt.x, pt.y, 1.3, 0, Math.PI * 2);
+
+          if (!pt.inDom) {
+            miniMathCtx.fillStyle = 'rgba(139, 148, 158, 0.20)'; // Grey proposals
+          } else if (pt.inShd) {
+            miniMathCtx.fillStyle = '#3fb950'; // Vibrant Green hit
+          } else {
+            miniMathCtx.fillStyle = 'rgba(255, 95, 86, 0.85)'; // Bright Red miss
+          }
+          miniMathCtx.fill();
+        }
+
+        const currentN = sampleIdx;
+        const currentP = miniNOmega > 0 ? ((miniNShaded / miniNOmega) * 100).toFixed(1) : '0.0';
+        document.getElementById('miniNSamples').textContent = `${currentN} pts`;
+        document.getElementById('miniPHatVal').textContent = `${currentP}%`;
+
+        if (sampleIdx >= miniSamples.length) {
+          demoState = 'verdict';
+          demoTimer = 0;
+        }
+      } else if (demoState === 'verdict') {
+        const estimated = miniNOmega > 0 ? ((miniNShaded / miniNOmega) * 100).toFixed(1) : '0.0';
+        const err = Math.abs(parseFloat(estimated) - miniTarget).toFixed(1);
+        document.getElementById('miniErrVal').textContent = `${err}%`;
+
+        const badge = document.getElementById('miniVerdictBadge');
+        if (parseFloat(err) <= 4.0) {
+          badge.textContent = `   Bullseye! (Error: ${err}%)`;
+          badge.style.color = 'var(--green)';
+          badge.style.borderColor = 'var(--green)';
+        } else if (parseFloat(err) <= 8.0) {
+          badge.textContent = `   Solid Accuracy! (Error: ${err}%)`;
+          badge.style.color = 'var(--accent)';
+          badge.style.borderColor = 'var(--accent)';
+        } else {
+          badge.textContent = `Off mark (Error: ${err}%)`;
+          badge.style.color = 'var(--red)';
+          badge.style.borderColor = 'var(--red)';
+        }
+
+        demoState = 'pause';
+      } else if (demoState === 'pause') {
+        demoTimer++;
+        // Extended hold time: ~4 seconds (240 frames) for readable comprehension
+        if (demoTimer > 240) {
+          resetDemoLoop();
         }
       }
-       
-      // This will let the x-box vanish when we tap outise, removing it since this has a comment section and accidental outside-tap is possible
-      
-      // if (modalOverlay) {
-      //   modalOverlay.addEventListener('click', (e) => {
-      //     if (e.target === modalOverlay) closeExtraModal();
-      //   });
-      // }      
 
+      requestAnimationFrame(miniDemoTick);
+    }
 
-/*=========================================*/
-/* =========================================*/
-
-
+    resetDemoLoop();
+    requestAnimationFrame(miniDemoTick);
   </script>
-
-  <!-- Controls the gap at the bottom of the home page -->
-  <div style="height: 35vh;"></div>
 </body>
 </html>
