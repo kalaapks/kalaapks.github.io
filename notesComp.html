@@ -781,9 +781,24 @@
       margin-top: 50px;
     }
 
+        .footer-icons {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  vertical-align: middle;
+  margin-left: 10px;
+}
+
+.footer-icons .contact-drop-icon svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+  display: block;
+}
+
 
     /* Mobile / Small Screen Adaptation */
-    @media (max-width: 768px) {
+    @media (max-width: 600px) {
       .top-nav { padding: 8px 12px; }
       .ks-badge { width: 34px; height: 34px; font-size: 0.85rem; }
       .theme-toggle { width: 32px; height: 32px; font-size: 0.9rem; }
@@ -802,7 +817,7 @@
       .floating-back-btn { top: 10px; left: 10px; font-size: 0.75rem; padding: 4px 8px; }
       .notes-intro h1 { font-size: 1.7rem; }
       .terminal-body { padding: 18px 14px; }
-      #sinkCanvas { width: 240px; height: 240px; }
+      #sinkCanvas { width: 240px; height: 240px; transition: none;}
       .sim-portal-switch { width: 38px; height: 38px; font-size: 1.25rem; }
       .game-nav-badge { width: 30px; height: 30px; font-size: 0.78rem; }
 
@@ -832,7 +847,7 @@
 
       .preview-card-body { max-height: calc(54vh - 120px); padding: 14px; }
       .preview-hint-pill { font-size: 0.72rem; padding: 5px 12px; bottom: 12px; }
-      .floating-corner-actions { bottom: 18px; right: 18px; gap: 12px; }
+      .floating-corner-actions { bottom: 18px; right: 18px; gap: 12px; transition: none;}
     }
   </style>
 </head>
@@ -1079,16 +1094,27 @@
   </button>
 
   <!-- Existing ~ Portal Switch with id="portalSwitch" -->
-  <a href="index.html" class="sim-portal-switch" id="portalSwitch" title="Home">~</a>
+  <a href="simulated.html" class="sim-portal-switch" id="portalSwitch" title="Simulations"> 𝕾 </a>
   </div>
 
     <!-- Space spacer before footer -->
   <div style="height: 25vh;"></div>
 
    <!-- Footer Banner -->
-  <footer class="site-footer-banner" id="siteFooter">
-    &copy; 2026 Kalaap Sadhu. All rights reserved.
-  </footer>
+<footer class="site-footer-banner" id="siteFooter">
+  &copy; 2026 Kalaap Sadhu. All rights reserved.
+  <span class="footer-icons">
+    <a href="mailto:kalaap.ks@gmail.com" class="contact-drop-icon" title="Send Email">
+      <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+    </a>
+    <a href="https://github.com/kalaapks" target="_blank" class="contact-drop-icon" title="GitHub">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+    </a>
+    <a href="YOUR_LINKEDIN_URL" target="_blank" class="contact-drop-icon" title="LinkedIn">
+      <svg viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.65 1.65 0 1 0 0 3.3 1.65 1.65 0 0 0 0-3.3z"/></svg>
+    </a>
+  </span>
+</footer>
 
 
 
@@ -1305,54 +1331,186 @@ if (sessionStorage.getItem(currentPageKey) === 'true') {
    }
 
 
+     /* =========================================================
+   Floating Actions + Footer Positioning
+   ========================================================= */
+    
     const btnJumpTop = document.getElementById('btnJumpTop');
     const btnSharePage = document.getElementById('btnSharePage');
     const floatingCluster = document.getElementById('floatingCluster');
-    const sinkCanvas = document.getElementById('sinkCanvas');
     const siteFooter = document.getElementById('siteFooter');
 
-    window.addEventListener('scroll', () => {
-  // 1. Reveal/hide top and share buttons
+
+let floatingUpdatePending = false;
+
+
+function updateFloatingPosition() {
+
+  /* -------------------------------------------------------
+     1. Reveal / hide Jump-To-Top and Share buttons
+     ------------------------------------------------------- */
+
   if (window.scrollY > 120) {
+
     btnJumpTop.classList.add('is-active');
     btnSharePage.classList.add('is-active');
+
   } else {
+
     btnJumpTop.classList.remove('is-active');
     btnSharePage.classList.remove('is-active');
+
   }
 
-  // 2. Synchronized lift above the footer
+
+  /* -------------------------------------------------------
+     2. Determine the ACTUAL visible viewport height
+
+     On mobile browsers, window.innerHeight can temporarily
+     represent a changing layout viewport while the browser
+     address bar is moving.
+
+     visualViewport.height tracks the visible viewport.
+     ------------------------------------------------------- */
+
+  const viewportHeight =
+    window.visualViewport
+      ? window.visualViewport.height
+      : window.innerHeight;
+
+
+  /* -------------------------------------------------------
+     3. Check whether the footer has entered the viewport
+     ------------------------------------------------------- */
+
   const footerRect = siteFooter.getBoundingClientRect();
-  const vh = window.innerHeight;
-  const defaultBottom = window.innerWidth <= 600 ? 18 : 24;
 
-  if (footerRect.top < vh) {
-    const overlap = vh - footerRect.top;
-    floatingCluster.style.bottom = `${overlap + 24}px`;
-    if (sinkCanvas) sinkCanvas.style.bottom = `${overlap}px`;
+  const defaultBottom =
+    window.innerWidth <= 600 ? 18 : 24;
+
+
+  /* -------------------------------------------------------
+     4. Move the floating controls above the footer
+     ------------------------------------------------------- */
+
+  if (footerRect.top < viewportHeight) {
+
+    const overlap = viewportHeight - footerRect.top;
+
+    floatingCluster.style.bottom =
+      `${overlap + 24}px`;
+
+    if (canvas) {
+      canvas.style.bottom =
+        `${overlap}px`;
+    }
+
   } else {
-    floatingCluster.style.bottom = `${defaultBottom}px`;
-    if (sinkCanvas) sinkCanvas.style.bottom = '0px';
+
+    floatingCluster.style.bottom =
+      `${defaultBottom}px`;
+
+    if (canvas) {
+      canvas.style.bottom = '0px';
+    }
+
   }
-});
+
+}
+
+
+/* =========================================================
+   Request one update per animation frame
+
+   This prevents dozens of position calculations from being
+   triggered during a single mobile scroll gesture.
+   ========================================================= */
+
+function requestFloatingUpdate() {
+
+  if (floatingUpdatePending) return;
+
+  floatingUpdatePending = true;
+
+  requestAnimationFrame(() => {
+
+    floatingUpdatePending = false;
+
+    updateFloatingPosition();
+
+  });
+
+}
+
+
+/* =========================================================
+   Normal page scrolling
+   ========================================================= */
+
+window.addEventListener(
+  'scroll',
+  requestFloatingUpdate,
+  { passive: true }
+);
+
+
+/* =========================================================
+   Browser / viewport resizing
+   ========================================================= */
+
+window.addEventListener(
+  'resize',
+  requestFloatingUpdate
+);
+
+
+/* =========================================================
+   Mobile visual viewport changes
+
+   This catches the browser address-bar appearing /
+   disappearing while the user scrolls.
+   ========================================================= */
+
+if (window.visualViewport) {
+
+  window.visualViewport.addEventListener(
+    'resize',
+    requestFloatingUpdate
+  );
+
+  window.visualViewport.addEventListener(
+    'scroll',
+    requestFloatingUpdate
+  );
+
+}
+
+
+/* =========================================================
+   Initial position when the page loads
+   ========================================================= */
+
+requestFloatingUpdate();
+
+
 
     btnJumpTop.addEventListener('click', () => {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-});
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
 
     btnSharePage.addEventListener('click', async () => {
-  const shareData = {
-    title: document.title,
-    url: window.location.href
-  };
-  if (navigator.share) {
-    try { await navigator.share(shareData); } catch (e) {}
-  } else {
-    navigator.clipboard.writeText(window.location.href);
-    btnSharePage.setAttribute('data-tooltip', 'Link Copied!');
-    setTimeout(() => btnSharePage.setAttribute('data-tooltip', 'Share page'), 2200);
-  }
-});  
+      const shareData = {
+        title: document.title,
+        url: window.location.href
+      };
+      if (navigator.share) {
+        try { await navigator.share(shareData); } catch (e) {}
+      } else {
+        navigator.clipboard.writeText(window.location.href);
+        btnSharePage.setAttribute('data-tooltip', 'Link Copied!');
+        setTimeout(() => btnSharePage.setAttribute('data-tooltip', 'Share page'), 2200);
+      }
+    }); 
 
 </script>
 

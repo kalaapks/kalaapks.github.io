@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>Differential Equations | Kalaap Sadhu</title>
+  <!-- Favicon: Exact Signature Circular KS Badge -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 38 38'><circle cx='19' cy='19' r='17' fill='%23161b22' stroke='%233fb950' stroke-width='2'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-family='monospace' font-weight='bold' font-size='14' fill='%233fb950'>KS</text></svg>">
   
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -67,7 +69,7 @@
       color: var(--text);
       font-family: 'AlgolRevived', 'Courier Prime', 'Fira Code', Courier, monospace;
       line-height: 1.6;
-      padding-bottom: 90px;
+      padding-bottom: 0;
       min-height: 100vh;
       transition: background 0.3s ease, color 0.3s ease;
       overflow-x: hidden;
@@ -618,46 +620,184 @@
     body.ks-inspect-active .preview-hint-pill { display: block; }
 
     #sinkCanvas {
-      position: fixed;
-      bottom: 0;
-      right: 0;
-      width: 360px;
-      height: 360px;
-      pointer-events: none;
-      z-index: 5;
-    }
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 360px;
+  height: 360px;
+  pointer-events: none;
+  z-index: 5;
+  transition: bottom 0.25s ease;
+}
 
-    .sim-portal-switch {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      width: 44px;
-      height: 44px;
+.sim-portal-switch {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--card-bg);
+  border: 1.5px solid var(--border);
+  color: var(--green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 1.45rem;
+  font-weight: bold;
+  box-shadow: 0 6px 20px var(--card-shadow);
+  line-height: 1;
+  padding-bottom: 2px;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sim-portal-switch:hover {
+  transform: scale(1.1);
+  border-color: var(--green);
+  box-shadow: 0 0 18px rgba(63, 185, 80, 0.4);
+}   
+
+    /* Floating Cluster Container */
+.floating-corner-actions {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  z-index: 900;
+  transition: bottom 0.25s ease;
+}
+
+/* Clean Borderless Action Buttons */
+.clean-float-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: color 0.2s ease, transform 0.2s ease;
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+.clean-float-btn.is-active {
+  opacity: 0.85;
+  pointer-events: auto;
+}
+
+.clean-float-btn:hover {
+  color: var(--green);
+  transform: translateY(-2px);
+  opacity: 1;
+}
+
+.float-arrowhead-icon {
+  width: 14px;
+  height: 14px;
+  border-top: 2.5px solid currentColor;
+  border-right: 2.5px solid currentColor;
+  transform: rotate(-45deg);
+  display: inline-block;
+  margin-top: 4px;
+}
+
+.float-share-icon {
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.clean-float-btn::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  right: 125%;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 0.72rem;
+  font-family: inherit;
+  white-space: nowrap;
+  padding: 3px 8px;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px var(--card-shadow);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.clean-float-btn:hover::before { opacity: 1; }
+
+/* --- Nav "G" Badge --- */
+    .game-nav-badge {
+      width: 38px;
+      height: 38px;
       border-radius: 50%;
       background: var(--card-bg);
-      border: 1.5px solid var(--border);
-      color: var(--green);
+      border: 2px solid var(--accent);
+      color: var(--accent);
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: bold;
       display: flex;
       align-items: center;
       justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(88, 166, 255, 0.2);
+      transition: all 0.2s ease;
+      flex-shrink: 0;
       text-decoration: none;
-      font-size: 1.45rem;
-      font-weight: bold;
-      box-shadow: 0 6px 20px var(--card-shadow);
-      z-index: 900;
-      line-height: 1;
-      padding-bottom: 2px;
-      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .game-nav-badge:hover {
+      transform: scale(1.08);
+      background: var(--accent);
+      color: #0d1117;
+      box-shadow: 0 0 16px rgba(88, 166, 255, 0.5);
     }
 
-    .sim-portal-switch:hover {
-      transform: scale(1.1);
-      border-color: var(--green);
-      box-shadow: 0 0 18px rgba(63, 185, 80, 0.4);
+    /* --- Footer Banner --- */
+    .site-footer-banner {
+      width: 100%;
+      border-top: 1px solid var(--border);
+      background: var(--terminal-header);
+      padding: 16px 20px;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-family: inherit;
+      position: relative;
+      z-index: 10;
+      margin-top: 50px;
     }
+
+        .footer-icons {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  vertical-align: middle;
+  margin-left: 10px;
+}
+
+.footer-icons .contact-drop-icon svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+  display: block;
+}
+
 
     /* Mobile / Small Screen Adaptation */
-    @media (max-width: 768px) {
+    @media (max-width: 600px) {
       .top-nav { padding: 8px 12px; }
       .ks-badge { width: 34px; height: 34px; font-size: 0.85rem; }
       .theme-toggle { width: 32px; height: 32px; font-size: 0.9rem; }
@@ -676,8 +816,10 @@
       .floating-back-btn { top: 10px; left: 10px; font-size: 0.75rem; padding: 4px 8px; }
       .notes-intro h1 { font-size: 1.7rem; }
       .terminal-body { padding: 18px 14px; }
-      #sinkCanvas { width: 220px; height: 220px; }
+      #sinkCanvas { width: 220px; height: 220px; transition: none;}
       .sim-portal-switch { bottom: 16px; right: 16px; width: 40px; height: 40px; font-size: 1.25rem; }
+      .game-nav-badge { width: 30px; height: 30px; font-size: 0.78rem; }
+      .floating-corner-actions { bottom: 18px; right: 18px; gap: 12px; transition: none;}
 
       .contents-sidebar {
         top: 55px;
@@ -716,6 +858,8 @@
       <button class="ks-badge" id="ksBtn" title="Toggle Contents Sidebar">KS</button>
       <div class="ks-hint-tooltip" id="ksHintTooltip">Tap for Content</div>
       <button class="theme-toggle" id="themeBtn" title="Toggle Light / Dark Mode">💡</button>
+            <!-- Quick G-badge -->
+      <a href="index.html#games" class="game-nav-badge" title="Go to Games on Home"> 𝓖 </a>
     </div>
     <div class="nav-links">
       <a href="index.html#me" class="nav-btn">HOME</a>
@@ -758,7 +902,7 @@
 
   <canvas id="sinkCanvas" width="360" height="360"></canvas>
 
-  <a href="simulated.html" class="sim-portal-switch" id="portalSwitch" title="Go to Simulations">~</a>
+  <!-- <a href="simulated.html" class="sim-portal-switch" id="portalSwitch" title="Go to Simulations">~</a> -->
 
   <div class="container" id="mainContainer">
     
@@ -771,7 +915,7 @@
     <!-- Title & Description directly beneath banner -->
     <div class="notes-intro">
       <h1><span style="display:inline-block; width:14px; height:14px; background-color: var(--yellow-dot); border-radius: 50%; margin-right:8px;"></span>Differential Equations</h1>
-      <p>DEs have been quite an experience for me. Over the course of 4 years, I went through "OH! I understand this now!" and "ohh.. I do not understand this. Again." more times than I would like to admit. ODE was one of the first topics I started turning into geometry heavy notes - handwritten but nevertheless, my first. <br> Happy reading! </p>
+      <p>These are some of my most favourite notes, mostly because the geometric treatment of DEs are not done in the standard math books. DEs have been quite an experience for me. Over the course of 4 years, I went through "OH! I understand this now!" and "ohh.. I do not understand this. Again." more times than I would like to admit. ODE was one of the first topics I started turning into geometry heavy notes - handwritten but nevertheless, my first. <br> Happy reading! </p>
     </div>
 
     <!-- BOX 1: ODE -->
@@ -852,6 +996,50 @@
       </div>
     </section>
   </div>
+
+  
+  <!-- FLOATING ACTIONS CLUSTER (Jump, Share, ~ Switch) -->
+<div class="floating-corner-actions" id="floatingCluster">
+  <button class="clean-float-btn" id="btnJumpTop" data-tooltip="Jump to top" aria-label="Jump to top">
+    <span class="float-arrowhead-icon"></span>
+  </button>
+
+  <button class="clean-float-btn" id="btnSharePage" data-tooltip="Share page" aria-label="Share page">
+    <svg class="float-share-icon" viewBox="0 0 24 24">
+      <circle cx="18" cy="5" r="3"></circle>
+      <circle cx="6" cy="12" r="3"></circle>
+      <circle cx="18" cy="19" r="3"></circle>
+      <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+      <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+    </svg>
+  </button>
+
+  <!-- Existing ~ Portal Switch with id="portalSwitch" -->
+  <a href="simulated.html" class="sim-portal-switch" id="portalSwitch" title="Simulations"> 𝕾 </a>
+</div>
+
+
+  <!-- Space spacer before footer -->
+  <div style="height: 25vh;"></div>
+
+   <!-- Footer Banner -->
+<footer class="site-footer-banner" id="siteFooter">
+  &copy; 2026 Kalaap Sadhu. All rights reserved.
+  <span class="footer-icons">
+    <a href="mailto:kalaap.ks@gmail.com" class="contact-drop-icon" title="Send Email">
+      <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+    </a>
+    <a href="https://github.com/kalaapks" target="_blank" class="contact-drop-icon" title="GitHub">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+    </a>
+    <a href="YOUR_LINKEDIN_URL" target="_blank" class="contact-drop-icon" title="LinkedIn">
+      <svg viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.65 1.65 0 1 0 0 3.3 1.65 1.65 0 0 0 0-3.3z"/></svg>
+    </a>
+  </span>
+</footer>
+
+
+
 
   <script>
     const themeBtn = document.getElementById('themeBtn');
@@ -1045,10 +1233,209 @@ if (sessionStorage.getItem(currentPageKey) === 'true') {
       requestAnimationFrame(animateSink);
     }
     animateSink();
+  
+
+    function getSinkOrigin() {
+  const portalSwitch = document.getElementById('portalSwitch');
+  const sinkCanvas = document.getElementById('sinkCanvas');
+  if (!portalSwitch || !sinkCanvas) return { x: 360 - 24 - 22, y: 360 - 24 - 22 };
+  
+  const pRect = portalSwitch.getBoundingClientRect();
+  const sRect = sinkCanvas.getBoundingClientRect();
+  return {
+    x: (pRect.left + pRect.width / 2) - sRect.left,
+    y: (pRect.top + pRect.height / 2) - sRect.top
+  };
+}
+
+
+
+
+ /* =========================================================
+   Floating Actions + Footer Positioning
+   ========================================================= */
+    
+    const btnJumpTop = document.getElementById('btnJumpTop');
+    const btnSharePage = document.getElementById('btnSharePage');
+    const floatingCluster = document.getElementById('floatingCluster');
+    const siteFooter = document.getElementById('siteFooter');
+
+
+let floatingUpdatePending = false;
+
+
+function updateFloatingPosition() {
+
+  /* -------------------------------------------------------
+     1. Reveal / hide Jump-To-Top and Share buttons
+     ------------------------------------------------------- */
+
+  if (window.scrollY > 120) {
+
+    btnJumpTop.classList.add('is-active');
+    btnSharePage.classList.add('is-active');
+
+  } else {
+
+    btnJumpTop.classList.remove('is-active');
+    btnSharePage.classList.remove('is-active');
+
+  }
+
+
+  /* -------------------------------------------------------
+     2. Determine the ACTUAL visible viewport height
+
+     On mobile browsers, window.innerHeight can temporarily
+     represent a changing layout viewport while the browser
+     address bar is moving.
+
+     visualViewport.height tracks the visible viewport.
+     ------------------------------------------------------- */
+
+  const viewportHeight =
+    window.visualViewport
+      ? window.visualViewport.height
+      : window.innerHeight;
+
+
+  /* -------------------------------------------------------
+     3. Check whether the footer has entered the viewport
+     ------------------------------------------------------- */
+
+  const footerRect = siteFooter.getBoundingClientRect();
+
+  const defaultBottom =
+    window.innerWidth <= 600 ? 18 : 24;
+
+
+  /* -------------------------------------------------------
+     4. Move the floating controls above the footer
+     ------------------------------------------------------- */
+
+  if (footerRect.top < viewportHeight) {
+
+    const overlap = viewportHeight - footerRect.top;
+
+    floatingCluster.style.bottom =
+      `${overlap + 24}px`;
+
+    if (canvas) {
+      canvas.style.bottom =
+        `${overlap}px`;
+    }
+
+  } else {
+
+    floatingCluster.style.bottom =
+      `${defaultBottom}px`;
+
+    if (canvas) {
+      canvas.style.bottom = '0px';
+    }
+
+  }
+
+}
+
+
+/* =========================================================
+   Request one update per animation frame
+
+   This prevents dozens of position calculations from being
+   triggered during a single mobile scroll gesture.
+   ========================================================= */
+
+function requestFloatingUpdate() {
+
+  if (floatingUpdatePending) return;
+
+  floatingUpdatePending = true;
+
+  requestAnimationFrame(() => {
+
+    floatingUpdatePending = false;
+
+    updateFloatingPosition();
+
+  });
+
+}
+
+
+/* =========================================================
+   Normal page scrolling
+   ========================================================= */
+
+window.addEventListener(
+  'scroll',
+  requestFloatingUpdate,
+  { passive: true }
+);
+
+
+/* =========================================================
+   Browser / viewport resizing
+   ========================================================= */
+
+window.addEventListener(
+  'resize',
+  requestFloatingUpdate
+);
+
+
+/* =========================================================
+   Mobile visual viewport changes
+
+   This catches the browser address-bar appearing /
+   disappearing while the user scrolls.
+   ========================================================= */
+
+if (window.visualViewport) {
+
+  window.visualViewport.addEventListener(
+    'resize',
+    requestFloatingUpdate
+  );
+
+  window.visualViewport.addEventListener(
+    'scroll',
+    requestFloatingUpdate
+  );
+
+}
+
+
+/* =========================================================
+   Initial position when the page loads
+   ========================================================= */
+
+requestFloatingUpdate();
+
+
+
+    btnJumpTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    btnSharePage.addEventListener('click', async () => {
+      const shareData = {
+        title: document.title,
+        url: window.location.href
+      };
+      if (navigator.share) {
+        try { await navigator.share(shareData); } catch (e) {}
+      } else {
+        navigator.clipboard.writeText(window.location.href);
+        btnSharePage.setAttribute('data-tooltip', 'Link Copied!');
+        setTimeout(() => btnSharePage.setAttribute('data-tooltip', 'Share page'), 2200);
+      }
+    });
+
+
   </script>
 
 
-<!-- controls the gap at the bottom of the home page -->
-<div style="height: 27vh;"></div>
+
 </body>
 </html>
