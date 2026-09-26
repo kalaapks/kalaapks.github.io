@@ -1081,7 +1081,8 @@
       align-items: center;
       gap: 16px;
       z-index: 900;
-      transition: transform 0.25s ease, bottom 0.25s ease;
+      transition: transform 0.25s ease;
+       /* bottom 0.25s ease; */
     }
 
     .clean-float-btn {
@@ -2050,7 +2051,7 @@
 
   <!-- FOOTER BANNER -->
   <footer class="site-footer-banner" id="siteFooter">
-    &copy; 2026 Kalaap Sadhu. All rights reserved.
+    &copy; 2026 Kalaap Sadhu.
   </footer>
 
   <script>
@@ -2301,31 +2302,94 @@
     const btnSharePage = document.getElementById('btnSharePage');
     const siteFooter = document.getElementById('siteFooter');
 
-    window.addEventListener('scroll', () => {
-      const meSection = document.getElementById('me');
-      const meBottom = meSection ? meSection.getBoundingClientRect().bottom : 300;
+    let floatingUpdatePending = false;
 
-      // Reveal Jump-To-Top and Share after scrolling past ME
-      if (meBottom < 100) {
-        btnJumpTop.classList.add('is-active');
-        btnSharePage.classList.add('is-active');
-      } else {
-        btnJumpTop.classList.remove('is-active');
-        btnSharePage.classList.remove('is-active');
-      }
+    function updateFloatingPosition() {
 
-      // Lift cluster and shift canvas when nearing the bottom footer banner
-      const footerRect = siteFooter.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
-      if (footerRect.top < viewportHeight) {
-        const overlap = viewportHeight - footerRect.top;
-        floatingCluster.style.bottom = `${overlap + 20}px`;
-        sinkCanvas.style.bottom = `${overlap}px`;
-      } else {
-        floatingCluster.style.bottom = window.innerWidth <= 600 ? '18px' : '24px';
-        sinkCanvas.style.bottom = '0px';
-      }
-    });
+        const meSection = document.getElementById('me');
+        const meBottom = meSection
+          ? meSection.getBoundingClientRect().bottom
+          : 300;
+
+           // Reveal Jump-To-Top and Share after scrolling past ME
+
+        if (meBottom < 100) {
+          btnJumpTop.classList.add('is-active');
+          btnSharePage.classList.add('is-active');
+        } else {
+          btnJumpTop.classList.remove('is-active');
+          btnSharePage.classList.remove('is-active');
+        }
+
+
+          // Use the actual visible viewport on mobile when available
+    
+        const viewportHeight =
+         window.visualViewport
+          ? window.visualViewport.height
+          : window.innerHeight;
+
+
+  // Lift cluster and shift canvas when nearing the bottom footer banner
+
+  const footerRect = siteFooter.getBoundingClientRect();
+
+  if (footerRect.top < viewportHeight) {
+
+    const overlap = viewportHeight - footerRect.top;
+
+    floatingCluster.style.bottom = `${overlap + 20}px`;
+    sinkCanvas.style.bottom = `${overlap}px`;
+
+  } else {
+
+    floatingCluster.style.bottom =
+      window.innerWidth <= 600 ? '18px' : '24px';
+
+    sinkCanvas.style.bottom = '0px';
+
+  }
+
+}
+
+
+function requestFloatingUpdate() {
+
+  if (floatingUpdatePending) return;
+
+  floatingUpdatePending = true;
+
+  requestAnimationFrame(() => {
+
+    floatingUpdatePending = false;
+    updateFloatingPosition();
+
+  });
+
+}
+
+
+window.addEventListener('scroll', requestFloatingUpdate, {
+  passive: true
+});
+
+window.addEventListener('resize', requestFloatingUpdate);
+
+if (window.visualViewport) {
+
+  window.visualViewport.addEventListener(
+    'resize',
+    requestFloatingUpdate
+  );
+
+  window.visualViewport.addEventListener(
+    'scroll',
+    requestFloatingUpdate
+  );
+
+}
+
+requestFloatingUpdate();
 
     // Jump to top smooth scroll
     btnJumpTop.addEventListener('click', () => {
