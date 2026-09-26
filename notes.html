@@ -618,9 +618,9 @@
         max-width: 300px;
       }
       .floating-card-dp { height: 130px; }
-      .floating-corner-actions { bottom: 18px; right: 18px; gap: 12px; }
+      .floating-corner-actions { bottom: 18px; right: 18px; gap: 12px; transition: none;}
       .sim-portal-switch { width: 38px; height: 38px; font-size: 1.25rem; }
-      #sinkCanvas { width: 240px; height: 240px; }
+      #sinkCanvas { width: 240px; height: 240px; transition: none;}
     }
   </style>
 </head>
@@ -937,37 +937,168 @@
 
 
 
-
+  /* =========================================================
+   Floating Actions + Footer Positioning
+   ========================================================= */
     
     const btnJumpTop = document.getElementById('btnJumpTop');
     const btnSharePage = document.getElementById('btnSharePage');
     const floatingCluster = document.getElementById('floatingCluster');
     const siteFooter = document.getElementById('siteFooter');
 
-    window.addEventListener('scroll', () => {
-      // 1. Reveal/hide top and share buttons
-      if (window.scrollY > 120) {
-        btnJumpTop.classList.add('is-active');
-        btnSharePage.classList.add('is-active');
-      } else {
-        btnJumpTop.classList.remove('is-active');
-        btnSharePage.classList.remove('is-active');
-      }
 
-      // 2. Synchronized lift above the footer
-      const footerRect = siteFooter.getBoundingClientRect();
-      const vh = window.innerHeight;
-      const defaultBottom = window.innerWidth <= 600 ? 18 : 24;
+let floatingUpdatePending = false;
 
-      if (footerRect.top < vh) {
-        const overlap = vh - footerRect.top;
-        floatingCluster.style.bottom = `${overlap + 24}px`;
-        if (canvas) canvas.style.bottom = `${overlap}px`;
-      } else {
-        floatingCluster.style.bottom = `${defaultBottom}px`;
-        if (canvas) canvas.style.bottom = '0px';
-      }
-    });
+
+function updateFloatingPosition() {
+
+  /* -------------------------------------------------------
+     1. Reveal / hide Jump-To-Top and Share buttons
+     ------------------------------------------------------- */
+
+  if (window.scrollY > 120) {
+
+    btnJumpTop.classList.add('is-active');
+    btnSharePage.classList.add('is-active');
+
+  } else {
+
+    btnJumpTop.classList.remove('is-active');
+    btnSharePage.classList.remove('is-active');
+
+  }
+
+
+  /* -------------------------------------------------------
+     2. Determine the ACTUAL visible viewport height
+
+     On mobile browsers, window.innerHeight can temporarily
+     represent a changing layout viewport while the browser
+     address bar is moving.
+
+     visualViewport.height tracks the visible viewport.
+     ------------------------------------------------------- */
+
+  const viewportHeight =
+    window.visualViewport
+      ? window.visualViewport.height
+      : window.innerHeight;
+
+
+  /* -------------------------------------------------------
+     3. Check whether the footer has entered the viewport
+     ------------------------------------------------------- */
+
+  const footerRect = siteFooter.getBoundingClientRect();
+
+  const defaultBottom =
+    window.innerWidth <= 600 ? 18 : 24;
+
+
+  /* -------------------------------------------------------
+     4. Move the floating controls above the footer
+     ------------------------------------------------------- */
+
+  if (footerRect.top < viewportHeight) {
+
+    const overlap = viewportHeight - footerRect.top;
+
+    floatingCluster.style.bottom =
+      `${overlap + 24}px`;
+
+    if (canvas) {
+      canvas.style.bottom =
+        `${overlap}px`;
+    }
+
+  } else {
+
+    floatingCluster.style.bottom =
+      `${defaultBottom}px`;
+
+    if (canvas) {
+      canvas.style.bottom = '0px';
+    }
+
+  }
+
+}
+
+
+/* =========================================================
+   Request one update per animation frame
+
+   This prevents dozens of position calculations from being
+   triggered during a single mobile scroll gesture.
+   ========================================================= */
+
+function requestFloatingUpdate() {
+
+  if (floatingUpdatePending) return;
+
+  floatingUpdatePending = true;
+
+  requestAnimationFrame(() => {
+
+    floatingUpdatePending = false;
+
+    updateFloatingPosition();
+
+  });
+
+}
+
+
+/* =========================================================
+   Normal page scrolling
+   ========================================================= */
+
+window.addEventListener(
+  'scroll',
+  requestFloatingUpdate,
+  { passive: true }
+);
+
+
+/* =========================================================
+   Browser / viewport resizing
+   ========================================================= */
+
+window.addEventListener(
+  'resize',
+  requestFloatingUpdate
+);
+
+
+/* =========================================================
+   Mobile visual viewport changes
+
+   This catches the browser address-bar appearing /
+   disappearing while the user scrolls.
+   ========================================================= */
+
+if (window.visualViewport) {
+
+  window.visualViewport.addEventListener(
+    'resize',
+    requestFloatingUpdate
+  );
+
+  window.visualViewport.addEventListener(
+    'scroll',
+    requestFloatingUpdate
+  );
+
+}
+
+
+/* =========================================================
+   Initial position when the page loads
+   ========================================================= */
+
+requestFloatingUpdate();
+
+
 
     btnJumpTop.addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
