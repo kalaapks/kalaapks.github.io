@@ -1,9 +1,13 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>Notes & Resources | Kalaap Sadhu</title>
+
+  <!-- Favicon: Exact Signature Circular KS Badge -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 38 38'><circle cx='19' cy='19' r='17' fill='%23161b22' stroke='%233fb950' stroke-width='2'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-family='monospace' font-weight='bold' font-size='14' fill='%233fb950'>KS</text></svg>">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -64,7 +68,7 @@
       color: var(--text);
       font-family: 'AlgolRevived', 'Courier Prime', 'Fira Code', Courier, monospace;
       line-height: 1.6;
-      padding-bottom: 90px;
+      padding-bottom: 0; /* Fixed: eliminates gap below footer */
       min-height: 100vh;
       transition: background 0.3s ease, color 0.3s ease;
       overflow-x: hidden;
@@ -137,6 +141,33 @@
       transform: rotate(12deg) scale(1.05);
     }
 
+    .game-nav-badge {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--card-bg);
+      border: 2px solid var(--accent);
+      color: var(--accent);
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(88, 166, 255, 0.2);
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+      text-decoration: none;
+    }
+
+    .game-nav-badge:hover {
+      transform: scale(1.08);
+      background: var(--accent);
+      color: #0d1117;
+      box-shadow: 0 0 16px rgba(88, 166, 255, 0.5);
+    }
+
     .nav-links { display: flex; gap: 6px; align-items: center; }
 
     .nav-btn {
@@ -194,10 +225,12 @@
     }
 
     .dropdown-content a:last-child { border-bottom: none; }
+    
     .dropdown-content a:hover {
       background: var(--inner-card-bg);
       color: var(--green);
     }
+    
     .dropdown.show .dropdown-content { display: block; }
 
     .container {
@@ -323,9 +356,9 @@
       background: rgba(5, 11, 20, 0.78);
       backdrop-filter: blur(10px);
       display: none;
-      align-items: flex-start; /* Prevents overflow clipping */
+      align-items: flex-start;
       justify-content: center;
-      padding: 24px 20px 90px 20px; /* Ample bottom padding to reveal bottom cards on scroll */
+      padding: 24px 20px 90px 20px;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
     }
@@ -437,12 +470,11 @@
       height: 360px;
       pointer-events: none;
       z-index: 5;
+      transition: bottom 0.25s ease;
     }
 
+    /* The ~ Portal Button */
     .sim-portal-switch {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
       width: 44px;
       height: 44px;
       border-radius: 50%;
@@ -456,7 +488,6 @@
       font-size: 1.45rem;
       font-weight: bold;
       box-shadow: 0 6px 20px var(--card-shadow);
-      z-index: 900;
       line-height: 1;
       padding-bottom: 2px;
       transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
@@ -468,30 +499,128 @@
       box-shadow: 0 0 18px rgba(63, 185, 80, 0.4);
     }
 
+    /* Floating Cluster Container */
+    .floating-corner-actions {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      z-index: 900;
+      transition: bottom 0.25s ease;
+    }
+
+    /* Clean Borderless Action Buttons */
+    .clean-float-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: color 0.2s ease, transform 0.2s ease;
+      opacity: 0;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .clean-float-btn.is-active {
+      opacity: 0.85;
+      pointer-events: auto;
+    }
+
+    .clean-float-btn:hover {
+      color: var(--green);
+      transform: translateY(-2px);
+      opacity: 1;
+    }
+
+    .float-arrowhead-icon {
+      width: 14px;
+      height: 14px;
+      border-top: 2.5px solid currentColor;
+      border-right: 2.5px solid currentColor;
+      transform: rotate(-45deg);
+      display: inline-block;
+      margin-top: 4px;
+    }
+
+    .float-share-icon {
+      width: 19px;
+      height: 19px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .clean-float-btn::before {
+      content: attr(data-tooltip);
+      position: absolute;
+      right: 125%;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 0.72rem;
+      font-family: inherit;
+      white-space: nowrap;
+      padding: 3px 8px;
+      border-radius: 4px;
+      box-shadow: 0 4px 12px var(--card-shadow);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .clean-float-btn:hover::before { opacity: 1; }
+
+    /* Footer Banner */
+    .site-footer-banner {
+      width: 100%;
+      border-top: 1px solid var(--border);
+      background: var(--terminal-header);
+      padding: 16px 20px;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-family: inherit;
+      position: relative;
+      z-index: 10;
+      margin-top: 50px;
+      margin-bottom: 0 !important;
+    }
+
     /* Mobile Adaptations */
-    @media (max-width: 820px) {
+    @media (max-width: 600px) {
+      .top-nav { padding: 8px 12px; }
+      .ks-badge { width: 34px; height: 34px; font-size: 0.85rem; }
+      .theme-toggle { width: 32px; height: 32px; font-size: 0.9rem; }
+      .game-nav-badge { width: 30px; height: 30px; font-size: 0.78rem; }
+      .nav-links { gap: 2px; }
+      .nav-btn { font-size: 0.8rem; padding: 4px 6px; }
+      .container { margin: 20px auto 0 auto; padding: 0 12px; }
+      .topic-dp { height: 180px; }
+      .notes-intro h1 { font-size: 1.75rem; }
       .floating-wall-overlay { 
         padding: 16px 16px 100px 16px; 
         justify-content: center; 
       }
       .floating-row-3, .floating-row-2 {
         grid-template-columns: 1fr;
-        max-width: 340px;
+        max-width: 300px;
       }
       .floating-card-dp { height: 130px; }
-      .topic-dp { height: 180px; }
-      .notes-intro h1 { font-size: 1.75rem; }
-    }
-
-    @media (max-width: 600px) {
-      .top-nav { padding: 8px 12px; }
-      .ks-badge { width: 34px; height: 34px; font-size: 0.85rem; }
-      .theme-toggle { width: 32px; height: 32px; font-size: 0.9rem; }
-      .nav-links { gap: 2px; }
-      .nav-btn { font-size: 0.8rem; padding: 4px 6px; }
-      .container { margin: 20px auto 0 auto; padding: 0 12px; }
-      #sinkCanvas { width: 220px; height: 220px; }
-      .sim-portal-switch { bottom: 16px; right: 16px; width: 40px; height: 40px; font-size: 1.25rem; }
+      .floating-corner-actions { bottom: 18px; right: 18px; gap: 12px; }
+      .sim-portal-switch { width: 38px; height: 38px; font-size: 1.25rem; }
+      #sinkCanvas { width: 240px; height: 240px; }
     }
   </style>
 </head>
@@ -501,12 +630,11 @@
   <nav class="top-nav">
     <div class="nav-left">
       <button class="ks-badge" id="ksBtn" title="Toggle Floating 3+2 View">KS</button>
-      <button class="theme-toggle" id="themeBtn" title="Toggle Light / Dark Mode">💡</button>
+      <button class="theme-toggle" id="themeBtn" title="Toggle Light / Dark Mode"> 💡 </button>
+      <a href="index.html#games" class="game-nav-badge" title="Go to Games on Home"> 𝓖 </a>
     </div>
+
     <div class="nav-links">
-      <!-- <a href="index.html#me" class="nav-btn">ME</a>
-      <a href="index.html#resume" class="nav-btn">Resume</a>
-      <a href="index.html#projects" class="nav-btn">Projects</a> -->
       <a href="index.html#me" class="nav-btn">HOME</a>
       
       <div class="dropdown" id="funDropdown">
@@ -524,8 +652,6 @@
 
   <canvas id="sinkCanvas" width="360" height="360"></canvas>
 
-  <a href="simulated.html" class="sim-portal-switch" id="portalSwitch" title="Go to Simulations">~</a>
-
   <div class="container">
     <div class="notes-intro">
       <h1><span style="display:inline-block; width:14px; height:14px; background-color: var(--green); margin-right:8px;"></span> Mathematics Notes & Exposition</h1>
@@ -535,7 +661,7 @@
     </div>
 
     <div class="notes-stack">
-      
+
       <!-- 1. Computing -->
       <a href="notesComp.html" class="topic-card">
         <div class="topic-dp">
@@ -548,9 +674,7 @@
           </div>
           <span class="topic-arrow-link">Open Notes ➔</span>
         </div>
-      
-      </a>
-      
+      </a>      
       
       <!-- 2. Differential Equations -->
       <a href="notesDE.html" class="topic-card">
@@ -616,7 +740,6 @@
     <div class="floating-wall-wrapper">
       
       <div class="floating-row-3">
-        
         <!-- 1*1 Computing -->
         <a href="notesComp.html" class="floating-card">
           <div class="floating-card-dp">
@@ -649,12 +772,10 @@
             <span class="floating-card-title">Probability & Stats</span>
           </div>
         </a>
-        
       </div>
 
       <!-- Row 2 -->
       <div class="floating-row-2">
-
         <!-- 2*1 -->
         <a href="notesStoc.html" class="floating-card">
           <div class="floating-card-dp">
@@ -666,7 +787,7 @@
           </div>
         </a>
         
-        <!-- 2*2 Calculus (closing tag fixed) -->
+        <!-- 2*2 Calculus -->
         <a href="notesCalc.html" class="floating-card">
           <div class="floating-card-dp">
             <img src="DPs/Calc.png" alt="Calc">
@@ -676,11 +797,37 @@
             <span class="floating-card-title">Multivariable Calculus & Optimization</span>
           </div>
         </a>
-        
-
       </div>
+
     </div>
   </div>
+
+  <!-- FLOATING ACTIONS CLUSTER (Jump, Share, ~ Switch) -->
+  <div class="floating-corner-actions" id="floatingCluster">
+    <button class="clean-float-btn" id="btnJumpTop" data-tooltip="Jump to top" aria-label="Jump to top">
+      <span class="float-arrowhead-icon"></span>
+    </button>
+
+    <button class="clean-float-btn" id="btnSharePage" data-tooltip="Share page" aria-label="Share page">
+      <svg class="float-share-icon" viewBox="0 0 24 24">
+        <circle cx="18" cy="5" r="3"></circle>
+        <circle cx="6" cy="12" r="3"></circle>
+        <circle cx="18" cy="19" r="3"></circle>
+        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+      </svg>
+    </button>
+
+    <a href="simulated.html" class="sim-portal-switch" id="portalSwitch" title="Go to Simulations"> 𝕾 </a>
+  </div>
+
+  <!-- Space spacer before footer -->
+  <div style="height: 17vh;"></div>
+
+  <!-- Footer Banner -->
+  <footer class="site-footer-banner" id="siteFooter">
+    &copy; 2026 Kalaap Sadhu. All rights reserved.
+  </footer>
 
   <script>
     const themeBtn = document.getElementById('themeBtn');
@@ -712,7 +859,7 @@
       document.body.classList.toggle('wall-mode', isWallMode);
       ksBtn.classList.toggle('active', isWallMode);
       if (isWallMode) {
-        wallOverlay.scrollTop = 0; // Always start at the top when opened
+        wallOverlay.scrollTop = 0;
       }
     }
 
@@ -770,9 +917,75 @@
       requestAnimationFrame(animateSink);
     }
     animateSink();
-  </script>
 
-<!-- controls the gap at the bottom of the home page -->
-<div style="height: 27vh;"></div>
+    function getSinkOrigin() {
+      const portalSwitch = document.getElementById('portalSwitch');
+      const sinkCanvas = document.getElementById('sinkCanvas');
+      if (!portalSwitch || !sinkCanvas) return { x: 360 - 24 - 22, y: 360 - 24 - 22 };
+      
+      const pRect = portalSwitch.getBoundingClientRect();
+      const sRect = sinkCanvas.getBoundingClientRect();
+      return {
+        x: (pRect.left + pRect.width / 2) - sRect.left,
+        y: (pRect.top + pRect.height / 2) - sRect.top
+      };
+    }
+
+
+
+
+
+
+
+
+    
+    const btnJumpTop = document.getElementById('btnJumpTop');
+    const btnSharePage = document.getElementById('btnSharePage');
+    const floatingCluster = document.getElementById('floatingCluster');
+    const siteFooter = document.getElementById('siteFooter');
+
+    window.addEventListener('scroll', () => {
+      // 1. Reveal/hide top and share buttons
+      if (window.scrollY > 120) {
+        btnJumpTop.classList.add('is-active');
+        btnSharePage.classList.add('is-active');
+      } else {
+        btnJumpTop.classList.remove('is-active');
+        btnSharePage.classList.remove('is-active');
+      }
+
+      // 2. Synchronized lift above the footer
+      const footerRect = siteFooter.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const defaultBottom = window.innerWidth <= 600 ? 18 : 24;
+
+      if (footerRect.top < vh) {
+        const overlap = vh - footerRect.top;
+        floatingCluster.style.bottom = `${overlap + 24}px`;
+        if (canvas) canvas.style.bottom = `${overlap}px`;
+      } else {
+        floatingCluster.style.bottom = `${defaultBottom}px`;
+        if (canvas) canvas.style.bottom = '0px';
+      }
+    });
+
+    btnJumpTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    btnSharePage.addEventListener('click', async () => {
+      const shareData = {
+        title: document.title,
+        url: window.location.href
+      };
+      if (navigator.share) {
+        try { await navigator.share(shareData); } catch (e) {}
+      } else {
+        navigator.clipboard.writeText(window.location.href);
+        btnSharePage.setAttribute('data-tooltip', 'Link Copied!');
+        setTimeout(() => btnSharePage.setAttribute('data-tooltip', 'Share page'), 2200);
+      }
+    });
+  </script>
 </body>
 </html>

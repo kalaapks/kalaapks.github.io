@@ -73,6 +73,7 @@
       color: var(--text);
       font-family: 'AlgolRevived', 'Courier Prime', 'Fira Code', Courier, monospace;
       line-height: 1.6;
+      padding-bottom: 0;
       min-height: 100vh;
       transition: background 0.3s ease, color 0.3s ease;
       overflow-x: hidden;
@@ -1433,7 +1434,7 @@
       </div>
 
       <!-- Quick G Badge: Jump to Games section -->
-      <a href="#games" class="game-nav-badge" id="navGamesQuickBtn" title="Jump to Games">G</a>
+      <a href="#games" class="game-nav-badge" id="navGamesQuickBtn" title="Jump to Games"> 𝓖 </a>
     </div>
 
     <div class="nav-links">
@@ -1443,8 +1444,8 @@
       <div class="dropdown" id="funDropdown">
         <button class="nav-btn" id="funBtn">Fun ▾</button>
         <div class="dropdown-content">
-          <a href="notes.html">&gt; Notes</a>
-          <a href="simulated.html">&gt; Simulations</a>
+          <a href="notes.html">&gt; Notes </a>
+          <a href="simulated.html">&gt;  Simulations</a>
           <a href="#games" id="dropdownGamesLink">&gt; Games</a>
         </div>
       </div>
@@ -1479,7 +1480,7 @@
     </button>
 
     <!-- "~" Portal Switch -->
-    <a href="notes.html" class="sim-portal-switch" id="portalSwitch" title="Go to Notes">~</a>
+    <a href="notes.html" class="sim-portal-switch" id="portalSwitch" title="Go to Notes"> 𝖓 </a>
   </div>
 
   <!-- Main Container -->
@@ -1556,7 +1557,7 @@
                 <div class="mini-meta-panel">
                   <div class="mini-meta-title">Game of Estimation</div>
                   <div class="mini-meta-desc" id="miniDescText">
-                    Rejection sampling over Level 3 Topology (<strong>Shape 'K'</strong>). The live engine samples uniform proposals, separates domain vs. shaded points, and determines empirical area coverage.
+                      Rejection sampling over Topological <strong>Shape 'K'</strong>. The live engine samples uniform proposals, separates domain vs. shaded points, and determines empirical area coverage by simple green/(red+green) logic (Monte-Carlo).
                   </div>
                   <div class="mini-telemetry-box">
                     <div class="mini-telemetry-item">
@@ -2195,8 +2196,11 @@
     const r_min = 22;
 
     function resizeSinkCanvas() {
-      sinkCanvas.width = 360;
-      sinkCanvas.height = 360;
+      // sinkCanvas.width = 360;
+      // sinkCanvas.height = 360;
+      const rect = sinkCanvas.getBoundingClientRect();
+      sinkCanvas.width = rect.width;
+      sinkCanvas.height = rect.height;
     }
     resizeSinkCanvas();
     window.addEventListener('resize', resizeSinkCanvas);
@@ -2638,8 +2642,8 @@
 
       document.getElementById('miniTerminalTitle').textContent = 
         `[${currentMiniShape}] • Click to Play`;
-      document.getElementById('miniDescText').innerHTML = 
-        `Rejection sampling over Level 3 Topology (<strong>Shape '${currentMiniShape}'</strong>). The live engine samples uniform proposals, separates domain vs. shaded points, and determines empirical area coverage.`;
+      document.getElementById('miniDescText').innerHTML = ''
+        // `Rejection sampling over Topological <strong>Shape '${currentMiniShape}'</strong>. The live engine samples uniform points and determines empirical area coverage by simple green/(red+green) logic (Monte-Carlo).`;
 
       renderMiniScene();
 
@@ -2696,14 +2700,14 @@
 
       if (demoState === 'paint') {
         // 3x Slower brush sweep (0.010 per frame vs 0.035)
-        sweepProgress += 0.010;
+        sweepProgress += 0.004;
         const cutoffY = (60 + (360 * (miniTarget / 100)) * Math.min(sweepProgress, 1)) * S;
 
         miniDrawCtx.save();
         miniDrawCtx.lineWidth = 18 * S;
         miniDrawCtx.lineCap = 'round';
         miniDrawCtx.lineJoin = 'round';
-        miniDrawCtx.strokeStyle = 'rgba(88, 166, 255, 0.20)';
+        miniDrawCtx.strokeStyle = 'rgba(140, 220, 255, 0.55)';
 
         miniDrawCtx.beginPath();
         if (currentMiniShape === 'K') {
