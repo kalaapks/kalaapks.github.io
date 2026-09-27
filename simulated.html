@@ -1,8 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>Simulations | Kalaap Sadhu</title>
   <!-- Favicon: Exact Signature Circular KS Badge -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 38 38'><circle cx='19' cy='19' r='17' fill='%23161b22' stroke='%233fb950' stroke-width='2'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-family='monospace' font-weight='bold' font-size='14' fill='%233fb950'>KS</text></svg>">
@@ -108,7 +109,6 @@
       box-shadow: 0 0 10px rgba(63, 185, 80, 0.2);
       transition: all 0.2s ease;
       flex-shrink: 0;
-      touch-action: manipulation;
     }
 
     .ks-badge:hover, .ks-badge.active {
@@ -132,7 +132,6 @@
       color: var(--text);
       transition: all 0.2s ease;
       flex-shrink: 0;
-      touch-action: manipulation;
     }
 
     .theme-toggle:hover {
@@ -155,7 +154,6 @@
       cursor: pointer;
       background: transparent;
       font-family: inherit;
-      touch-action: manipulation;
     }
 
     .nav-btn:hover {
@@ -291,7 +289,7 @@
     .category-title {
       font-size: 1.35rem;
       font-weight: 700;
-      color: var(--text);
+      color: var(--green);
       letter-spacing: 0.5px;
     }
 
@@ -379,7 +377,7 @@
     .floating-card-title {
       font-size: 1.15rem;
       font-weight: 700;
-      color: var(--text);
+      color: var(--green);
     }
 
     .wall-hint {
@@ -423,7 +421,6 @@
       gap: 16px;
       z-index: 900;
       will-change: transform;
-      pointer-events: none; /* Container ignores touches so elements underneath register taps */
     }
 
     .home-portal-switch {
@@ -444,8 +441,6 @@
       padding-bottom: 2px;
       transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
       -webkit-tap-highlight-color: transparent;
-      pointer-events: auto;
-      touch-action: manipulation;
     }
 
     .home-portal-switch:hover {
@@ -472,7 +467,6 @@
       width: 32px;
       height: 32px;
       -webkit-tap-highlight-color: transparent;
-      touch-action: manipulation;
     }
 
     .clean-float-btn.is-active {
@@ -547,7 +541,6 @@
       transition: all 0.2s ease;
       flex-shrink: 0;
       text-decoration: none;
-      touch-action: manipulation;
     }
     
     .game-nav-badge:hover {
@@ -614,7 +607,7 @@
   <nav class="top-nav">
     <div class="nav-left">
       <button class="ks-badge" id="ksBtn" title="Toggle Floating 1x3 View">KS</button>
-      <button class="theme-toggle" id="themeBtn" title="Toggle Light / Dark Mode"> 💡 </button>
+      <button class="theme-toggle" id="themeBtn" title="Toggle Light / Dark Mode"> 💡</button>
       <a href="index.html#games" class="game-nav-badge" title="Go to Games on Home"> 𝓖 </a>
     </div>
     <div class="nav-links">
@@ -634,7 +627,7 @@
   </nav>
 
   <!-- Wall Mode Hint Bar -->
-  <div class="wall-hint">Floating 1×4 Mode: Click a category to enter • Esc or KS to exit</div>
+  <div class="wall-hint">Floating 2×4 Mode: Click a category to enter • Esc or KS to exit</div>
 
   <!-- Outward Source Particle Canvas Behind Home Button -->
   <canvas id="sourceCanvas"></canvas>
@@ -657,9 +650,8 @@
           <img src="dp_2d.png" alt="2D Simulations DP" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'250\' viewBox=\'0 0 600 250\'><rect width=\'100%\' height=\'100%\' fill=\'%230d1117\'/><circle cx=\'300\' cy=\'125\' r=\'65\' stroke=\'%233fb950\' stroke-width=\'2\' fill=\'none\'/><line x1=\'180\' y1=\'125\' x2=\'420\' y2=\'125\' stroke=\'%2358a6ff\' stroke-width=\'1.5\'/><line x1=\'300\' y1=\'35\' x2=\'300\' y2=\'215\' stroke=\'%2358a6ff\' stroke-width=\'1.5\'/><text x=\'300\' y=\'235\' fill=\'%238b949e\' font-size=\'13\' font-family=\'monospace\' text-anchor=\'middle\'>2D Display Picture (dp_2d.png)</text></svg>';">
         </div>
         <div class="category-footer">
-          <span class="category-title">
-            <span style="display:inline-block; width:12px; height:12px; background-color: #e6a008; border-radius: 50%; margin-right:8px;"></span> 2D</span>
-          <span class="category-tag">Collection ➔</span>
+          <span class="category-title">&gt; 2D</span>
+          <span class="category-tag">View Collection ➔</span>
         </div>
       </a>
 
@@ -669,9 +661,8 @@
           <img src="dp_3d.png" alt="3D Simulations DP" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'250\' viewBox=\'0 0 600 250\'><rect width=\'100%\' height=\'100%\' fill=\'%230d1117\'/><path d=\'M200 170 L300 65 L400 170 Z\' stroke=\'%2358a6ff\' stroke-width=\'2\' fill=\'none\'/><path d=\'M200 170 L300 200 L400 170\' stroke=\'%233fb950\' stroke-width=\'1.5\' fill=\'none\'/><text x=\'300\' y=\'235\' fill=\'%238b949e\' font-size=\'13\' font-family=\'monospace\' text-anchor=\'middle\'>3D Display Picture (dp_3d.png)</text></svg>';">
         </div>
         <div class="category-footer">
-          <span class="category-title">
-            <span style="display:inline-block; width:12px; height:12px; background-color: #e6a008; border-radius: 50%; margin-right:8px;"></span> 3D</span>
-          <span class="category-tag">Collection ➔</span>
+          <span class="category-title">&gt; 3D</span>
+          <span class="category-tag">View Collection ➔</span>
         </div>
       </a>
 
@@ -681,9 +672,8 @@
           <img src="dp_stochastic.png" alt="Stochastic Simulations DP" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'250\' viewBox=\'0 0 600 250\'><rect width=\'100%\' height=\'100%\' fill=\'%230d1117\'/><polyline points=\'150,140 200,110 250,150 300,80 350,130 400,70 450,100\' fill=\'none\' stroke=\'%23ffbd2e\' stroke-width=\'2.5\'/><text x=\'300\' y=\'235\' fill=\'%238b949e\' font-size=\'13\' font-family=\'monospace\' text-anchor=\'middle\'>Stochastic DP (dp_stochastic.png)</text></svg>';">
         </div>
         <div class="category-footer">
-          <span class="category-title">
-            <span style="display:inline-block; width:12px; height:12px; background-color: #e6a008; border-radius: 50%; margin-right:8px;"></span> Stochastic</span>
-          <span class="category-tag">Collection ➔</span>
+          <span class="category-title">&gt; Stochastic</span>
+          <span class="category-tag">View Collection ➔</span>
         </div>
       </a>
 
@@ -693,9 +683,8 @@
           <img src="dp_animations.png" alt="2D Animations DP" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22180%22 viewBox=%220 0 300 180%22%3E%3Crect width=%22100%25%22 height=%22100%25%22 fill=%22%230d1117%22/%3E%3Ccircle cx=%22100%22 cy=%2290%22 r=%2225%22 stroke=%22%2358a6ff%22 stroke-width=%222%22 fill=%22none%22/%3E%3Ccircle cx=%22150%22 cy=%2290%22 r=%2225%22 stroke=%22%233fb950%22 stroke-width=%222%22 fill=%22none%22/%3E%3Ccircle cx=%22200%22 cy=%2290%22 r=%2225%22 stroke=%22%2358a6ff%22 stroke-width=%222%22 fill=%22none%22/%3E%3C/svg%3E';">
         </div>
         <div class="category-footer">
-          <span class="category-title">
-            <span style="display:inline-block; width:12px; height:12px; background-color: #e6a008; border-radius: 50%; margin-right:8px;"></span> Animations</span>
-          <span class="category-tag">Collection ➔</span>
+          <span class="category-title">&gt; Animations</span>
+          <span class="category-tag">View Collection ➔</span>
         </div>
       </a>
 
@@ -711,8 +700,7 @@
           <img src="dp_2d.png" alt="2D DP" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'180\' viewBox=\'0 0 300 180\'><rect width=\'100%\' height=\'100%\' fill=\'%230d1117\'/><circle cx=\'150\' cy=\'90\' r=\'45\' stroke=\'%233fb950\' stroke-width=\'2\' fill=\'none\'/></svg>';">
         </div>
         <div class="floating-card-footer">
-          <div class="floating-card-title">
-            <span style="display:inline-block; width:12px; height:12px; background-color: #e6a008; border-radius: 50%; margin-right:8px;"></span> 2D</div>
+          <div class="floating-card-title">&gt; 2D</div>
         </div>
       </a>
 
@@ -721,8 +709,7 @@
           <img src="dp_3d.png" alt="3D DP" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'180\' viewBox=\'0 0 300 180\'><rect width=\'100%\' height=\'100%\' fill=\'%230d1117\'/><path d=\'M100 130 L150 50 L200 130 Z\' stroke=\'%2358a6ff\' stroke-width=\'2\' fill=\'none\'/></svg>';">
         </div>
         <div class="floating-card-footer">
-          <div class="floating-card-title">
-            <span style="display:inline-block; width:12px; height:12px; background-color: #e6a008; border-radius: 50%; margin-right:8px;"></span> 3D</div>
+          <div class="floating-card-title">&gt; 3D</div>
         </div>
       </a>
 
@@ -731,8 +718,7 @@
           <img src="dp_stochastic.png" alt="Stochastic DP" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'180\' viewBox=\'0 0 300 180\'><rect width=\'100%\' height=\'100%\' fill=\'%230d1117\'/><polyline points=\'80,110 120,80 160,120 200,60 230,90\' fill=\'none\' stroke=\'%23ffbd2e\' stroke-width=\'2\'/></svg>';">
         </div>
         <div class="floating-card-footer">
-          <div class="floating-card-title">
-            <span style="display:inline-block; width:12px; height:12px; background-color: #e6a008; border-radius: 50%; margin-right:8px;"></span> Stochastic</div>
+          <div class="floating-card-title">&gt; Stochastic</div>
         </div>
       </a>
 
@@ -741,8 +727,7 @@
           <img src="dp_animations.png" alt="Animations DP" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22180%22 viewBox=%220 0 300 180%22%3E%3Crect width=%22100%25%22 height=%22100%25%22 fill=%22%230d1117%22/%3E%3Ccircle cx=%22100%22 cy=%2290%22 r=%2225%22 stroke=%22%2358a6ff%22 stroke-width=%222%22 fill=%22none%22/%3E%3Ccircle cx=%22150%22 cy=%2290%22 r=%2225%22 stroke=%22%233fb950%22 stroke-width=%222%22 fill=%22none%22/%3E%3Ccircle cx=%22200%22 cy=%2290%22 r=%2225%22 stroke=%22%2358a6ff%22 stroke-width=%222%22 fill=%22none%22/%3E%3C/svg%3E';">
         </div>
         <div class="floating-card-footer">
-          <div class="floating-card-title">
-            <span style="display:inline-block; width:12px; height:12px; background-color: #e6a008; border-radius: 50%; margin-right:8px;"></span> Animations</div>
+          <div class="floating-card-title">&gt; Animations</div>
         </div>
       </a>
     </div>
@@ -841,20 +826,34 @@
     const particles = [];
     const R_max = 210;
     const r_min = 22;
+    let canvasW = window.innerWidth;
+    let canvasH = window.innerHeight;
 
-    let cachedCanvasWidth = window.innerWidth;
-    let cachedCanvasHeight = window.innerHeight;
+    // Cache the home switch origin to eliminate layout thrashing
+    const portalSwitch = document.getElementById('portalSwitch');
+    let cachedOrigin = { x: window.innerWidth - 46, y: window.innerHeight - 46 };
+
+    function updateOrigin() {
+      if (portalSwitch) {
+        const rect = portalSwitch.getBoundingClientRect();
+        cachedOrigin = {
+          x: rect.left + rect.width / 2,
+          y: rect.top + rect.height / 2
+        };
+      }
+    }
 
     function resizeCanvas() {
       const dpr = window.devicePixelRatio || 1;
-      cachedCanvasWidth = window.innerWidth;
-      cachedCanvasHeight = window.innerHeight;
-      srcCanvas.width = cachedCanvasWidth * dpr;
-      srcCanvas.height = cachedCanvasHeight * dpr;
+      canvasW = window.innerWidth;
+      canvasH = window.innerHeight;
+      srcCanvas.width = canvasW * dpr;
+      srcCanvas.height = canvasH * dpr;
       srcCtx.resetTransform();
       srcCtx.scale(dpr, dpr);
+      updateOrigin();
     }
-    window.addEventListener('resize', resizeCanvas, { passive: true });
+    window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
 
     class SourceParticle {
@@ -891,23 +890,13 @@
       particles.push(new SourceParticle());
     }
 
-    const portalSwitch = document.getElementById('portalSwitch');
-
     function animateSource() {
-      srcCtx.clearRect(0, 0, cachedCanvasWidth, cachedCanvasHeight);
-
-      let origin = { x: cachedCanvasWidth - 46, y: cachedCanvasHeight - 46 };
-      if (portalSwitch) {
-        const rect = portalSwitch.getBoundingClientRect();
-        origin = {
-          x: rect.left + rect.width / 2,
-          y: rect.top + rect.height / 2
-        };
-      }
+      srcCtx.clearRect(0, 0, canvasW, canvasH);
 
       for (let i = 0; i < numParticles; i++) {
-        particles[i].update();
-        particles[i].draw(origin);
+        const p = particles[i];
+        p.update();
+        p.draw(cachedOrigin);
       }
       requestAnimationFrame(animateSource);
     }
@@ -922,28 +911,31 @@
     const siteFooter = document.getElementById('siteFooter');
 
     let floatingUpdatePending = false;
-    let areButtonsActive = false;
 
     function updateFloatingPosition() {
-      // 1. Reveal / hide Jump-To-Top and Share buttons without repeated class thrashing
-      const shouldActivate = window.scrollY > 120;
-      if (shouldActivate !== areButtonsActive) {
-        areButtonsActive = shouldActivate;
-        btnJumpTop.classList.toggle('is-active', shouldActivate);
-        btnSharePage.classList.toggle('is-active', shouldActivate);
+      // 1. Reveal / hide Jump-To-Top and Share buttons
+      if (window.scrollY > 120) {
+        btnJumpTop.classList.add('is-active');
+        btnSharePage.classList.add('is-active');
+      } else {
+        btnJumpTop.classList.remove('is-active');
+        btnSharePage.classList.remove('is-active');
       }
 
-      // 2. Measure actual visible height (tracks address bar shifts on mobile)
-      const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+      // 2. Compute footer boundary with standard viewport
+      const viewportHeight = window.innerHeight;
       const footerRect = siteFooter.getBoundingClientRect();
 
-      // 3. Move cluster upward using GPU translate3d; adjusts for footer collision
+      // 3. Move cluster upward using GPU-accelerated translateY to avoid layout redraws
       if (footerRect.top < viewportHeight) {
         const overlap = viewportHeight - footerRect.top;
-        floatingCluster.style.transform = `translate3d(0, -${overlap + 10}px, 0)`;
+        floatingCluster.style.transform = `translate3d(0, -${overlap}px, 0)`;
       } else {
         floatingCluster.style.transform = 'translate3d(0, 0, 0)';
       }
+
+      // Update cached origin once here (only on layout updates, not every tick)
+      updateOrigin();
     }
 
     function requestFloatingUpdate() {
@@ -965,14 +957,12 @@
 
     requestFloatingUpdate();
 
-    // Button Actions with Immediate Touch Handling
-    btnJumpTop.addEventListener('click', (e) => {
-      e.preventDefault();
+    // Button Actions
+    btnJumpTop.addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    btnSharePage.addEventListener('click', async (e) => {
-      e.preventDefault();
+    btnSharePage.addEventListener('click', async () => {
       const shareData = {
         title: document.title,
         url: window.location.href
@@ -980,13 +970,11 @@
       if (navigator.share) {
         try { 
           await navigator.share(shareData); 
-        } catch (err) {}
+        } catch (e) {}
       } else {
-        try {
-          await navigator.clipboard.writeText(window.location.href);
-          btnSharePage.setAttribute('data-tooltip', 'Link Copied!');
-          setTimeout(() => btnSharePage.setAttribute('data-tooltip', 'Share page'), 2200);
-        } catch (err) {}
+        navigator.clipboard.writeText(window.location.href);
+        btnSharePage.setAttribute('data-tooltip', 'Link Copied!');
+        setTimeout(() => btnSharePage.setAttribute('data-tooltip', 'Share page'), 2200);
       }
     });
   </script>
