@@ -987,78 +987,6 @@
         </div>
       </div>
 
-      <!-- Plot 04 -->
-      <!-- <div class="sim-card" id="plot4" data-code-file="simco/.py">
-        <div class="sim-card-header">
-          <span class="sim-card-header-title">
-            <span class="card-header-arrow"></span> plot_04.png
-          </span>
-          <button class="btn-view-code" title="View Python Code">/.</button>
-        </div>
-        <div class="sim-media">
-          <img src="">
-        </div>
-        <div class="sim-card-body">
-          <h3>nnn</h3>
-          <p>......</p>
-          <a href="notes.html#stochastic" class="sim-ref">&gt; Reference: See Analysis Notes §1.2</a>
-        </div>
-      </div> -->
-
-       <!-- Plot 05 -->
-      <!-- <div class="sim-card" id="plot4" data-code-file="simco/.py">
-        <div class="sim-card-header">
-          <span class="sim-card-header-title">
-            <span class="card-header-arrow"></span> plot_04.png
-          </span>
-          <button class="btn-view-code" title="View Python Code">/.</button>
-        </div>
-        <div class="sim-media">
-          <img src="">
-        </div>
-        <div class="sim-card-body">
-          <h3>nnn</h3>
-          <p>......</p>
-          <a href="notes.html#stochastic" class="sim-ref">&gt; Reference: See Analysis Notes §1.2</a>
-        </div>
-      </div> -->
-
-       <!-- Plot 06 -->
-      <!-- <div class="sim-card" id="plot4" data-code-file="simco/.py">
-        <div class="sim-card-header">
-          <span class="sim-card-header-title">
-            <span class="card-header-arrow"></span> plot_04.png
-          </span>
-          <button class="btn-view-code" title="View Python Code">/.</button>
-        </div>
-        <div class="sim-media">
-          <img src="">
-        </div>
-        <div class="sim-card-body">
-          <h3>nnn</h3>
-          <p>......</p>
-          <a href="notes.html#stochastic" class="sim-ref">&gt; Reference: See Analysis Notes §1.2</a>
-        </div>
-      </div> -->
-
-       <!-- Plot 07 -->
-      <!-- <div class="sim-card" id="plot4" data-code-file="simco/.py">
-        <div class="sim-card-header">
-          <span class="sim-card-header-title">
-            <span class="card-header-arrow"></span> plot_04.png
-          </span>
-          <button class="btn-view-code" title="View Python Code">/.</button>
-        </div>
-        <div class="sim-media">
-          <img src="">
-        </div>
-        <div class="sim-card-body">
-          <h3>nnn</h3>
-          <p>......</p>
-          <a href="notes.html#stochastic" class="sim-ref">&gt; Reference: See Analysis Notes §1.2</a>
-        </div>
-      </div> -->
-
     </div>
   </div>
 
@@ -1374,7 +1302,15 @@
       }
     });
 
-    // Outward Source Animation Canvas Setup
+    /* =========================================================
+       FIX #1: Outward Source Animation Canvas Setup
+       Canvas backing-store size now tracks the VISUAL viewport
+       (window.visualViewport) instead of the layout viewport
+       (window.innerWidth/innerHeight), and is re-synced on
+       visualViewport's own 'resize' event too — this is what
+       keeps it accurate while the mobile browser chrome
+       (address bar) is animating in/out.
+       ========================================================= */
     const srcCanvas = document.getElementById('sourceCanvas');
     const srcCtx = srcCanvas.getContext('2d');
     const numParticles = 48;
@@ -1382,14 +1318,27 @@
     const R_max = 210; 
     const r_min = 22;  
 
+    function getViewportSize() {
+      const vv = window.visualViewport;
+      return {
+        width: vv ? vv.width : window.innerWidth,
+        height: vv ? vv.height : window.innerHeight
+      };
+    }
+
     function resizeCanvas() {
       const dpr = window.devicePixelRatio || 1;
-      srcCanvas.width = window.innerWidth * dpr;
-      srcCanvas.height = window.innerHeight * dpr;
+      const { width, height } = getViewportSize();
+      srcCanvas.width = width * dpr;
+      srcCanvas.height = height * dpr;
       srcCtx.resetTransform();
       srcCtx.scale(dpr, dpr);
     }
     window.addEventListener('resize', resizeCanvas);
+    if (window.visualViewport) {
+      // Fires when the mobile toolbar shows/hides, on pinch-zoom, etc.
+      window.visualViewport.addEventListener('resize', resizeCanvas);
+    }
     resizeCanvas();
 
     class SourceParticle {
@@ -1425,12 +1374,36 @@
     for (let i = 0; i < numParticles; i++) particles.push(new SourceParticle());
 
     const portalSwitch = document.getElementById('portalSwitch');
+    const btnJumpTop = document.getElementById('btnJumpTop');
+    const btnSharePage = document.getElementById('btnSharePage');
+    const floatingCluster = document.getElementById('floatingCluster');
+    const siteFooter = document.getElementById('siteFooter');
 
-    function animateSource() {
-      srcCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    /* =========================================================
+       FIX #2: Single unified rAF loop (Smooth & Zero-Lag)
+       Previously the particle animation and the floating-cluster
+       position update ran in two SEPARATE requestAnimationFrame
+       loops. Because the cluster's position was written via
+       style.transform in one loop and then portalSwitch's
+       geometry was read via getBoundingClientRect() in the
+       other, the browser was forced into extra synchronous
+       layout recalculations (read-after-write thrashing) —
+       much more costly on phones than on a laptop.
 
-      // Dynamically calculate the center of the home portal switch
-      let origin = { x: window.innerWidth - 46, y: window.innerHeight - 46 };
+       Now everything happens in one loop, per frame, in two
+       clearly separated phases: all READS first, then all
+       WRITES. Both phases also use the same visual-viewport
+       dimensions, so the particle ring and the cluster/footer
+       collision logic never disagree about where the screen
+       actually ends.
+       ========================================================= */
+    function mainLoop() {
+      // ---- READ PHASE ----
+      const { width: vpWidth, height: vpHeight } = getViewportSize();
+      const scrollY = window.scrollY;
+      const footerRect = siteFooter.getBoundingClientRect();
+
+      let origin = { x: vpWidth - 46, y: vpHeight - 46 };
       if (portalSwitch) {
         const rect = portalSwitch.getBoundingClientRect();
         origin = {
@@ -1439,263 +1412,33 @@
         };
       }
 
+      // ---- WRITE PHASE ----
+      if (scrollY > 120) {
+        btnJumpTop.classList.add('is-active');
+        btnSharePage.classList.add('is-active');
+      } else {
+        btnJumpTop.classList.remove('is-active');
+        btnSharePage.classList.remove('is-active');
+      }
+
+      if (footerRect.top < vpHeight) {
+        const overlap = vpHeight - footerRect.top;
+        floatingCluster.style.transform = `translate3d(0, -${overlap}px, 0)`;
+      } else {
+        floatingCluster.style.transform = 'translate3d(0, 0, 0)';
+      }
+
+      srcCtx.clearRect(0, 0, vpWidth, vpHeight);
       for (let p of particles) {
         p.update();
         p.draw(origin);
       }
-      requestAnimationFrame(animateSource);
+
+      requestAnimationFrame(mainLoop);
     }
-    requestAnimationFrame(animateSource);
+    requestAnimationFrame(mainLoop);
 
-    // /* =========================================================
-    //    Floating Actions + Footer Positioning (Smooth & Zero-Lag)
-    //    ========================================================= */
-    // const btnJumpTop = document.getElementById('btnJumpTop');
-    // const btnSharePage = document.getElementById('btnSharePage');
-    // const floatingCluster = document.getElementById('floatingCluster');
-    // const siteFooter = document.getElementById('siteFooter');
-
-    // let floatingUpdatePending = false;
-
-    // function updateFloatingPosition() {
-    //   // 1. Reveal / hide Jump-To-Top and Share buttons
-    //   if (window.scrollY > 120) {
-    //     btnJumpTop.classList.add('is-active');
-    //     btnSharePage.classList.add('is-active');
-    //   } else {
-    //     btnJumpTop.classList.remove('is-active');
-    //     btnSharePage.classList.remove('is-active');
-    //   }
-
-    //   // 2. Compute footer boundary with visible viewport
-    //   const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-    //   const footerRect = siteFooter.getBoundingClientRect();
-
-    //   // 3. Move cluster upward using GPU-accelerated translateY to avoid layout redraws
-    //   if (footerRect.top < viewportHeight) {
-    //     const overlap = viewportHeight - footerRect.top;
-    //     floatingCluster.style.transform = `translate3d(0, -${overlap}px, 0)`;
-    //   } else {
-    //     floatingCluster.style.transform = 'translate3d(0, 0, 0)';
-    //   }
-    // }
-
-    // function requestFloatingUpdate() {
-    //   if (floatingUpdatePending) return;
-    //   floatingUpdatePending = true;
-    //   requestAnimationFrame(() => {
-    //     floatingUpdatePending = false;
-    //     updateFloatingPosition();
-    //   });
-    // }
-
-    // window.addEventListener('scroll', requestFloatingUpdate, { passive: true });
-    // window.addEventListener('resize', requestFloatingUpdate, { passive: true });
-
-    // if (window.visualViewport) {
-    //   window.visualViewport.addEventListener('resize', requestFloatingUpdate, { passive: true });
-    //   window.visualViewport.addEventListener('scroll', requestFloatingUpdate, { passive: true });
-    // }
-
-    // requestFloatingUpdate();
-
-    // // Button Actions
-    // btnJumpTop.addEventListener('click', () => {
-    //   window.scrollTo({ top: 0, behavior: 'smooth' });
-    // });
-
-    // btnSharePage.addEventListener('click', async () => {
-    //   const shareData = {
-    //     title: document.title,
-    //     url: window.location.href
-    //   };
-    //   if (navigator.share) {
-    //     try { 
-    //       await navigator.share(shareData); 
-    //     } catch (e) {}
-    //   } else {
-    //     navigator.clipboard.writeText(window.location.href);
-    //     btnSharePage.setAttribute('data-tooltip', 'Link Copied!');
-    //     setTimeout(() => btnSharePage.setAttribute('data-tooltip', 'Share page'), 2200);
-    //   }
-    // });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  /* =========================================================
-   Floating Actions + Footer Positioning
-   ========================================================= */
-    
-    const btnJumpTop = document.getElementById('btnJumpTop');
-    const btnSharePage = document.getElementById('btnSharePage');
-    const floatingCluster = document.getElementById('floatingCluster');
-    const siteFooter = document.getElementById('siteFooter');
-
-
-let floatingUpdatePending = false;
-
-
-function updateFloatingPosition() {
-
-  /* -------------------------------------------------------
-     1. Reveal / hide Jump-To-Top and Share buttons
-     ------------------------------------------------------- */
-
-  if (window.scrollY > 120) {
-
-    btnJumpTop.classList.add('is-active');
-    btnSharePage.classList.add('is-active');
-
-  } else {
-
-    btnJumpTop.classList.remove('is-active');
-    btnSharePage.classList.remove('is-active');
-
-  }
-
-
-  /* -------------------------------------------------------
-     2. Determine the ACTUAL visible viewport height
-
-     On mobile browsers, window.innerHeight can temporarily
-     represent a changing layout viewport while the browser
-     address bar is moving.
-
-     visualViewport.height tracks the visible viewport.
-     ------------------------------------------------------- */
-
-  const viewportHeight =
-    window.visualViewport
-      ? window.visualViewport.height
-      : window.innerHeight;
-
-
-  /* -------------------------------------------------------
-     3. Check whether the footer has entered the viewport
-     ------------------------------------------------------- */
-
-  const footerRect = siteFooter.getBoundingClientRect();
-
-  const defaultBottom =
-    window.innerWidth <= 600 ? 18 : 24;
-
-
-  /* -------------------------------------------------------
-     4. Move the floating controls above the footer
-     ------------------------------------------------------- */
-
-  if (footerRect.top < viewportHeight) {
-
-    const overlap = viewportHeight - footerRect.top;
-
-    floatingCluster.style.bottom =
-      `${overlap + 24}px`;
-
-    if (canvas) {
-      canvas.style.bottom =
-        `${overlap}px`;
-    }
-
-  } else {
-
-    floatingCluster.style.bottom =
-      `${defaultBottom}px`;
-
-    if (canvas) {
-      canvas.style.bottom = '0px';
-    }
-
-  }
-
-}
-
-
-/* =========================================================
-   Request one update per animation frame
-
-   This prevents dozens of position calculations from being
-   triggered during a single mobile scroll gesture.
-   ========================================================= */
-
-function requestFloatingUpdate() {
-
-  if (floatingUpdatePending) return;
-
-  floatingUpdatePending = true;
-
-  requestAnimationFrame(() => {
-
-    floatingUpdatePending = false;
-
-    updateFloatingPosition();
-
-  });
-
-}
-
-
-/* =========================================================
-   Normal page scrolling
-   ========================================================= */
-
-window.addEventListener(
-  'scroll',
-  requestFloatingUpdate,
-  { passive: true }
-);
-
-
-/* =========================================================
-   Browser / viewport resizing
-   ========================================================= */
-
-window.addEventListener(
-  'resize',
-  requestFloatingUpdate
-);
-
-
-/* =========================================================
-   Mobile visual viewport changes
-
-   This catches the browser address-bar appearing /
-   disappearing while the user scrolls.
-   ========================================================= */
-
-if (window.visualViewport) {
-
-  window.visualViewport.addEventListener(
-    'resize',
-    requestFloatingUpdate
-  );
-
-  window.visualViewport.addEventListener(
-    'scroll',
-    requestFloatingUpdate
-  );
-
-}
-
-
-/* =========================================================
-   Initial position when the page loads
-   ========================================================= */
-
-requestFloatingUpdate();
-
-
-
+    // Button Actions
     btnJumpTop.addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
@@ -1706,21 +1449,15 @@ requestFloatingUpdate();
         url: window.location.href
       };
       if (navigator.share) {
-        try { await navigator.share(shareData); } catch (e) {}
+        try { 
+          await navigator.share(shareData); 
+        } catch (e) {}
       } else {
         navigator.clipboard.writeText(window.location.href);
         btnSharePage.setAttribute('data-tooltip', 'Link Copied!');
         setTimeout(() => btnSharePage.setAttribute('data-tooltip', 'Share page'), 2200);
       }
     });
-
-
-
-
-
-
-
-
   </script>
 </body>
 </html>
