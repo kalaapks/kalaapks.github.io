@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Simulations | Kalaap Sadhu</title>
   <!-- Favicon: Exact Signature Circular KS Badge -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 38 38'><circle cx='19' cy='19' r='17' fill='%23161b22' stroke='%233fb950' stroke-width='2'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-family='monospace' font-weight='bold' font-size='14' fill='%233fb950'>KS</text></svg>">
@@ -108,6 +108,7 @@
       box-shadow: 0 0 10px rgba(63, 185, 80, 0.2);
       transition: all 0.2s ease;
       flex-shrink: 0;
+      touch-action: manipulation;
     }
 
     .ks-badge:hover, .ks-badge.active {
@@ -131,6 +132,7 @@
       color: var(--text);
       transition: all 0.2s ease;
       flex-shrink: 0;
+      touch-action: manipulation;
     }
 
     .theme-toggle:hover {
@@ -153,6 +155,7 @@
       cursor: pointer;
       background: transparent;
       font-family: inherit;
+      touch-action: manipulation;
     }
 
     .nav-btn:hover {
@@ -420,6 +423,7 @@
       gap: 16px;
       z-index: 900;
       will-change: transform;
+      pointer-events: none; /* Container ignores touches so elements underneath register taps */
     }
 
     .home-portal-switch {
@@ -440,6 +444,8 @@
       padding-bottom: 2px;
       transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
       -webkit-tap-highlight-color: transparent;
+      pointer-events: auto;
+      touch-action: manipulation;
     }
 
     .home-portal-switch:hover {
@@ -466,6 +472,7 @@
       width: 32px;
       height: 32px;
       -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
 
     .clean-float-btn.is-active {
@@ -540,6 +547,7 @@
       transition: all 0.2s ease;
       flex-shrink: 0;
       text-decoration: none;
+      touch-action: manipulation;
     }
     
     .game-nav-badge:hover {
@@ -588,11 +596,11 @@
       }
       .floating-card { border-radius: 8px; }
       .floating-card-dp { height: 95px; }
-      .floating-card-footer { padding: 8px 6px; }     /* Compact footer padding */
+      .floating-card-footer { padding: 8px 6px; }
       .floating-card-title {
-        font-size: 0.85rem;                    /* Scaled-down title text */
+        font-size: 0.85rem;
         letter-spacing: 0.2px;
-        }
+      }
       .category-dp { height: 180px; }
       .game-nav-badge { width: 30px; height: 30px; font-size: 0.78rem; }
       .floating-corner-actions { bottom: 18px; right: 18px; gap: 12px; }
@@ -606,7 +614,7 @@
   <nav class="top-nav">
     <div class="nav-left">
       <button class="ks-badge" id="ksBtn" title="Toggle Floating 1x3 View">KS</button>
-      <button class="theme-toggle" id="themeBtn" title="Toggle Light / Dark Mode">💡</button>
+      <button class="theme-toggle" id="themeBtn" title="Toggle Light / Dark Mode"> 💡 </button>
       <a href="index.html#games" class="game-nav-badge" title="Go to Games on Home"> 𝓖 </a>
     </div>
     <div class="nav-links">
@@ -826,14 +834,19 @@
     const R_max = 210;
     const r_min = 22;
 
+    let cachedCanvasWidth = window.innerWidth;
+    let cachedCanvasHeight = window.innerHeight;
+
     function resizeCanvas() {
       const dpr = window.devicePixelRatio || 1;
-      srcCanvas.width = window.innerWidth * dpr;
-      srcCanvas.height = window.innerHeight * dpr;
+      cachedCanvasWidth = window.innerWidth;
+      cachedCanvasHeight = window.innerHeight;
+      srcCanvas.width = cachedCanvasWidth * dpr;
+      srcCanvas.height = cachedCanvasHeight * dpr;
       srcCtx.resetTransform();
       srcCtx.scale(dpr, dpr);
     }
-    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener('resize', resizeCanvas, { passive: true });
     resizeCanvas();
 
     class SourceParticle {
@@ -873,10 +886,9 @@
     const portalSwitch = document.getElementById('portalSwitch');
 
     function animateSource() {
-      srcCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      srcCtx.clearRect(0, 0, cachedCanvasWidth, cachedCanvasHeight);
 
-      // Dynamically calculate the center of the home portal switch
-      let origin = { x: window.innerWidth - 46, y: window.innerHeight - 46 };
+      let origin = { x: cachedCanvasWidth - 46, y: cachedCanvasHeight - 46 };
       if (portalSwitch) {
         const rect = portalSwitch.getBoundingClientRect();
         origin = {
@@ -885,9 +897,9 @@
         };
       }
 
-      for (let p of particles) {
-        p.update();
-        p.draw(origin);
+      for (let i = 0; i < numParticles; i++) {
+        particles[i].update();
+        particles[i].draw(origin);
       }
       requestAnimationFrame(animateSource);
     }
@@ -902,26 +914,25 @@
     const siteFooter = document.getElementById('siteFooter');
 
     let floatingUpdatePending = false;
+    let areButtonsActive = false;
 
     function updateFloatingPosition() {
-      // 1. Reveal / hide Jump-To-Top and Share buttons
-      if (window.scrollY > 120) {
-        btnJumpTop.classList.add('is-active');
-        btnSharePage.classList.add('is-active');
-      } else {
-        btnJumpTop.classList.remove('is-active');
-        btnSharePage.classList.remove('is-active');
+      // 1. Reveal / hide Jump-To-Top and Share buttons without repeated class thrashing
+      const shouldActivate = window.scrollY > 120;
+      if (shouldActivate !== areButtonsActive) {
+        areButtonsActive = shouldActivate;
+        btnJumpTop.classList.toggle('is-active', shouldActivate);
+        btnSharePage.classList.toggle('is-active', shouldActivate);
       }
 
-      // 2. Compute footer boundary with visible viewport
+      // 2. Measure actual visible height (tracks address bar shifts on mobile)
       const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
       const footerRect = siteFooter.getBoundingClientRect();
-      const margin = window.innerWidth <= 800 ? 18 : 24;
 
-      // 3. Move cluster upward using GPU-accelerated translateY to avoid layout redraws
+      // 3. Move cluster upward using GPU translate3d; adjusts for footer collision
       if (footerRect.top < viewportHeight) {
         const overlap = viewportHeight - footerRect.top;
-        floatingCluster.style.transform = `translate3d(0, -${overlap}px, 0)`;
+        floatingCluster.style.transform = `translate3d(0, -${overlap + 10}px, 0)`;
       } else {
         floatingCluster.style.transform = 'translate3d(0, 0, 0)';
       }
@@ -946,12 +957,14 @@
 
     requestFloatingUpdate();
 
-    // Button Actions
-    btnJumpTop.addEventListener('click', () => {
+    // Button Actions with Immediate Touch Handling
+    btnJumpTop.addEventListener('click', (e) => {
+      e.preventDefault();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    btnSharePage.addEventListener('click', async () => {
+    btnSharePage.addEventListener('click', async (e) => {
+      e.preventDefault();
       const shareData = {
         title: document.title,
         url: window.location.href
@@ -959,11 +972,13 @@
       if (navigator.share) {
         try { 
           await navigator.share(shareData); 
-        } catch (e) {}
+        } catch (err) {}
       } else {
-        navigator.clipboard.writeText(window.location.href);
-        btnSharePage.setAttribute('data-tooltip', 'Link Copied!');
-        setTimeout(() => btnSharePage.setAttribute('data-tooltip', 'Share page'), 2200);
+        try {
+          await navigator.clipboard.writeText(window.location.href);
+          btnSharePage.setAttribute('data-tooltip', 'Link Copied!');
+          setTimeout(() => btnSharePage.setAttribute('data-tooltip', 'Share page'), 2200);
+        } catch (err) {}
       }
     });
   </script>
