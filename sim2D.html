@@ -237,10 +237,10 @@
 
     .breadcrumb a:hover { text-decoration: underline; }
 
-    .gallery-intro { margin-bottom: 30px; }
+    .gallery-intro { margin-bottom: 50px; }
 
     .gallery-intro h1 {
-      color: var(--green);
+      color: var(--text);
       font-size: 2.2rem;
       margin-bottom: 14px;
       line-height: 1.2;
@@ -372,7 +372,17 @@
     body.wall-mode .gallery-intro,
     body.wall-mode .breadcrumb {
       display: none;
-    }
+    } 
+
+    /* body.wall-mode .container,
+    body.wall-mode .site-footer-banner,
+    body.wall-mode .floating-corner-actions {
+      filter: blur(8px);
+      pointer-events: none !important;
+      user-select: none;
+    } */
+
+
 
     body.wall-mode .sim-grid {
       grid-template-columns: repeat(5, 1fr);
@@ -434,10 +444,15 @@
       padding: 6px 18px;
       border-radius: 20px;
       font-size: 0.8rem;
-      z-index: 2000;
+      z-index: 2200;
       box-shadow: 0 4px 20px rgba(0,0,0,0.6);
       display: none;
       pointer-events: none;
+    }
+
+    /* Completely remove the footer in Wall Mode */
+    body.wall-mode .site-footer-banner {
+     display: none !important;
     }
 
     body.wall-mode .wall-hint { display: block; }
@@ -911,7 +926,7 @@
     </div>
 
     <div class="gallery-intro">
-      <h1><span style="display:inline-block; width:14px; height:14px; background-color: var(--green); margin-right:8px;"></span>2D Geometric Simulations</h1>
+      <h1><span style="display:inline-block; width:15px; height:15px; background-color: #e6a008; border-radius: 50%; margin-right:8px;"></span>2D Geometric Simulations</h1>
       <p>Slope fields, trajectories, planar characteristic curves, radial heat diffusion boundaries and 2D contours extracted directly from the notes.</p>
     </div>
 
@@ -932,7 +947,7 @@
         <div class="sim-card-body">
           <h3>Exponential growth or decay depending on value of \(\lambda\)</h3>
           <p> These are the trajectories of curves that solve \(y'=\lambda y\) and they form what we call the Direction field.</p>
-          <a href="notes.html#DE" class="sim-ref">&gt; Ref: See ODE Notes §1.1.1</a>
+          <a href="notesDE.html" class="sim-ref">&gt; Ref: See ODE Notes §1.1.1</a>
         </div>
       </div>
 
@@ -949,8 +964,8 @@
         </div>
         <div class="sim-card-body">
           <h3>Characteristic curves of a const-coefficient Transport equation</h3>
-          <p>These are the curves in the domain along which we get constant value of the surface that satisfies \(u_t + bu_x=0\).</p>
-          <a href="notes.html#stochastic" class="sim-ref">&gt; Ref: See PDE Notes §1.1.1</a>
+          <p>These are the curves in the domain on which we get constant value of the surface that satisfies \(u_t + bu_x=0\).</p>
+          <a href="notesDE.html" class="sim-ref">&gt; Ref: See PDE Notes §1.1.1</a>
         </div>
       </div>
 
@@ -968,7 +983,7 @@
         <div class="sim-card-body">
           <h3>Direction field with collision on \(\{x \ge 0\}\)</h3>
           <p>This direction field is created by something that is as simple as \(x'=-\frac{t}{x}\) and yet we get into complicated discussions about +ve and -ve branches. </p>
-          <a href="notes.html#DE" class="sim-ref">&gt; Ref: See ODE Notes §1.1.1</a>
+          <a href="notesDE.html" class="sim-ref">&gt; Ref: See ODE Notes §1.1.1</a>
         </div>
       </div>
 
@@ -1336,23 +1351,6 @@
     });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* ========================================================
        Unified Global Keyboard Handler: Esc, ArrowLeft, ArrowRight
        ======================================================== */
@@ -1449,59 +1447,255 @@
     }
     requestAnimationFrame(animateSource);
 
-    /* =========================================================
-       Floating Actions + Footer Positioning (Smooth & Zero-Lag)
-       ========================================================= */
+    // /* =========================================================
+    //    Floating Actions + Footer Positioning (Smooth & Zero-Lag)
+    //    ========================================================= */
+    // const btnJumpTop = document.getElementById('btnJumpTop');
+    // const btnSharePage = document.getElementById('btnSharePage');
+    // const floatingCluster = document.getElementById('floatingCluster');
+    // const siteFooter = document.getElementById('siteFooter');
+
+    // let floatingUpdatePending = false;
+
+    // function updateFloatingPosition() {
+    //   // 1. Reveal / hide Jump-To-Top and Share buttons
+    //   if (window.scrollY > 120) {
+    //     btnJumpTop.classList.add('is-active');
+    //     btnSharePage.classList.add('is-active');
+    //   } else {
+    //     btnJumpTop.classList.remove('is-active');
+    //     btnSharePage.classList.remove('is-active');
+    //   }
+
+    //   // 2. Compute footer boundary with visible viewport
+    //   const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+    //   const footerRect = siteFooter.getBoundingClientRect();
+
+    //   // 3. Move cluster upward using GPU-accelerated translateY to avoid layout redraws
+    //   if (footerRect.top < viewportHeight) {
+    //     const overlap = viewportHeight - footerRect.top;
+    //     floatingCluster.style.transform = `translate3d(0, -${overlap}px, 0)`;
+    //   } else {
+    //     floatingCluster.style.transform = 'translate3d(0, 0, 0)';
+    //   }
+    // }
+
+    // function requestFloatingUpdate() {
+    //   if (floatingUpdatePending) return;
+    //   floatingUpdatePending = true;
+    //   requestAnimationFrame(() => {
+    //     floatingUpdatePending = false;
+    //     updateFloatingPosition();
+    //   });
+    // }
+
+    // window.addEventListener('scroll', requestFloatingUpdate, { passive: true });
+    // window.addEventListener('resize', requestFloatingUpdate, { passive: true });
+
+    // if (window.visualViewport) {
+    //   window.visualViewport.addEventListener('resize', requestFloatingUpdate, { passive: true });
+    //   window.visualViewport.addEventListener('scroll', requestFloatingUpdate, { passive: true });
+    // }
+
+    // requestFloatingUpdate();
+
+    // // Button Actions
+    // btnJumpTop.addEventListener('click', () => {
+    //   window.scrollTo({ top: 0, behavior: 'smooth' });
+    // });
+
+    // btnSharePage.addEventListener('click', async () => {
+    //   const shareData = {
+    //     title: document.title,
+    //     url: window.location.href
+    //   };
+    //   if (navigator.share) {
+    //     try { 
+    //       await navigator.share(shareData); 
+    //     } catch (e) {}
+    //   } else {
+    //     navigator.clipboard.writeText(window.location.href);
+    //     btnSharePage.setAttribute('data-tooltip', 'Link Copied!');
+    //     setTimeout(() => btnSharePage.setAttribute('data-tooltip', 'Share page'), 2200);
+    //   }
+    // });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /* =========================================================
+   Floating Actions + Footer Positioning
+   ========================================================= */
+    
     const btnJumpTop = document.getElementById('btnJumpTop');
     const btnSharePage = document.getElementById('btnSharePage');
     const floatingCluster = document.getElementById('floatingCluster');
     const siteFooter = document.getElementById('siteFooter');
 
-    let floatingUpdatePending = false;
 
-    function updateFloatingPosition() {
-      // 1. Reveal / hide Jump-To-Top and Share buttons
-      if (window.scrollY > 120) {
-        btnJumpTop.classList.add('is-active');
-        btnSharePage.classList.add('is-active');
-      } else {
-        btnJumpTop.classList.remove('is-active');
-        btnSharePage.classList.remove('is-active');
-      }
+let floatingUpdatePending = false;
 
-      // 2. Compute footer boundary with visible viewport
-      const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-      const footerRect = siteFooter.getBoundingClientRect();
 
-      // 3. Move cluster upward using GPU-accelerated translateY to avoid layout redraws
-      if (footerRect.top < viewportHeight) {
-        const overlap = viewportHeight - footerRect.top;
-        floatingCluster.style.transform = `translate3d(0, -${overlap}px, 0)`;
-      } else {
-        floatingCluster.style.transform = 'translate3d(0, 0, 0)';
-      }
+function updateFloatingPosition() {
+
+  /* -------------------------------------------------------
+     1. Reveal / hide Jump-To-Top and Share buttons
+     ------------------------------------------------------- */
+
+  if (window.scrollY > 120) {
+
+    btnJumpTop.classList.add('is-active');
+    btnSharePage.classList.add('is-active');
+
+  } else {
+
+    btnJumpTop.classList.remove('is-active');
+    btnSharePage.classList.remove('is-active');
+
+  }
+
+
+  /* -------------------------------------------------------
+     2. Determine the ACTUAL visible viewport height
+
+     On mobile browsers, window.innerHeight can temporarily
+     represent a changing layout viewport while the browser
+     address bar is moving.
+
+     visualViewport.height tracks the visible viewport.
+     ------------------------------------------------------- */
+
+  const viewportHeight =
+    window.visualViewport
+      ? window.visualViewport.height
+      : window.innerHeight;
+
+
+  /* -------------------------------------------------------
+     3. Check whether the footer has entered the viewport
+     ------------------------------------------------------- */
+
+  const footerRect = siteFooter.getBoundingClientRect();
+
+  const defaultBottom =
+    window.innerWidth <= 600 ? 18 : 24;
+
+
+  /* -------------------------------------------------------
+     4. Move the floating controls above the footer
+     ------------------------------------------------------- */
+
+  if (footerRect.top < viewportHeight) {
+
+    const overlap = viewportHeight - footerRect.top;
+
+    floatingCluster.style.bottom =
+      `${overlap + 24}px`;
+
+    if (canvas) {
+      canvas.style.bottom =
+        `${overlap}px`;
     }
 
-    function requestFloatingUpdate() {
-      if (floatingUpdatePending) return;
-      floatingUpdatePending = true;
-      requestAnimationFrame(() => {
-        floatingUpdatePending = false;
-        updateFloatingPosition();
-      });
+  } else {
+
+    floatingCluster.style.bottom =
+      `${defaultBottom}px`;
+
+    if (canvas) {
+      canvas.style.bottom = '0px';
     }
 
-    window.addEventListener('scroll', requestFloatingUpdate, { passive: true });
-    window.addEventListener('resize', requestFloatingUpdate, { passive: true });
+  }
 
-    if (window.visualViewport) {
-      window.visualViewport.addEventListener('resize', requestFloatingUpdate, { passive: true });
-      window.visualViewport.addEventListener('scroll', requestFloatingUpdate, { passive: true });
-    }
+}
 
-    requestFloatingUpdate();
 
-    // Button Actions
+/* =========================================================
+   Request one update per animation frame
+
+   This prevents dozens of position calculations from being
+   triggered during a single mobile scroll gesture.
+   ========================================================= */
+
+function requestFloatingUpdate() {
+
+  if (floatingUpdatePending) return;
+
+  floatingUpdatePending = true;
+
+  requestAnimationFrame(() => {
+
+    floatingUpdatePending = false;
+
+    updateFloatingPosition();
+
+  });
+
+}
+
+
+/* =========================================================
+   Normal page scrolling
+   ========================================================= */
+
+window.addEventListener(
+  'scroll',
+  requestFloatingUpdate,
+  { passive: true }
+);
+
+
+/* =========================================================
+   Browser / viewport resizing
+   ========================================================= */
+
+window.addEventListener(
+  'resize',
+  requestFloatingUpdate
+);
+
+
+/* =========================================================
+   Mobile visual viewport changes
+
+   This catches the browser address-bar appearing /
+   disappearing while the user scrolls.
+   ========================================================= */
+
+if (window.visualViewport) {
+
+  window.visualViewport.addEventListener(
+    'resize',
+    requestFloatingUpdate
+  );
+
+  window.visualViewport.addEventListener(
+    'scroll',
+    requestFloatingUpdate
+  );
+
+}
+
+
+/* =========================================================
+   Initial position when the page loads
+   ========================================================= */
+
+requestFloatingUpdate();
+
+
+
     btnJumpTop.addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
@@ -1512,15 +1706,21 @@
         url: window.location.href
       };
       if (navigator.share) {
-        try { 
-          await navigator.share(shareData); 
-        } catch (e) {}
+        try { await navigator.share(shareData); } catch (e) {}
       } else {
         navigator.clipboard.writeText(window.location.href);
         btnSharePage.setAttribute('data-tooltip', 'Link Copied!');
         setTimeout(() => btnSharePage.setAttribute('data-tooltip', 'Share page'), 2200);
       }
     });
+
+
+
+
+
+
+
+
   </script>
 </body>
 </html>
