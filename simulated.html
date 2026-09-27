@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <title>Simulated | Kalaap Sadhu</title>
+  <title>Simulations | Kalaap Sadhu</title>
+  <!-- Favicon: Exact Signature Circular KS Badge -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 38 38'><circle cx='19' cy='19' r='17' fill='%23161b22' stroke='%233fb950' stroke-width='2'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-family='monospace' font-weight='bold' font-size='14' fill='%233fb950'>KS</text></svg>">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -62,7 +64,7 @@
       color: var(--text);
       font-family: 'AlgolRevived', 'Courier Prime', 'Fira Code', Courier, monospace;
       line-height: 1.6;
-      padding-bottom: 80px;
+      padding-bottom: 0;
       min-height: 100vh;
       transition: background 0.3s ease, color 0.3s ease;
       overflow-x: hidden;
@@ -225,9 +227,7 @@
       margin-bottom: 16px;
     }
 
-    /* ========================================================
-       3x1 VERTICAL STACK (DEFAULT)
-       ======================================================== */
+    /* 3x1 Vertical Stack */
     .category-stack {
       display: flex;
       flex-direction: column;
@@ -298,9 +298,7 @@
       font-weight: bold;
     }
 
-    /* ========================================================
-       FLOATING 1x3 WALL OVERLAY (KS MODE)
-       ======================================================== */
+    /* Floating 1x3 KS Wall Overlay */
     body.wall-mode .container {
       filter: blur(8px);
       pointer-events: none;
@@ -400,20 +398,31 @@
 
     body.wall-mode .wall-hint { display: block; }
 
+    /* Outward Source Particle Canvas: Covers viewport to prevent clipping */
     #sourceCanvas {
       position: fixed;
-      bottom: 0;
-      right: 0;
-      width: 360px;
-      height: 360px;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
       pointer-events: none;
-      z-index: 5;
+      z-index: 1;
     }
 
-    .home-portal-switch {
+    /* Floating Corner Action Cluster */
+    .floating-corner-actions {
       position: fixed;
       bottom: 24px;
       right: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      z-index: 900;
+      will-change: transform;
+    }
+
+    .home-portal-switch {
       width: 44px;
       height: 44px;
       border-radius: 50%;
@@ -424,15 +433,13 @@
       align-items: center;
       justify-content: center;
       text-decoration: none;
+      font-size: 1.45rem;
+      font-weight: bold;
       box-shadow: 0 6px 20px var(--card-shadow);
-      z-index: 900;
+      line-height: 1;
+      padding-bottom: 2px;
       transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .home-portal-switch svg {
-      width: 20px;
-      height: 20px;
-      fill: currentColor;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .home-portal-switch:hover {
@@ -441,14 +448,155 @@
       box-shadow: 0 0 18px rgba(63, 185, 80, 0.4);
     }
 
+    /* Clean Borderless Action Buttons */
+    .clean-float-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: color 0.2s ease, opacity 0.25s ease, transform 0.25s ease;
+      opacity: 0;
+      pointer-events: none;
+      user-select: none;
+      width: 32px;
+      height: 32px;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .clean-float-btn.is-active {
+      opacity: 0.85;
+      pointer-events: auto;
+    }
+
+    .clean-float-btn:hover {
+      color: var(--green);
+      transform: translateY(-2px);
+      opacity: 1;
+    }
+
+    .float-arrowhead-icon {
+      width: 14px;
+      height: 14px;
+      border-top: 2.5px solid currentColor;
+      border-right: 2.5px solid currentColor;
+      transform: rotate(-45deg);
+      display: inline-block;
+      margin-top: 4px;
+    }
+
+    .float-share-icon {
+      width: 19px;
+      height: 19px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .clean-float-btn::before {
+      content: attr(data-tooltip);
+      position: absolute;
+      right: 125%;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 0.72rem;
+      font-family: inherit;
+      white-space: nowrap;
+      padding: 3px 8px;
+      border-radius: 4px;
+      box-shadow: 0 4px 12px var(--card-shadow);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .clean-float-btn:hover::before { opacity: 1; }
+
+    /* Nav G Badge */
+    .game-nav-badge {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--card-bg);
+      border: 2px solid var(--accent);
+      color: var(--accent);
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(88, 166, 255, 0.2);
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+      text-decoration: none;
+    }
+    
+    .game-nav-badge:hover {
+      transform: scale(1.08);
+      background: var(--accent);
+      color: #0d1117;
+      box-shadow: 0 0 16px rgba(88, 166, 255, 0.5);
+    }
+
+    /* Footer Banner */
+    .site-footer-banner {
+      width: 100%;
+      border-top: 1px solid var(--border);
+      background: var(--terminal-header);
+      padding: 16px 20px;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-family: inherit;
+      position: relative;
+      z-index: 10;
+      margin-top: 50px;
+    }
+
+    .footer-icons {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      vertical-align: middle;
+      margin-left: 10px;
+    }
+
+    .footer-icons .contact-drop-icon svg {
+      width: 16px;
+      height: 16px;
+      fill: var(--text-muted);
+      display: block;
+    }
+
     @media (max-width: 800px) {
+      .floating-wall-overlay { padding: 16px; }
       .floating-wall-grid {
-        grid-template-columns: 1fr;
-        max-width: 320px;
-        gap: 16px;
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 360px;
+        gap: 12px;
       }
-      .floating-card-dp { height: 130px; }
+      .floating-card { border-radius: 8px; }
+      .floating-card-dp { height: 95px; }
+      .floating-card-footer { padding: 8px 6px; }     /* Compact footer padding */
+      .floating-card-title {
+        font-size: 0.85rem;                    /* Scaled-down title text */
+        letter-spacing: 0.2px;
+        }
       .category-dp { height: 180px; }
+      .game-nav-badge { width: 30px; height: 30px; font-size: 0.78rem; }
+      .floating-corner-actions { bottom: 18px; right: 18px; gap: 12px; }
+      .home-portal-switch { width: 40px; height: 40px; font-size: 1.25rem; }
     }
   </style>
 </head>
@@ -459,9 +607,9 @@
     <div class="nav-left">
       <button class="ks-badge" id="ksBtn" title="Toggle Floating 1x3 View">KS</button>
       <button class="theme-toggle" id="themeBtn" title="Toggle Light / Dark Mode">💡</button>
+      <a href="index.html#games" class="game-nav-badge" title="Go to Games on Home"> 𝓖 </a>
     </div>
     <div class="nav-links">
-      <a href="index.html#me" class="nav-btn">ME</a>
       <a href="index.html#resume" class="nav-btn">Resume</a>
       <a href="index.html#projects" class="nav-btn">Projects</a>
       
@@ -469,35 +617,27 @@
       <div class="dropdown" id="funDropdown">
         <button class="nav-btn active" id="funBtn"> Fun ▾</button>
         <div class="dropdown-content">
-          <a href="notes.html">> Notes</a>
-          <a href="simulated.html">> Simulated</a>
-          <a href="index.html#fun">> Games</a>
+          <a href="notes.html">&gt; Notes</a>
+          <a href="simulated.html">&gt; Simulated</a>
+          <a href="index.html#fun">&gt; Games</a>
         </div>
       </div>
     </div>
   </nav>
 
   <!-- Wall Mode Hint Bar -->
-  <div class="wall-hint">Floating 1×3 Mode: Click a category to enter • Esc or KS to exit</div>
+  <div class="wall-hint">Floating 1×4 Mode: Click a category to enter • Esc or KS to exit</div>
 
-  <!-- Outward Source Particle Canvas -->
-  <canvas id="sourceCanvas" width="360" height="360"></canvas>
+  <!-- Outward Source Particle Canvas Behind Home Button -->
+  <canvas id="sourceCanvas"></canvas>
 
-  <!-- Bottom-Right Home Portal Switch -->
-  <a href="index.html" class="home-portal-switch" id="homePortalSwitch" title="Back to Home">
-    <svg viewBox="0 0 24 24">
-      <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-    </svg>
-  </a>
-
-  <!-- Standard Container (3x1 Stack) -->
+  <!-- Standard Container (4x1 Stack) -->
   <div class="container">
     <div class="gallery-intro">
-      <h1><span style="display:inline-block; width:14px; height:14px; background-color: var(--green); margin-right:8px;"></span> Simulations & Visualizations</h1>
+      <h1><span style="display:inline-block; width:14px; height:14px; background-color: var(--green); margin-right:8px;"></span> Simulations &amp; Visualizations</h1>
       <p style="margin-bottom: 25px;">This is my absolute favourite part of the website. </p>
       <p>This section is a quick glimpse into how I see Mathematics. There is immense beauty and power in abstracting ideas, but I have always enjoyed peeling away the abstraction and seeing the geometry hiding underneath it, whenever possible. So, this section is essentially a collection of things that a 5 year old would say "Nice color-y things". If you are 5, you know exactly what I mean, right? </p>
-      <!-- These ranges from geometric ODE/PDE solutions and their numerical approximations, computational models and stochastic trajectories.  -->
-      <p>They are not meant to replace the mathematics. They are little windows into it. All of them are linked back to the corresponding Notes where they are developed more carefully, feel free to click and see where the pictures came from. <br> Happy viewing!</p>
+      <p>These are not meant to replace the mathematics. They are little windows into it. All of them are linked back to the corresponding Notes where they are developed more carefully, feel free to click and see where the pictures came from. <br> Happy viewing!</p>
     </div>
 
     <!-- 3x1 Stack Layout (Scroll to explore) -->
@@ -509,7 +649,7 @@
           <img src="dp_2d.png" alt="2D Simulations DP" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'250\' viewBox=\'0 0 600 250\'><rect width=\'100%\' height=\'100%\' fill=\'%230d1117\'/><circle cx=\'300\' cy=\'125\' r=\'65\' stroke=\'%233fb950\' stroke-width=\'2\' fill=\'none\'/><line x1=\'180\' y1=\'125\' x2=\'420\' y2=\'125\' stroke=\'%2358a6ff\' stroke-width=\'1.5\'/><line x1=\'300\' y1=\'35\' x2=\'300\' y2=\'215\' stroke=\'%2358a6ff\' stroke-width=\'1.5\'/><text x=\'300\' y=\'235\' fill=\'%238b949e\' font-size=\'13\' font-family=\'monospace\' text-anchor=\'middle\'>2D Display Picture (dp_2d.png)</text></svg>';">
         </div>
         <div class="category-footer">
-          <span class="category-title">> 2D</span>
+          <span class="category-title">&gt; 2D</span>
           <span class="category-tag">View Collection ➔</span>
         </div>
       </a>
@@ -520,7 +660,7 @@
           <img src="dp_3d.png" alt="3D Simulations DP" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'250\' viewBox=\'0 0 600 250\'><rect width=\'100%\' height=\'100%\' fill=\'%230d1117\'/><path d=\'M200 170 L300 65 L400 170 Z\' stroke=\'%2358a6ff\' stroke-width=\'2\' fill=\'none\'/><path d=\'M200 170 L300 200 L400 170\' stroke=\'%233fb950\' stroke-width=\'1.5\' fill=\'none\'/><text x=\'300\' y=\'235\' fill=\'%238b949e\' font-size=\'13\' font-family=\'monospace\' text-anchor=\'middle\'>3D Display Picture (dp_3d.png)</text></svg>';">
         </div>
         <div class="category-footer">
-          <span class="category-title">> 3D</span>
+          <span class="category-title">&gt; 3D</span>
           <span class="category-tag">View Collection ➔</span>
         </div>
       </a>
@@ -531,7 +671,18 @@
           <img src="dp_stochastic.png" alt="Stochastic Simulations DP" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'250\' viewBox=\'0 0 600 250\'><rect width=\'100%\' height=\'100%\' fill=\'%230d1117\'/><polyline points=\'150,140 200,110 250,150 300,80 350,130 400,70 450,100\' fill=\'none\' stroke=\'%23ffbd2e\' stroke-width=\'2.5\'/><text x=\'300\' y=\'235\' fill=\'%238b949e\' font-size=\'13\' font-family=\'monospace\' text-anchor=\'middle\'>Stochastic DP (dp_stochastic.png)</text></svg>';">
         </div>
         <div class="category-footer">
-          <span class="category-title">> Stochastic</span>
+          <span class="category-title">&gt; Stochastic</span>
+          <span class="category-tag">View Collection ➔</span>
+        </div>
+      </a>
+
+      <!-- animated Category -->
+      <a href="animations.html" class="category-card">
+        <div class="category-dp">
+          <img src="dp_animations.png" alt="2D Animations DP" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22180%22 viewBox=%220 0 300 180%22%3E%3Crect width=%22100%25%22 height=%22100%25%22 fill=%22%230d1117%22/%3E%3Ccircle cx=%22100%22 cy=%2290%22 r=%2225%22 stroke=%22%2358a6ff%22 stroke-width=%222%22 fill=%22none%22/%3E%3Ccircle cx=%22150%22 cy=%2290%22 r=%2225%22 stroke=%22%233fb950%22 stroke-width=%222%22 fill=%22none%22/%3E%3Ccircle cx=%22200%22 cy=%2290%22 r=%2225%22 stroke=%22%2358a6ff%22 stroke-width=%222%22 fill=%22none%22/%3E%3C/svg%3E';">
+        </div>
+        <div class="category-footer">
+          <span class="category-title">&gt; Animations</span>
           <span class="category-tag">View Collection ➔</span>
         </div>
       </a>
@@ -539,15 +690,16 @@
     </div>
   </div>
 
-  <!-- Floating 1x3 KS Wall Overlay -->
+  <!-- Floating 1x4 KS Wall Overlay -->
   <div class="floating-wall-overlay" id="wallOverlay">
     <div class="floating-wall-grid">
+        
       <a href="sim2D.html" class="floating-card">
         <div class="floating-card-dp">
           <img src="dp_2d.png" alt="2D DP" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'180\' viewBox=\'0 0 300 180\'><rect width=\'100%\' height=\'100%\' fill=\'%230d1117\'/><circle cx=\'150\' cy=\'90\' r=\'45\' stroke=\'%233fb950\' stroke-width=\'2\' fill=\'none\'/></svg>';">
         </div>
         <div class="floating-card-footer">
-          <div class="floating-card-title">> 2D</div>
+          <div class="floating-card-title">&gt; 2D</div>
         </div>
       </a>
 
@@ -556,7 +708,7 @@
           <img src="dp_3d.png" alt="3D DP" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'180\' viewBox=\'0 0 300 180\'><rect width=\'100%\' height=\'100%\' fill=\'%230d1117\'/><path d=\'M100 130 L150 50 L200 130 Z\' stroke=\'%2358a6ff\' stroke-width=\'2\' fill=\'none\'/></svg>';">
         </div>
         <div class="floating-card-footer">
-          <div class="floating-card-title">> 3D</div>
+          <div class="floating-card-title">&gt; 3D</div>
         </div>
       </a>
 
@@ -565,11 +717,58 @@
           <img src="dp_stochastic.png" alt="Stochastic DP" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'180\' viewBox=\'0 0 300 180\'><rect width=\'100%\' height=\'100%\' fill=\'%230d1117\'/><polyline points=\'80,110 120,80 160,120 200,60 230,90\' fill=\'none\' stroke=\'%23ffbd2e\' stroke-width=\'2\'/></svg>';">
         </div>
         <div class="floating-card-footer">
-          <div class="floating-card-title">> Stochastic</div>
+          <div class="floating-card-title">&gt; Stochastic</div>
+        </div>
+      </a>
+
+      <a href="animations.html" class="floating-card">
+        <div class="floating-card-dp">
+          <img src="dp_animations.png" alt="Animations DP" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22180%22 viewBox=%220 0 300 180%22%3E%3Crect width=%22100%25%22 height=%22100%25%22 fill=%22%230d1117%22/%3E%3Ccircle cx=%22100%22 cy=%2290%22 r=%2225%22 stroke=%22%2358a6ff%22 stroke-width=%222%22 fill=%22none%22/%3E%3Ccircle cx=%22150%22 cy=%2290%22 r=%2225%22 stroke=%22%233fb950%22 stroke-width=%222%22 fill=%22none%22/%3E%3Ccircle cx=%22200%22 cy=%2290%22 r=%2225%22 stroke=%22%2358a6ff%22 stroke-width=%222%22 fill=%22none%22/%3E%3C/svg%3E';">
+        </div>
+        <div class="floating-card-footer">
+          <div class="floating-card-title">&gt; Animations</div>
         </div>
       </a>
     </div>
   </div>
+
+  <!-- FLOATING ACTIONS CLUSTER (Jump, Share, Home Switch) -->
+  <div class="floating-corner-actions" id="floatingCluster">
+    <button class="clean-float-btn" id="btnJumpTop" data-tooltip="Jump to top" aria-label="Jump to top">
+      <span class="float-arrowhead-icon"></span>
+    </button>
+
+    <button class="clean-float-btn" id="btnSharePage" data-tooltip="Share page" aria-label="Share page">
+      <svg class="float-share-icon" viewBox="0 0 24 24">
+        <circle cx="18" cy="5" r="3"></circle>
+        <circle cx="6" cy="12" r="3"></circle>
+        <circle cx="18" cy="19" r="3"></circle>
+        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+      </svg>
+    </button>
+
+    <a href="index.html" class="home-portal-switch" id="portalSwitch" title="Home"> 🏠︎ </a>
+  </div>
+
+  <!-- Space spacer before footer -->
+  <div style="height: 25vh;"></div>
+
+  <!-- Footer Banner -->
+  <footer class="site-footer-banner" id="siteFooter">
+    &copy; 2026 Kalaap Sadhu. All rights reserved.
+    <span class="footer-icons">
+      <a href="mailto:kalaap.ks@gmail.com" class="contact-drop-icon" title="Send Email">
+        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+      </a>
+      <a href="https://github.com/kalaapks" target="_blank" class="contact-drop-icon" title="GitHub">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+      </a>
+      <a href="YOUR_LINKEDIN_URL" target="_blank" class="contact-drop-icon" title="LinkedIn">
+        <svg viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.65 1.65 0 1 0 0 3.3 1.65 1.65 0 0 0 0-3.3z"/></svg>
+      </a>
+    </span>
+  </footer>
 
   <script>
     // Theme Switcher Logic
@@ -619,13 +818,23 @@
       if (e.key === 'Escape' && isWallMode) toggleWallMode(false);
     });
 
-    // Outward Source Animation
+    // Outward Source Animation Canvas Setup
     const srcCanvas = document.getElementById('sourceCanvas');
     const srcCtx = srcCanvas.getContext('2d');
-    const numParticles = 45;
+    const numParticles = 48;
     const particles = [];
-    const R_max = 210; 
-    const r_min = 22;  
+    const R_max = 210;
+    const r_min = 22;
+
+    function resizeCanvas() {
+      const dpr = window.devicePixelRatio || 1;
+      srcCanvas.width = window.innerWidth * dpr;
+      srcCanvas.height = window.innerHeight * dpr;
+      srcCtx.resetTransform();
+      srcCtx.scale(dpr, dpr);
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
 
     class SourceParticle {
       constructor() {
@@ -635,7 +844,7 @@
       reset() {
         this.theta = Math.random() * Math.PI * 2;
         this.r = r_min;
-        this.speed = 0.45 + Math.random() * 0.45;
+        this.speed = 0.5 + Math.random() * 0.5;
       }
       update() {
         this.r += this.speed;
@@ -644,7 +853,7 @@
       draw(origin) {
         const x = origin.x + this.r * Math.cos(this.theta);
         const y = origin.y + this.r * Math.sin(this.theta);
-        let opacity = 0.24;
+        let opacity = 0.28;
         if (this.r - r_min < 25) opacity *= (this.r - r_min) / 25;
         else if (R_max - this.r < 45) opacity *= (R_max - this.r) / 45;
 
@@ -652,28 +861,111 @@
           ? `rgba(35, 39, 45, ${opacity * 1.5})`
           : `rgba(63, 185, 80, ${opacity})`;
         srcCtx.beginPath();
-        srcCtx.arc(x, y, 1.2, 0, Math.PI * 2);
+        srcCtx.arc(x, y, 1.25, 0, Math.PI * 2);
         srcCtx.fill();
       }
     }
 
-    for (let i = 0; i < numParticles; i++) particles.push(new SourceParticle());
+    for (let i = 0; i < numParticles; i++) {
+      particles.push(new SourceParticle());
+    }
+
+    const portalSwitch = document.getElementById('portalSwitch');
 
     function animateSource() {
-      srcCtx.clearRect(0, 0, srcCanvas.width, srcCanvas.height);
-      const origin = { x: 360 - 24 - 22, y: 360 - 24 - 22 };
+      srcCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+      // Dynamically calculate the center of the home portal switch
+      let origin = { x: window.innerWidth - 46, y: window.innerHeight - 46 };
+      if (portalSwitch) {
+        const rect = portalSwitch.getBoundingClientRect();
+        origin = {
+          x: rect.left + rect.width / 2,
+          y: rect.top + rect.height / 2
+        };
+      }
+
       for (let p of particles) {
         p.update();
         p.draw(origin);
       }
       requestAnimationFrame(animateSource);
     }
-    animateSource();
+    requestAnimationFrame(animateSource);
+
+    /* =========================================================
+       Floating Actions + Footer Positioning (Smooth & Zero-Lag)
+       ========================================================= */
+    const btnJumpTop = document.getElementById('btnJumpTop');
+    const btnSharePage = document.getElementById('btnSharePage');
+    const floatingCluster = document.getElementById('floatingCluster');
+    const siteFooter = document.getElementById('siteFooter');
+
+    let floatingUpdatePending = false;
+
+    function updateFloatingPosition() {
+      // 1. Reveal / hide Jump-To-Top and Share buttons
+      if (window.scrollY > 120) {
+        btnJumpTop.classList.add('is-active');
+        btnSharePage.classList.add('is-active');
+      } else {
+        btnJumpTop.classList.remove('is-active');
+        btnSharePage.classList.remove('is-active');
+      }
+
+      // 2. Compute footer boundary with visible viewport
+      const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+      const footerRect = siteFooter.getBoundingClientRect();
+      const margin = window.innerWidth <= 800 ? 18 : 24;
+
+      // 3. Move cluster upward using GPU-accelerated translateY to avoid layout redraws
+      if (footerRect.top < viewportHeight) {
+        const overlap = viewportHeight - footerRect.top;
+        floatingCluster.style.transform = `translate3d(0, -${overlap}px, 0)`;
+      } else {
+        floatingCluster.style.transform = 'translate3d(0, 0, 0)';
+      }
+    }
+
+    function requestFloatingUpdate() {
+      if (floatingUpdatePending) return;
+      floatingUpdatePending = true;
+      requestAnimationFrame(() => {
+        floatingUpdatePending = false;
+        updateFloatingPosition();
+      });
+    }
+
+    window.addEventListener('scroll', requestFloatingUpdate, { passive: true });
+    window.addEventListener('resize', requestFloatingUpdate, { passive: true });
+
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', requestFloatingUpdate, { passive: true });
+      window.visualViewport.addEventListener('scroll', requestFloatingUpdate, { passive: true });
+    }
+
+    requestFloatingUpdate();
+
+    // Button Actions
+    btnJumpTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    btnSharePage.addEventListener('click', async () => {
+      const shareData = {
+        title: document.title,
+        url: window.location.href
+      };
+      if (navigator.share) {
+        try { 
+          await navigator.share(shareData); 
+        } catch (e) {}
+      } else {
+        navigator.clipboard.writeText(window.location.href);
+        btnSharePage.setAttribute('data-tooltip', 'Link Copied!');
+        setTimeout(() => btnSharePage.setAttribute('data-tooltip', 'Share page'), 2200);
+      }
+    });
   </script>
-
-
-<!-- controls the gap at the bottom of the home page -->
-<div style="height: 27vh;"></div>
-</body>
 </body>
 </html>
