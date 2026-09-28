@@ -934,7 +934,7 @@
     <div class="sim-grid" id="simGrid">
 
       <!-- Plot 01 -->
-      <div class="sim-card" id="plot1" data-code-file="simco/vecFsur2.py">
+      <div class="sim-card" id="plot3" data-code-file="simco/GoTo.py">
         <div class="sim-card-header">
           <span class="sim-card-header-title">
             <span class="card-header-arrow"></span> plot_01.png
@@ -942,20 +942,56 @@
           <button class="btn-view-code" title="View Python Code">/.</button>
         </div>
         <div class="sim-media">
-          <img src="sim/vecFsur2.png" alt="Exponential growth or decay trajectories">
+          <img src="sim/100.png">
         </div>
         <div class="sim-card-body">
-          <h3>Exponential growth or decay depending on value of \(\lambda\)</h3>
-          <p> These are the trajectories of curves that solve \(y'=\lambda y\) and they form what we call the Direction field.</p>
+          <h3>A simple constant vector field \((1,0,0)\)</h3>
+          <p> This vector field represents something a bit deeper than it seems apriori, this field is corresponding to a PDE \(u_t=0\).</p>
           <a href="notesDE.html" class="sim-ref">&gt; Ref: See ODE Notes §1.1.1</a>
         </div>
       </div>
 
       <!-- Plot 02 -->
-      <div class="sim-card" id="plot2" data-code-file="simco/char3.py">
+      <div class="sim-card" id="plot3" data-code-file="simco/vecFsur.py">
         <div class="sim-card-header">
           <span class="sim-card-header-title">
             <span class="card-header-arrow"></span> plot_02.png
+          </span>
+          <button class="btn-view-code" title="View Python Code">/.</button>
+        </div>
+        <div class="sim-media">
+          <img src="sim/vecFsur.png">
+        </div>
+        <div class="sim-card-body">
+          <h3>Non-characteristic surface for the vector field \((1,0,0)\)</h3>
+          <p>Clearly, the vector field \((1,0,0)\) aligns with the tangent plane at the highest point of the surface; and for our purposes of finding solutions, that is something we want to avoid.</p>
+          <a href="notesDE.html#table-pde" class="sim-ref">&gt; Ref: See PDE Notes §1.1.2</a>
+        </div>
+      </div>
+
+      <!-- Plot 03 -->
+      <div class="sim-card" id="plot1" data-code-file="simco/vecFsur2.py">
+        <div class="sim-card-header">
+          <span class="sim-card-header-title">
+            <span class="card-header-arrow"></span> plot_03.png
+          </span>
+          <button class="btn-view-code" title="View Python Code">/.</button>
+        </div>
+        <div class="sim-media">
+          <img src="sim/vecFsur2.png" alt="Exponential growth or decay trajectories">
+        </div>
+        <div class="sim-card-body">
+          <h3>A surface in \(\mathbb{R}^3\) with an underlying constant vector field </h3>
+          <p> The vector field (green) here is \((0,0,1)\) and any surface that is transverse to this vector field at every single point is called a characteristic surface.</p>
+          <a href="notesDE.html#table-pde" class="sim-ref">&gt; Ref: See PDE Notes §1.1.2</a>
+        </div>
+      </div>
+
+      <!-- Plot 04 -->
+      <div class="sim-card" id="plot2" data-code-file="simco/char3.py">
+        <div class="sim-card-header">
+          <span class="sim-card-header-title">
+            <span class="card-header-arrow"></span> plot_04.png
           </span>
           <button class="btn-view-code" title="View Python Code">/.</button>
         </div>
@@ -965,48 +1001,12 @@
         <div class="sim-card-body">
           <h3>Characteristic curves of a const-coefficient Transport equation</h3>
           <p>These are the curves in the domain on which we get constant value of the surface that satisfies \(u_t + b_1u_{x_1} + b_2u_{x_2}=0\).</p>
-          <a href="notesDE.html" class="sim-ref">&gt; Ref: See PDE Notes §1.1.1</a>
-        </div>
-      </div>
-
-      <!-- Plot 03 -->
-      <div class="sim-card" id="plot3" data-code-file="simco/DerFieldslice.py">
-        <div class="sim-card-header">
-          <span class="sim-card-header-title">
-            <span class="card-header-arrow"></span> plot_03.png
-          </span>
-          <button class="btn-view-code" title="View Python Code">/.</button>
-        </div>
-        <div class="sim-media">
-          <img src="sim/DerFieldslice.jpeg">
-        </div>
-        <div class="sim-card-body">
-          <h3>Direction field with collision on \(\{x \ge 0\}\)</h3>
-          <p>This direction field is created by something that is as simple as \(x'=-\frac{t}{x}\) and yet we get into complicated discussions about +ve and -ve branches. </p>
-          <a href="notesDE.html" class="sim-ref">&gt; Ref: See ODE Notes §1.1.1</a>
-        </div>
-      </div>
-
-      <!-- Plot 04 -->
-      <div class="sim-card" id="plot3" data-code-file="simco/vecFsur.py">
-        <div class="sim-card-header">
-          <span class="sim-card-header-title">
-            <span class="card-header-arrow"></span> plot_04.png
-          </span>
-          <button class="btn-view-code" title="View Python Code">/.</button>
-        </div>
-        <div class="sim-media">
-          <img src="sim/vecFsur.png">
-        </div>
-        <div class="sim-card-body">
-          <h3>Direction field with collision on \(\{x \ge 0\}\)</h3>
-          <p>This direction field is created by something that is as simple as \(x'=-\frac{t}{x}\) and yet we get into complicated discussions about +ve and -ve branches. </p>
-          <a href="notesDE.html" class="sim-ref">&gt; Ref: See ODE Notes §1.1.1</a>
+          <a href="notesDE.html#table-pde" class="sim-ref">&gt; Ref: See PDE Notes §1.1.1</a>
         </div>
       </div>
 
       <!-- Plot 05 -->
-      <div class="sim-card" id="plot3" data-code-file="simco/vecFsur3.py">
+      <div class="sim-card" id="plot3" data-code-file="simco/GoTo.py">
         <div class="sim-card-header">
           <span class="sim-card-header-title">
             <span class="card-header-arrow"></span> plot_05.png
@@ -1014,17 +1014,17 @@
           <button class="btn-view-code" title="View Python Code">/.</button>
         </div>
         <div class="sim-media">
-          <img src="sim/vecFsur3.png">
+          <img src="sim/x y 0.5.png">
         </div>
         <div class="sim-card-body">
-          <h3>Direction field with collision on \(\{x \ge 0\}\)</h3>
-          <p>This direction field is created by something that is as simple as \(x'=-\frac{t}{x}\) and yet we get into complicated discussions about +ve and -ve branches. </p>
-          <a href="notesDE.html" class="sim-ref">&gt; Ref: See ODE Notes §1.1.1</a>
+          <h3>A non-constant vector field \((x_1,x_2,\frac{1}{2})\)</h3>
+          <p> Since, \(x_3\) do not appear in the vector field, at any given height the field looks identical. Now, at any fixed height, the vectors are outward pointing and then the fixed \(3^{rd}\) component gives it a gentle upward nudge.</p>
+          <a href="notesDE.html#table-pde" class="sim-ref">&gt; Ref: See PDE Notes §1.1.2</a>
         </div>
       </div>
 
       <!-- Plot 06 -->
-      <div class="sim-card" id="plot3" data-code-file="simco/.py">
+      <div class="sim-card" id="plot3" data-code-file="simco/vecFsur3.py">
         <div class="sim-card-header">
           <span class="sim-card-header-title">
             <span class="card-header-arrow"></span> plot_06.png
@@ -1032,11 +1032,47 @@
           <button class="btn-view-code" title="View Python Code">/.</button>
         </div>
         <div class="sim-media">
-          <img src="sim/x y 0.5.png">
+          <img src="sim/vecFsur3.png">
         </div>
         <div class="sim-card-body">
-          <h3>Direction field with collision on \(\{x \ge 0\}\)</h3>
-          <p>This direction field is created by something that is as simple as \(x'=-\frac{t}{x}\) and yet we get into complicated discussions about +ve and -ve branches. </p>
+          <h3>The normal vector field for this surface is almost aligned to the underlying vector field we just saw.</h3>
+          <p> If the normal vector field (red) aligns with the underlying vector field (green), more or less, then the underlying vector field (green) cannot lie on the tangent plane at any point on the surface. </p>
+          <a href="notesDE.html#table-pde" class="sim-ref">&gt; Ref: See PDE Notes §1.1.2</a>
+        </div>
+      </div>
+
+            <!-- Plot 07 -->
+      <div class="sim-card" id="plot3" data-code-file="simco/DerField.py">
+        <div class="sim-card-header">
+          <span class="sim-card-header-title">
+            <span class="card-header-arrow"></span> plot_07.png
+          </span>
+          <button class="btn-view-code" title="View Python Code">/.</button>
+        </div>
+        <div class="sim-media">
+          <img src="sim/DerField.png">
+        </div>
+        <div class="sim-card-body">
+          <h3>A relatively simple vector field in Phase space already looks this messy!</h3>
+          <p>This is corresponding to the \(2^{nd}\) order ODE \(x'' + 2\zeta\omega x' + \omega^2 x = 0\) which is the equation for damped harmonic oscillator. Without the red curve it is pretty hard to understand what the vector field looks like.</p>
+          <a href="notesDE.html" class="sim-ref">&gt; Ref: See ODE Notes §1.1.1</a>
+        </div>
+      </div>
+
+          <!-- Plot 08 -->
+      <div class="sim-card" id="plot3" data-code-file="simco/DerFieldslice.py">
+        <div class="sim-card-header">
+          <span class="sim-card-header-title">
+            <span class="card-header-arrow"></span> plot_08.png
+          </span>
+          <button class="btn-view-code" title="View Python Code">/.</button>
+        </div>
+        <div class="sim-media">
+          <img src="sim/DerFieldslice.jpeg">
+        </div>
+        <div class="sim-card-body">
+          <h3>Two slices of the previous vector field corresponding to \(x'' + 2\zeta\omega x' + \omega^2 x = 0\)</h3>
+          <p> Here we finally see that it is a cylic vector field in the \(x_1-x_2\)-plane with a slight nudge in the \(3^{rd}\) time-component that helps a particle move forward in time.</p>
           <a href="notesDE.html" class="sim-ref">&gt; Ref: See ODE Notes §1.1.1</a>
         </div>
       </div>
