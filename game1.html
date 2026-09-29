@@ -737,7 +737,7 @@
       .sliders-panel { grid-template-columns: 1fr; gap: 12px; }
       .action-row { width: 100%; }
       .action-btn { flex: 1; text-align: center; padding: 10px; }
-      .canvas-stage-wrapper { max-width: 100%; }
+      .canvas-stage-wrapper { max-width: 80%; }
       .game-nav-badge { width: 30px; height: 30px; font-size: 0.78rem; }
       .floating-corner-actions { bottom: 18px; right: 18px; gap: 12px; }
     }
@@ -772,7 +772,7 @@
       </div>
 
       <!-- Quick G-badge -->
-      <a href="index.html#games" class="game-nav-badge" title="Go to Games on Home"> G </a>
+      <a href="index.html#games" class="game-nav-badge" title="Explore other Games"> 𝓖 </a>
 
     </div>
 
@@ -821,11 +821,14 @@
         <!-- Explanation Card -->
          
         <div class="game-explanation-card">
-          <strong>Rules:</strong> A random target fraction between <strong>1%</strong> and <strong>99%</strong> is generated. Once you choose a level and a shape, paint inside the shape boundary with your brush to shade that exact fraction. When you click <em>Submit Estimate</em>, the Monte Carlo estimator samples points across the domain. Toggle <strong>Math Mode</strong> to see the live rejection sampling coordinates.
+          <strong>Rules:</strong> A random target fraction 
+          <!--   -->
+          is generated. Pick a level & shape, then paint inside the shape boundary that exact percentage of area. Click <em>Submit</em> to see if your estimate is correct.
+          <!-- , the Monte Carlo estimator samples points across the domain. -->
            <!-- (Muted grey outside, bright red in unshaded domain, vibrant green in shaded domain). -->
         </div>
-        <div class="game-explanation-card"> <strong>p.s.</strong> Some of the world's best minds were consulted and we all concluded the same thing. <strong>0%</strong> and <strong>100%</strong> will be too easy. Thank you for your cooperation!</div>
-        
+        <!-- <div class="game-explanation-card">  Toggle <strong>Math Mode</strong> to see the live rejection sampling coordinates. </div> -->
+
         <!-- <div style="margin-top: 10px;"> See the Math behind this at 
           <a href="notesComp.html" target="_blank" style="color: var(--accent); font-weight: bold; text-decoration: none;">
           Notes</a>.
@@ -844,7 +847,7 @@
 
           <!-- Binary 0 / 1 Math Slider -->
           <div class="math-switch-container">
-            <span>Math mode:</span>
+            <span>See live rejection sampling in Math mode:</span>
             <div class="math-slider" id="mathSlider" title="Toggle 0 / 1 Math Inspector"></div>
           </div>
         </div>
@@ -870,14 +873,6 @@
               <span class="val" id="brushValLabel">32 px</span>
             </div>
             <input type="range" class="horizontal-slider" id="brushSlider" min="6" max="50" value="32" step="1">
-          </div>
-
-          <div class="slider-control">
-            <div class="slider-header-row">
-              <span>Sample Points (N)</span>
-              <span class="val" id="sampleValLabel">3000 pts</span>
-            </div>
-            <input type="range" class="horizontal-slider" id="sampleSlider" min="1000" max="6000" value="3000" step="250">
           </div>
         </div>
 
@@ -910,6 +905,16 @@
             </div>
             <span style="font-size: 0.72rem; color: var(--text-muted);" id="engineBadge">Standard Monte Carlo Engine</span>
           </div>
+          <div class="sliders-panel">
+          
+          <div class="slider-control">
+            <div class="slider-header-row">
+              <span>Sample Points (N)</span>
+              <span class="val" id="sampleValLabel">3000 pts</span>
+            </div>
+            <input type="range" class="horizontal-slider" id="sampleSlider" min="1000" max="6000" value="3000" step="250">
+          </div>
+        </div>
           <div class="telemetry-grid">
             <div class="telemetry-item">
               <div class="telemetry-label">Uniform Proposals (N)</div>
@@ -937,10 +942,19 @@
       </div>
 
       <div style="margin-top: 10px; margin-bottom: 16px; margin-left: 20px; font-size: 0.78rem;">
-        <span style="color: var(--text-muted);">Short explainer: Once you switch to math mode, you pretty much see what is happening. Do it, in case you did not yet. The grey dots are the random sampling done on the square. Inside the shape you pick, called N_Omega, green ones are the on the shaded region and red ones are in the unshaded region. To see if you have correctly done the shading we look at green/(red+green) to get the area (approximated). Increase the number of sample points to get better estimates. This is part of something called Monte Carlo simulation. <br>Read the detailed Math of Monte Carlo and code behind this code here:
+        <span style="color: var(--text-muted);">Short explainer: Once you switch to math mode, you pretty much see what is happening. Do it, in case you did not yet. The grey dots are the random sampling done on the square. Inside the shape you pick, called N_Omega, green ones are on the shaded region and red ones are in the unshaded region. To see if you have correctly done the shading we look at green/(red+green) to get the area (approximated). Increase the number of sample points to get better estimates. This is part of something called Monte Carlo simulation. <br>Read the detailed Math of Monte Carlo and code behind this code at
         </span>
-        <a href="notesComp.html" target="_blank" style="color: var(--accent); font-weight: bold; text-decoration: none;"> Notes on Computing</a>. 
-        <span style="color: var(--text-muted);"><br> In that page, click KS (top left) and see Chapter Game 1.
+        <a href="notesComp.html#table-G1" target="_blank" style="color: var(--accent); font-weight: bold; text-decoration: none;"> Notes on Computing</a>. 
+        <!-- <span style="color: var(--text-muted);"><br> In that page, click KS (top left) and see Chapter Game 1. -->
+        <!-- </span> -->
+      </div>
+    </section>
+  </div>
+
+  <div class="container">
+    <section class="terminal-window">
+      <div style="margin-top: 10px; margin-bottom: 16px; margin-left: 20px; font-size: 0.78rem;">
+        <span style="color: var(--text-muted);"> <strong>p.s.</strong> The target fraction is between <strong>1%</strong> and <strong>99%</strong>. Some of the world's best minds were consulted and we all concluded the same thing. <strong>0%</strong> and <strong>100%</strong> will be too easy. Thank you for your cooperation!
         </span>
       </div>
     </section>
