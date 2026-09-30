@@ -36,7 +36,7 @@
       --card-shadow: rgba(0, 0, 0, 0.6);
     }
 
-    body.light-mode {
+    /* body.light-mode {
       --page-bg-top: #f7f5ef;
       --page-bg-bottom: #e5dfce;
       --card-bg: #ece7db;
@@ -50,9 +50,81 @@
       --card-shadow: rgba(80, 75, 60, 0.16);
       background: radial-gradient(circle at 50% 15%, #eae4d3 0%, var(--page-bg-top) 55%, var(--page-bg-bottom) 100%);
       background-attachment: fixed;
-    }
+    } */
+
+    body.light-mode {
+  --page-bg-top: #e8dbb0;
+  --page-bg-bottom: #d6c48e;
+  --page-glow: #f1e7c4;
+  --card-bg: #efe5c2;
+  --terminal-header: #dccb95;
+  --inner-card-bg: #f6eed3;
+  --border: #b9a56b;
+  --text: #2a2616;
+  --text-muted: #5f5429;
+  --green: #23652f;
+  --accent: #1e6091;
+  --card-shadow: rgba(90, 70, 20, 0.18);
+  --term-bg: #1f242c;
+  --term-header: #161a20;
+  background:
+    var(--grid-print),
+    /* this gives paper like matt finish in light mode, so next line is optional */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.28 0 0 0 0 0.1 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+    radial-gradient(circle at 50% 15%, var(--page-glow) 0%, var(--page-bg-top) 55%, var(--page-bg-bottom) 100%);
+  background-attachment: fixed;
+}
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* Added for grid, can control the entire grid specifics*/
+    body {
+  --grid-size: 48px;
+  --grid-strength: 9%;             
+  --grid-color: rgba(128, 128, 128, 0.18);  
+  --grid-color-soft: rgba(128, 128, 128, 0.09); 
+    /* so unless someone fixes their choice the default grid is the dotted one */
+  --grid-print: radial-gradient(circle, var(--grid-color) 1.2px, transparent 1.7px)
+                0 0 / var(--grid-size) var(--grid-size);
+    }
+
+  @supports (color: color-mix(in srgb, red, blue)) {
+    body {
+      --grid-color: color-mix(in srgb, var(--text) var(--grid-strength), transparent);
+      --grid-color-soft: color-mix(in srgb, var(--text) 7%, transparent);
+    }
+  }
+
+  /* Alternative prints, switched by a class on <body> */
+  /* PRINT 1 */
+    body.grid-lines {
+  --grid-print:
+    linear-gradient(var(--grid-color) 1px, transparent 1px) 0 0 / var(--grid-size) var(--grid-size),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px) 0 0 / var(--grid-size) var(--grid-size);
+    }
+  /* PRINT 2 */
+    body.grid-off {
+  --grid-print: linear-gradient(transparent, transparent);
+    }
+  /* PRINT 3 Graph paper: faint small squares, stronger line every 5th */
+    body.grid-graph {
+  --grid-print:
+    linear-gradient(var(--grid-color) 1px, transparent 1px) 0 0 / calc(var(--grid-size) * 5) calc(var(--grid-size) * 5),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px) 0 0 / calc(var(--grid-size) * 5) calc(var(--grid-size) * 5),
+    linear-gradient(var(--grid-color-soft) 1px, transparent 1px) 0 0 / var(--grid-size) var(--grid-size),
+    linear-gradient(90deg, var(--grid-color-soft) 1px, transparent 1px) 0 0 / var(--grid-size) var(--grid-size);
+    }
+
+  /* PRINT 4 Diagonal hatch, like engineering paper */
+    body.grid-diag {
+  --grid-print: repeating-linear-gradient(45deg, var(--grid-color) 0 1px, transparent 1px var(--grid-size));
+    }
+
+  /* PRINT 5 Large sparse dots */
+    body.grid-dots-lg {
+  --grid-size: 48px;
+  --grid-print: radial-gradient(circle, var(--grid-color) 2px, transparent 2.6px) 0 0 / var(--grid-size) var(--grid-size);
+    }
 
     html {
       scroll-behavior: smooth;
@@ -60,7 +132,8 @@
     }
 
     body {
-      background: radial-gradient(circle at 50% 15%, #0f2744 0%, var(--page-bg-top) 50%, var(--page-bg-bottom) 100%);
+      background: var(--grid-print), 
+                  radial-gradient(circle at 50% 15%, #0f2744 0%, var(--page-bg-top) 50%, var(--page-bg-bottom) 100%);
       background-attachment: fixed;
       color: var(--text);
       font-family: 'AlgolRevived', 'Courier Prime', 'Fira Code', Courier, monospace;
@@ -86,8 +159,12 @@
       transition: background 0.3s ease, border-color 0.3s ease;
     }
 
-    body.light-mode .top-nav {
+    /* body.light-mode .top-nav {
       background: rgba(247, 245, 239, 0.85);
+    } */
+
+    body.light-mode .top-nav {
+      background: rgba(232, 219, 176, 0.85);
     }
 
     .nav-left { display: flex; align-items: center; gap: 10px; }
@@ -619,7 +696,7 @@
         <button class="nav-btn active" id="funBtn"> Fun ▾</button>
         <div class="dropdown-content">
           <a href="notes.html">&gt; Notes</a>
-          <a href="simulated.html">&gt; Simulated</a>
+          <a href="simulated.html">&gt; Simulations</a>
           <a href="index.html#fun">&gt; Games</a>
         </div>
       </div>
@@ -636,9 +713,11 @@
   <div class="container">
     <div class="gallery-intro">
       <h1><span style="display:inline-block; width:14px; height:14px; background-color: var(--green); margin-right:8px;"></span> Simulations &amp; Visualizations</h1>
-      <p style="margin-bottom: 25px;">This is my absolute favourite part of the website. </p>
-      <p>This section is a quick glimpse into how I see Mathematics. There is immense beauty and power in abstracting ideas, but I have always enjoyed peeling away the abstraction and seeing the geometry hiding underneath it, whenever possible. So, this section is essentially a collection of things that a 5 year old would say "Nice color-y things". If you are 5, you know exactly what I mean, right? </p>
-      <p>These are not meant to replace the mathematics. They are little windows into it. All of them are linked back to the corresponding Notes where they are developed more carefully, feel free to click and see where the pictures came from. <br> Happy viewing!</p>
+      <p style="margin-bottom: 25px;">This is my absolute favourite part of the website.
+      <br>This section is a quick glimpse into how I see Mathematics. There is immense power in abstracting ideas, but I have always enjoyed seeing the geometry hiding underneath it, whenever possible. 
+        <!-- So, this section is essentially a collection of things that a 5 year old would say "Nice color-y things". If you are 5, you know exactly what I mean, right? -->
+         <!-- </p> -->
+      <br>These are not meant to replace the mathematics. They are little windows into it. All of them are linked back to the corresponding Notes where they are developed more carefully, feel free to click and see where the pictures came from. <br> Happy viewing!</p>
     </div>
 
     <!-- 3x1 Stack Layout (Scroll to explore) -->
@@ -977,6 +1056,27 @@
         setTimeout(() => btnSharePage.setAttribute('data-tooltip', 'Share page'), 2200);
       }
     });
+
+
+
+    /* ========================================================
+       FEATURE: The background grid control using keyboard G
+       ======================================================== */
+    const gridModes = ['', 'grid-lines', 'grid-graph', 'grid-diag', 'grid-dots-lg', 'grid-off'];
+let gridIdx = gridModes.indexOf(localStorage.getItem('site-grid') || '');
+if (gridIdx < 0) gridIdx = 0;
+if (gridModes[gridIdx]) document.body.classList.add(gridModes[gridIdx]);
+
+document.addEventListener('keydown', (e) => {
+  if (e.key.toLowerCase() !== 'g' || e.ctrlKey || e.metaKey || e.altKey) return;
+  if (['INPUT', 'TEXTAREA'].includes(e.target.tagName) || e.target.isContentEditable) return;
+  document.body.classList.remove('grid-lines', 'grid-graph', 'grid-diag', 'grid-dots-lg', 'grid-off');
+  gridIdx = (gridIdx + 1) % gridModes.length;
+  if (gridModes[gridIdx]) document.body.classList.add(gridModes[gridIdx]);
+  localStorage.setItem('site-grid', gridModes[gridIdx]);
+});
+
+
   </script>
 </body>
 </html>
