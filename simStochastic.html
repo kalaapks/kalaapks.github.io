@@ -927,14 +927,14 @@
 
     <div class="gallery-intro">
       <h1><span style="display:inline-block; width:15px; height:15px; background-color: #e6a008; border-radius: 50%; margin-right:8px;"></span>Stochastic Simulations</h1>
-      <p>Random walks (simple and diffusively rescaled), Brownian paths extracted directly from the notes.</p>
+      <p>Random walks (simple and diffusively rescaled), Brownian paths, path-execution based on some strategy and Monte Carlo simulations extracted directly from the notes.</p>
     </div>
 
     <!-- 2 in Each Row Grid (Standard) -->
     <div class="sim-grid" id="simGrid">
 
       <!-- Plot 01 -->
-      <div class="sim-card" id="plot1" data-code-file="simco/.py">
+      <div class="sim-card" id="plot1" data-code-file="simco/Mart_bettor.py">
         <div class="sim-card-header">
           <span class="sim-card-header-title">
             <span class="card-header-arrow"></span> plot_01.png
@@ -942,38 +942,111 @@
           <button class="btn-view-code" title="View Python Code">/.</button>
         </div>
         <div class="sim-media">
-          <img src="sim/.png" alt=".....">
+          <img src="sim/Mart_bettor.png" alt=".....">
         </div>
         <div class="sim-card-body">
-          <h3>main title</h3>
-          <p> firther details </p>
-          <a href="notesDE.html" class="sim-ref">&gt; Ref: See ODE Notes §1.1.1</a>
+          <h3>Doubling the wager when you face a loss gives such paths</h3>
+          <p> This is a martingale startegy since doubling down on the wager ensures whenever we do win for the first time we recover all our past losses. See how the paths drops down very low (upto \(200,000\) loss in last spike) but comes back all the way up.</p>
+          <a href="notesStoc.html" class="sim-ref">&gt; Ref: See Monte Carlo Notes </a>  
+           <!-- §1.1.1 -->
         </div>
       </div>
 
       <!-- Plot 02 -->
-      <div class="sim-card" id="plot1" data-code-file="simco/.py">
+      <div class="sim-card" id="plot1" data-code-file="simco/Mart_bettorCutOff.py">
         <div class="sim-card-header">
           <span class="sim-card-header-title">
-            <span class="card-header-arrow"></span> plot_01.png
+            <span class="card-header-arrow"></span> plot_02.png
           </span>
           <button class="btn-view-code" title="View Python Code">/.</button>
         </div>
         <div class="sim-media">
-          <img src="sim/.png" alt=".....">
+          <img src="sim/Mart_bettorCutOff.png" alt=".....">
         </div>
         <div class="sim-card-body">
-          <h3>main title</h3>
-          <p> firther details </p>
-          <a href="notesDE.html" class="sim-ref">&gt; Ref: See ODE Notes §1.1.1</a>
+          <h3>Doubling down strategy but when we do not have enough to double down, we decide to leave</h3>
+          <p> This ensures we leave with some money and not lose it all (well, except for the one who did hit \(0\)!). All those who left above the starting fund made some profit. </p>
+          <a href="notesStoc.html" class="sim-ref">&gt; Ref: See Monte Carlo Notes</a>
         </div>
       </div>
 
       <!-- Plot 03 -->
+      <div class="sim-card" id="plot1" data-code-file="simco/Mart_bettorCutORallin.py">
+        <div class="sim-card-header">
+          <span class="sim-card-header-title">
+            <span class="card-header-arrow"></span> plot_03.png
+          </span>
+          <button class="btn-view-code" title="View Python Code">/.</button>
+        </div>
+        <div class="sim-media">
+          <img src="sim/Mart_bettorCutORallin.png" alt=".....">
+        </div>
+        <div class="sim-card-body">
+          <h3> Still the doubling down strategy but when we do not have enough to double down we put in all we have </h3>
+          <p> Here the betting process will not stop unless we run out of funds. Even if we incur a huge loss and no longer can double doen the wager, we will put in all we have. Hence, see in the plot, how the paths do make a small upward return. </p>
+          <a href="notesStoc.html" class="sim-ref">&gt; Ref: See Monte Carlo Notes</a>
+        </div>
+      </div>
+
+      <!-- Plot 04 -->
+      <div class="sim-card" id="plot1" data-code-file="simco/RW1.py">
+        <div class="sim-card-header">
+          <span class="sim-card-header-title">
+            <span class="card-header-arrow"></span> plot_04.png
+          </span>
+          <button class="btn-view-code" title="View Python Code">/.</button>
+        </div>
+        <div class="sim-media">
+          <img src="sim/RW1.png" alt=".....">
+        </div>
+        <div class="sim-card-body">
+          <h3> Simple Random Walk </h3>
+          <p> We can actually calculate the standard deviation of Simple RW to be \(\sqrt n\). See in the figure too, since we have \(100\) steps involved we should get the variance to be \(10\) at the end.</p>
+          <a href="notesStoc.html" class="sim-ref">&gt; Ref: See Monte Carlo Notes</a>
+        </div>
+      </div>
+
+      <!-- Plot 05 -->
+      <div class="sim-card" id="plot1" data-code-file="simco/RW2(150paths).py">
+        <div class="sim-card-header">
+          <span class="sim-card-header-title">
+            <span class="card-header-arrow"></span> plot_05.png
+          </span>
+          <button class="btn-view-code" title="View Python Code">/.</button>
+        </div>
+        <div class="sim-media">
+          <img src="sim/RW2(150paths).png" alt=".....">
+        </div>
+        <div class="sim-card-body">
+          <h3> Simple RW with \(1000\) steps </h3>
+          <p> This is same as the previous plot but over a longer time. This is still a continuous time stochastic process that came from a linearly interpolated discrete Stochastic process. </p>
+          <a href="notesStoc.html" class="sim-ref">&gt; Ref: See Monte Carlo Notes</a>
+        </div>
+      </div>
+
+      <!-- Plot 06 -->
+      <div class="sim-card" id="plot1" data-code-file="simco/RW2(2000paths).py">
+        <div class="sim-card-header">
+          <span class="sim-card-header-title">
+            <span class="card-header-arrow"></span> plot_06.png
+          </span>
+          <button class="btn-view-code" title="View Python Code">/.</button>
+        </div>
+        <div class="sim-media">
+          <img src="sim/RW2(2000paths).png" alt=".....">
+        </div>
+        <div class="sim-card-body">
+          <h3> RW with \(2000\) paths </h3>
+          <p> Simulation of \(2000\) paths highlights the fact that standard deviation is \(\sqrt n\). Almost all paths inside the \([-100,100]\) region since we run it for \(1000\) steps. </p>
+          <a href="notesStoc.html" class="sim-ref">&gt; Ref: See Monte Carlo Notes</a>
+        </div>
+      </div>
+
+      <!-- Plot 07
       <div class="sim-card" id="plot1" data-code-file="simco/.py">
         <div class="sim-card-header">
           <span class="sim-card-header-title">
-            <span class="card-header-arrow"></span> plot_01.png
+            <span class="card-header-arrow"></span> plot_0.png
           </span>
           <button class="btn-view-code" title="View Python Code">/.</button>
         </div>
@@ -981,11 +1054,11 @@
           <img src="sim/.png" alt=".....">
         </div>
         <div class="sim-card-body">
-          <h3>main title</h3>
+          <h3> Still </h3>
           <p> firther details </p>
-          <a href="notesDE.html" class="sim-ref">&gt; Ref: See ODE Notes §1.1.1</a>
+          <a href="notesStoc.html" class="sim-ref">&gt; Ref: See Monte Carlo Notes</a>
         </div>
-      </div>
+      </div> -->
 
     </div>
   </div>
