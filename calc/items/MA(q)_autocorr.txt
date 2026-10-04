@@ -1,6 +1,3 @@
-$\providecommand{\ind}[1]{\mathbf{1}_{\{#1\}}}$
-$\newcommand{\E}{\mathbb{E}}$
-
 With $\theta_0 = 1$,
 \begin{align*}
 	(Y_t-c)(Y_{t+h}-c)&=\Big(\sum_{j=0}^{q}\theta_j\epsilon_{t-j}\Big)\Big(\sum_{j=0}^{q}\theta_j\epsilon_{t+h-j}\Big)\\
