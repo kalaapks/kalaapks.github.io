@@ -16,6 +16,8 @@
         macros: {
           E: '\\mathbb{E}',
           R: '\\mathbb{R}',
+          Cov: '\\operatorname{Cov}',
+          Var: '\\operatorname{Var}',
           ind: ['\\mathbf{1}_{\\{#1\\}}', 1]
         }
       },
@@ -144,6 +146,10 @@
       overflow-wrap: anywhere;      /* long words / URLs never push the card wider */
     }
     #content p { margin: 0 0 1em; }
+    .gap { display: block; height: 0.9em; }
+    .tex-list { list-style: none; margin: 0 0 1em; padding: 0; }
+    .tex-list li { position: relative; padding-left: 1.6em; }
+    .tex-list .lbl { position: absolute; left: 0; }
     #content code { color: var(--green); }
 
     /* Wide equations scroll inside their own box instead of leaving the card */
@@ -238,6 +244,19 @@
     // Escape &, <, > so math like "i<j" or "a & b" is not parsed as HTML
     const escapeHtml = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
+    // MathJax only understands math. Text-mode LaTeX is converted to HTML here.
+    function latexTextToHtml(s) {
+      return s
+        .replace(/\\noindent\s*/g, '')
+        .replace(/\\begin\{itemize\}/g, '<ul class="tex-list">')
+        .replace(/\\end\{itemize\}/g, '</li></ul>')
+        .replace(/\\item(?:\[([^\]]*)\])?/g,
+          (m, label) => '</li><li><span class="lbl">' + (label || '•') + '</span>')
+        .replace(/<ul class="tex-list">\s*<\/li>/g, '<ul class="tex-list">')
+        .replace(/\\textbf\{([^{}]*)\}/g, '<b>$1</b>')
+        .replace(/\\(?:emph|textit)\{([^{}]*)\}/g, '<i>$1</i>');
+    }
+
     if (!id) {
       contentDiv.innerHTML = '<p class="muted">No calculation specified.</p>';
     } else {
@@ -247,11 +266,9 @@
           return response.text();
         })
         .then(text => {
-          // Blank line = new paragraph
-          const html = escapeHtml(text.trim())
-            .split(/\n\s*\n/)
-            .map(block => `<p>${block}</p>`)
-            .join('');
+          // Escape, convert text-mode LaTeX (itemize, \noindent, ...) to HTML, then typeset the math
+          const html = latexTextToHtml(escapeHtml(text.trim()))
+            .replace(/\n\s*\n/g, '<span class="gap"></span>');   // blank line = vertical gap
           contentDiv.innerHTML = html;
 
           const typeset = () => MathJax.typesetPromise([contentDiv]);
