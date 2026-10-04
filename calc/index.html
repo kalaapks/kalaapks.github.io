@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Derivation & Calculation</title>
+  
+  <!-- MathJax render LaTeX in browser -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 24px 16px;
+      background-color: #fafafa;
+      color: #1a1a1a;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+    .container {
+      max-width: 760px;
+      width: 100%;
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 32px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+      margin-top: 20px;
+    }
+    .badge {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #2563eb;
+      background: #eff6ff;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      margin-bottom: 16px;
+    }
+    #content {
+      line-height: 1.7;
+      font-size: 16px;
+    }
+    .muted {
+      color: #6b7280;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="badge">Derivation / Calculation</div>
+    <div id="content">Loading calculation...</div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+
+    if (!id) {
+      document.getElementById('content').innerHTML = '<p class="muted">No calculation specified.</p>';
+    } else {
+      // Fetches the specific derivation text file from the items/ folder
+      fetch(`items/${id}.txt`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Not found');
+          }
+          return response.text();
+        })
+        .then(text => {
+          const contentDiv = document.getElementById('content');
+          // Replace newlines with linebreaks for simple formatting
+          contentDiv.innerHTML = text.replace(/\n\n/g, '<p></p>');
+          // Tell MathJax to typeset the newly loaded LaTeX
+          if (window.MathJax && window.MathJax.typesetPromise) {
+            MathJax.typesetPromise([contentDiv]);
+          }
+        })
+        .catch(err => {
+          document.getElementById('content').innerHTML = 
+            `<p class="muted">Calculation <code>${id}</code> not found.</p>`;
+        });
+    }
+  </script>
+</body>
+</html>
