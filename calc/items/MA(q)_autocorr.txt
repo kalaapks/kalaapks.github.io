@@ -1,0 +1,24 @@
+With $\theta_0=1$,
+\begin{align*}
+	(Y_t-c)(Y_{t+h}-c)&=\Big(\sum_{j=0}^{q}\theta_j\epsilon_{t-j}\Big)\Big(\sum_{j=0}^{q}\theta_j\epsilon_{t+h-j}\Big)\\
+	&=\sum_{i=0}^{q}\sum_{j=0}^{q}\theta_i\theta_j\,\epsilon_{t-i}\epsilon_{t+h-j},
+\end{align*}
+and therefore
+\begin{equation*}
+	\gamma_Y(t,t+h)=\E\big[(Y_t-c)(Y_{t+h}-c)\big]=\sum_{i=0}^{q}\sum_{j=0}^{q}\theta_i\theta_j\underbrace{\E\big[\epsilon_{t-i}\epsilon_{t+h-j}\big]}_{\sigma^2\ \text{only if } t-i=t+h-j\ }.
+\end{equation*}
+Along with $j=i+h$ we have $j\le q\Rightarrow i+h\le q$. Let us see how the two sums collapse into one now that $j=i+h$. Fix some $i$ and look at the inner sum running over $j$:
+\begin{equation*}
+	\sum_{j=0}^{q}\theta_j\E\big[\epsilon_{t-i}\epsilon_{t+h-j}\big]
+	=\sum_{j=0}^{q}\theta_j\sigma^2\ind{j=i+h}
+	=\sigma^2\sum_{j=0}^{q}\theta_j\ind{j=i+h}
+	=\sigma^2
+	\begin{cases}
+		\theta_{i+h}, & i+h\le q,\\
+		0, & i+h>q.
+	\end{cases}
+\end{equation*}
+The index $i$ was already running from $0$ to $q$, and now it runs from $0$ to $q-h$; the index $j$ is gone. Hence
+\begin{equation*}
+	\Rightarrow\quad\gamma_Y(t,t+h)=\sum_{i=0}^{q}\theta_i\Big(\sigma^2\theta_{i+h}\ind{i\le q-h}\Big)=\sigma^2\sum_{i=0}^{q-h}\theta_i\theta_{i+h}.
+\end{equation*}
