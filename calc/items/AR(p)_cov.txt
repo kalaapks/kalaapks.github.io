@@ -1,0 +1,25 @@
+\noindent We will do it in two cases, $h=0$ and $h\neq 0$.
+
+\begin{itemize}
+	\item[$\bullet$] {Case $h\neq 0$.} The trick is to not expand $X_{t-h}$ at all. Expand $X_t$ and multiply $X_{t-h}$ to it. If we open both into their constituents, we will have many more terms to handle.
+	\begin{equation*}
+		\E[X_{t-h}X_t]=\E\Big[X_{t-h}\epsilon_t+\sum_{j=1}^{p}\phi_jX_{t-j}X_{t-h}\Big]=\E[X_{t-h}\epsilon_t]+\sum_{j=1}^{p}\phi_j\E[X_{t-j}X_{t-h}].
+	\end{equation*}
+	Further, $\E[X_{t-h}\epsilon_t]=0$ since $X_{t-h}$ is uncorrelated with the future error $\epsilon_t$. So a refinement of the trick is that we expand the $X_s$ that comes later. For $\E[X_{t+h}X_t]$ we would expand $X_{t+h}$. Then
+	\begin{align*}
+		\Cov(Y_{t-h},Y_t)&=\sum_{j=1}^{p}\phi_j\gamma_X(t-j,t-h)=\sum_{j=1}^{p}\phi_j\gamma_X(|h-j|)\\
+		&\qquad(\text{since }\{Y_t\}\text{ is stationary}\Rightarrow\{X_t\}\text{ is too}).
+	\end{align*}
+\end{itemize}
+
+\begin{itemize}
+	\item[$\bullet$] {Case $h=0$.}
+	\begin{equation*}
+		\E[X_tX_t]=\E[X_t\epsilon_t]+\sum_{j=1}^{p}\phi_j\E[X_{t-j}X_t]=\sigma^2+\sum_{j=1}^{p}\phi_j\gamma_X(|h-j|).
+	\end{equation*}
+	
+Since $X_t\epsilon_t=\epsilon_t^2+\sum\phi_jX_{t-j}\epsilon_t$, we get
+	\begin{equation*}
+		\Rightarrow\quad\underbrace{\E[X_t\epsilon_t]}_{=\,\sigma^2}=\sigma^2+\sum\phi_j\cdot 0\qquad(\text{since }X_{t-j}\text{ is uncorrelated with }\epsilon_t).
+	\end{equation*}
+\end{itemize}
