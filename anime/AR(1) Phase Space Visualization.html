@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AR(1) Phase Space Visualization</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=STIX+Two+Text:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+  :root{color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+  body{font-family:'Inter',system-ui,sans-serif;background:#020617}
+  .font-mono{font-family:'JetBrains Mono',monospace}
+  /* math-mode look */
+  .m{font-family:'STIX Two Text','Times New Roman',serif;font-style:italic;font-size:1.08em}
+  .m sub,sub.m{font-size:.72em;line-height:0;font-style:italic}
+  .mr{font-family:'STIX Two Text','Times New Roman',serif;font-style:normal}
+  input[type=range]{accent-color:#3b82f6}
+  .g{color:#34b34a}
+</style>
+</head>
+<body class="text-slate-100 min-h-screen flex flex-col antialiased selection:bg-blue-600 selection:text-white">
+
+<header class="border-b border-slate-800 bg-slate-900/70 backdrop-blur px-4 md:px-6 py-4 flex flex-wrap items-center justify-between gap-4">
+  <div class="flex items-center gap-3">
+    <a href="https://kalaapks.github.io/" target="_blank" rel="noopener" title="Go to kalaapks.github.io" aria-label="Go to kalaapks.github.io" class="shrink-0 transition-transform hover:scale-105 active:scale-95">
+      <svg width="38" height="38" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg">
+        <rect x="1.5" y="1.5" width="35" height="35" rx="8" fill="#0b1220" stroke="#34b34a" stroke-width="3"/>
+        <text x="19" y="25" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-weight="700" font-size="16" fill="#34b34a">KS</text>
+      </svg>
+    </a>
+    <div>
+      <h1 class="text-base md:text-lg font-bold tracking-tight text-white flex flex-wrap items-center gap-2">
+        AR(1) Phase Space Visualization
+        <span class="text-xs px-2 py-0.5 rounded-full bg-blue-950 text-blue-400 border border-blue-800"><span class="m">Y<sub>t</sub></span> = <span class="m">φ Y<sub>t−1</sub></span> + <span class="m">ϵ<sub>t</sub></span></span>
+      </h1>
+      <p class="text-xs text-slate-400">Fixed-axis geometry showing role of φ in AR(1) process</p>
+    </div>
+  </div>
+  <button id="btnResample" class="px-3.5 py-1.5 rounded-lg bg-[#34b34a] hover:bg-[#3fc556] text-xs font-semibold text-slate-950 transition-all shadow-md active:scale-95 flex items-center gap-1.5">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+    Re-new Shocks
+  </button>
+</header>
+
+<main class="flex-1 p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6 max-w-[1600px] w-full mx-auto items-start">
+
+  <!-- Left column on laptop; on phone "contents" lets cards be ordered individually -->
+  <section class="contents lg:flex lg:flex-col lg:col-span-4 lg:gap-5">
+
+    <div class="order-1 bg-slate-900/90 border border-slate-800 rounded-xl p-5 shadow-xl flex flex-col gap-4">
+      <div class="border-b border-slate-800 pb-3">
+        <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-300">Model Parameters</h2>
+      </div>
+
+      <div class="space-y-1.5">
+        <div class="flex justify-between items-center text-sm">
+          <label for="phiSlider" class="font-medium text-slate-300">Persistence Parameter (<span class="m text-blue-400 font-bold">φ</span>)</label>
+          <span id="phiVal" class="font-mono font-bold text-sm bg-blue-950/70 border border-blue-800/80 text-blue-300 px-2 py-0.5 rounded">0.70</span>
+        </div>
+        <input id="phiSlider" type="range" min="-0.99" max="0.99" step="0.01" value="0.70" class="w-full h-2 bg-slate-800 rounded-lg cursor-pointer">
+        <div class="flex justify-between text-[10px] text-slate-500 font-mono px-0.5">
+          <span>-0.99 (Oscillatory)</span><span>0.0</span><span>+0.99 (Persistent)</span>
+        </div>
+      </div>
+
+      <button id="btnMore" type="button" aria-expanded="false" class="flex items-center justify-center gap-1.5 text-xs font-semibold text-slate-300 hover:text-white border border-slate-700 bg-slate-800/70 hover:bg-slate-800 rounded-lg py-1.5 transition">
+        <span id="moreLbl">More</span>
+        <svg id="moreIco" class="h-3.5 w-3.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </button>
+
+      <div id="morePanel" class="hidden flex-col gap-4">
+        <div class="space-y-1.5 pt-1">
+          <div class="flex justify-between items-center text-sm">
+            <label for="nSlider" class="font-medium text-slate-300">Sample Size (<span class="m text-emerald-400 font-bold">N</span>)</label>
+            <span id="nVal" class="font-mono font-bold text-sm bg-emerald-950/70 border border-emerald-800/80 text-emerald-300 px-2 py-0.5 rounded">1000</span>
+          </div>
+          <input id="nSlider" type="range" min="100" max="5000" step="50" value="1000" class="w-full h-2 bg-slate-800 rounded-lg cursor-pointer accent-emerald-500">
+          <div class="flex justify-between text-[10px] text-slate-500 font-mono px-0.5"><span>100 pts</span><span>2500 pts</span><span>5000 pts</span></div>
+        </div>
+        <div class="space-y-1.5 pt-1">
+          <div class="flex justify-between items-center text-sm">
+            <label for="sigmaSlider" class="font-medium text-slate-300">Noise Std Dev (<span class="m text-purple-400 font-bold">σ<sub>ϵ</sub></span>)</label>
+            <span id="sigmaVal" class="font-mono font-bold text-sm bg-purple-950/70 border border-purple-800/80 text-purple-300 px-2 py-0.5 rounded">1.00</span>
+          </div>
+          <input id="sigmaSlider" type="range" min="0.2" max="2.5" step="0.05" value="1.00" class="w-full h-2 bg-slate-800 rounded-lg cursor-pointer accent-purple-500">
+          <div class="flex justify-between text-[10px] text-slate-500 font-mono px-0.5"><span>0.20</span><span>1.00</span><span>2.50</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="order-4 bg-slate-900/90 border border-slate-800 rounded-xl p-5 shadow-xl flex flex-col gap-4">
+      <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-300 border-b border-slate-800 pb-3">Fixed Display &amp; Overlays</h2>
+      <div>
+        <label class="block text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wide">Phase Axis Range (Fixed ±L)</label>
+        <div class="grid grid-cols-4 gap-2">
+          <button class="range-btn py-1.5 text-xs rounded border border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-700 font-mono transition" data-range="6">±6</button>
+          <button class="range-btn py-1.5 text-xs rounded border border-blue-600 bg-blue-900/50 text-blue-200 font-mono font-bold transition" data-range="10">±10</button>
+          <button class="range-btn py-1.5 text-xs rounded border border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-700 font-mono transition" data-range="15">±15</button>
+          <button class="range-btn py-1.5 text-xs rounded border border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-700 font-mono transition" data-range="25">±25</button>
+        </div>
+        <p class="text-[11px] text-slate-500 mt-2 leading-tight">Axes remain fixed while adjusting <span class="m">φ</span> to observe variance elongation and boundary explosions.</p>
+      </div>
+      <div class="space-y-2.5 pt-2 border-t border-slate-800">
+        <label class="flex items-center gap-2.5 text-xs font-medium text-slate-300 cursor-pointer select-none">
+          <input id="chkEllipses" type="checkbox" checked class="w-4 h-4 rounded bg-slate-800 border-slate-700 text-blue-600 focus:ring-0">
+          <span>Theoretical 1σ &amp; 2σ Covariance Ellipses</span>
+        </label>
+        <label class="flex items-center gap-2.5 text-xs font-medium text-slate-300 cursor-pointer select-none">
+          <input id="chkRegLine" type="checkbox" checked class="w-4 h-4 rounded bg-slate-800 border-slate-700 text-[#34b34a] accent-[#34b34a] focus:ring-0">
+          <span>Autoregression Line (<span class="g"><span class="m">Y<sub>t</sub></span> = <span class="m">φ</span> · <span class="m">Y<sub>t−1</sub></span></span>)</span>
+        </label>
+        <label class="flex items-center gap-2.5 text-xs font-medium text-slate-300 cursor-pointer select-none">
+          <input id="chkTrajectory" type="checkbox" class="w-4 h-4 rounded bg-slate-800 border-slate-700 text-slate-400 focus:ring-0">
+          <span>Successive Trajectory Vectors (Connect points)</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="order-5 bg-slate-900/90 border border-slate-800 rounded-xl p-5 shadow-xl flex flex-col gap-3">
+      <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-300 border-b border-slate-800 pb-2">Statistical Comparison</h2>
+      <div class="grid grid-cols-2 gap-3 text-xs font-mono">
+        <div class="bg-slate-950/60 p-2.5 rounded border border-slate-800/80">
+          <div class="text-slate-400 text-[10px] uppercase font-sans font-medium">Theoretical Var(<span class="m normal-case">Y</span>)</div>
+          <div id="statTheoVar" class="text-base font-bold text-cyan-400 mt-0.5">1.96</div>
+          <div class="text-[10px] text-slate-500 mt-0.5"><span class="m">σ²</span> / (1 − <span class="m">φ²</span>)</div>
+        </div>
+        <div class="bg-slate-950/60 p-2.5 rounded border border-slate-800/80">
+          <div class="text-slate-400 text-[10px] uppercase font-sans font-medium">Sample Var(<span class="m normal-case">Y</span>)</div>
+          <div id="statEmpVar" class="text-base font-bold text-emerald-400 mt-0.5">1.92</div>
+          <div class="text-[10px] text-slate-500 mt-0.5"><span class="m">s²</span> = Σ(<span class="m">y</span> − <span class="m">ȳ</span>)²/<span class="m">N</span></div>
+        </div>
+        <div class="bg-slate-950/60 p-2.5 rounded border border-slate-800/80">
+          <div class="text-slate-400 text-[10px] uppercase font-sans font-medium">Theoretical <span class="m normal-case">ρ<sub>1</sub></span></div>
+          <div id="statTheoRho" class="text-base font-bold text-amber-400 mt-0.5">0.700</div>
+          <div class="text-[10px] text-slate-500 mt-0.5">Exact = <span class="m">φ</span></div>
+        </div>
+        <div class="bg-slate-950/60 p-2.5 rounded border border-slate-800/80">
+          <div class="text-slate-400 text-[10px] uppercase font-sans font-medium">Sample <span class="m normal-case">r<sub>1</sub></span></div>
+          <div id="statEmpRho" class="text-base font-bold text-lime-400 mt-0.5">0.694</div>
+          <div class="text-[10px] text-slate-500 mt-0.5">Corr(<span class="m">Y<sub>t</sub></span>, <span class="m">Y<sub>t−1</sub></span>)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Right column -->
+  <section class="contents lg:flex lg:flex-col lg:col-span-8 lg:gap-4">
+
+    <div class="order-2 bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-xl flex flex-col">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-3 px-1">
+        <div class="flex items-center gap-2">
+          <div class="w-2.5 h-2.5 rounded-full bg-[#34b34a]"></div>
+          <span class="text-sm font-semibold text-slate-200">Phase Space Plot</span>
+          <span class="text-xs text-slate-400">(<span class="m">Y<sub>t−1</sub></span>, <span class="m">Y<sub>t</sub></span>)</span>
+        </div>
+        <div id="boundaryBadge" class="text-[11px] px-2.5 py-0.5 rounded font-mono font-semibold text-emerald-400 bg-emerald-950/50 border border-emerald-800/60">STATIONARY (|φ| &lt; 1)</div>
+      </div>
+      <div class="relative w-full aspect-square md:aspect-[4/3] max-h-[540px] bg-slate-950 rounded-lg border border-slate-800 overflow-hidden">
+        <canvas id="phaseCanvas" class="w-full h-full block cursor-crosshair"></canvas>
+        <div id="coordOverlay" class="absolute bottom-3 left-3 bg-slate-900/90 border border-slate-700/80 px-2 py-1 rounded text-[11px] font-mono text-slate-300 pointer-events-none opacity-0 transition-opacity"></div>
+      </div>
+    </div>
+
+    <div class="order-3 bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-xl flex flex-col">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-2 px-1">
+        <div class="flex items-center gap-2">
+          <div class="w-2.5 h-2.5 rounded-full bg-[#34b34a]"></div>
+          <span class="text-sm font-semibold text-slate-200">Companion Time Series</span>
+          <span class="text-xs text-slate-400"><span class="m">(Y<sub>t</sub></span> vs <span class="m">t)</span></span>
+        </div>
+        <span class="text-[11px] text-slate-500 font-mono">Zero Mean Process</span>
+      </div>
+      <div class="relative w-full h-36 bg-slate-950 rounded-lg border border-slate-800 overflow-hidden">
+        <canvas id="tsCanvas" class="w-full h-full block"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- Explainer (full width, at the very end) -->
+  <section id="explainer" class="order-last lg:col-span-12 bg-slate-900/90 border border-slate-800 rounded-xl p-5 shadow-xl">
+    <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-300 border-b border-slate-800 pb-3 mb-3">Explainer</h2>
+    <div class="text-sm text-slate-300 leading-relaxed space-y-3">
+      <!-- Write your explanation here. Use <span class="m">Y<sub>t</sub></span> for math-style symbols. -->
+      <p class="text-slate-500 italic">Explanation to be added.</p>
+    </div>
+  </section>
+</main>
+
+<script>
+const state = {phi:0.70, N:1000, sigma:1.0, axisLimit:10, showEllipses:true, showRegLine:true, showTrajectory:false, burnIn:100, innovations:[], series:[]};
+const $ = id => document.getElementById(id);
+const phiSlider=$('phiSlider'), phiVal=$('phiVal'), nSlider=$('nSlider'), nVal=$('nVal'), sigmaSlider=$('sigmaSlider'), sigmaVal=$('sigmaVal');
+const boundaryBadge=$('boundaryBadge'), coordOverlay=$('coordOverlay');
+const phaseCanvas=$('phaseCanvas'), pCtx=phaseCanvas.getContext('2d');
+const tsCanvas=$('tsCanvas'), tCtx=tsCanvas.getContext('2d');
+
+// More / Collapse
+$('btnMore').addEventListener('click', () => {
+  const p = $('morePanel'), open = p.classList.contains('hidden');
+  p.classList.toggle('hidden', !open); p.classList.toggle('flex', open);
+  $('moreLbl').textContent = open ? 'Collapse' : 'More';
+  $('moreIco').style.transform = open ? 'rotate(180deg)' : '';
+  $('btnMore').setAttribute('aria-expanded', open);
+});
+
+function gauss(){let u=0,v=0;while(u===0)u=Math.random();while(v===0)v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
+function sampleInnovations(){
+  state.innovations = new Float32Array(5000 + state.burnIn);
+  for(let i=0;i<state.innovations.length;i++) state.innovations[i]=gauss();
+  computeSeries();
+}
+function computeSeries(){
+  state.series = new Float32Array(state.N);
+  let prev=0;
+  for(let i=0;i<state.burnIn;i++) prev = state.phi*prev + state.sigma*state.innovations[i];
+  for(let t=0;t<state.N;t++){ prev = state.phi*prev + state.sigma*state.innovations[state.burnIn+t]; state.series[t]=prev; }
+  calculateMetrics(); draw();
+}
+function calculateMetrics(){
+  const n=state.N, y=state.series, phi=state.phi, s2=state.sigma**2;
+  const theoVar = Math.abs(phi)>=1 ? Infinity : s2/(1-phi*phi);
+  let sum=0; for(let i=0;i<n;i++) sum+=y[i];
+  const mean=sum/n; let ss=0, sc=0;
+  for(let i=0;i<n;i++){ const d=y[i]-mean; ss+=d*d; if(i>0) sc+=d*(y[i-1]-mean); }
+  const sv=ss/n, rho = sv>0 ? (sc/(n-1))/sv : 0;
+  $('statTheoVar').textContent = theoVar===Infinity ? '∞' : theoVar.toFixed(2);
+  $('statEmpVar').textContent = sv.toFixed(2);
+  $('statTheoRho').textContent = phi.toFixed(3);
+  $('statEmpRho').textContent = rho.toFixed(3);
+  if(Math.abs(phi)>=0.95){
+    boundaryBadge.textContent='NEAR-UNIT ROOT (|φ| ≈ 1)';
+    boundaryBadge.className='text-[11px] px-2.5 py-0.5 rounded font-mono font-semibold text-amber-400 bg-amber-950/50 border border-amber-800/60';
+  } else {
+    boundaryBadge.textContent='STATIONARY (|φ| < 1)';
+    boundaryBadge.className='text-[11px] px-2.5 py-0.5 rounded font-mono font-semibold text-emerald-400 bg-emerald-950/50 border border-emerald-800/60';
+  }
+}
+function resizeCanvases(){
+  const dpr=window.devicePixelRatio||1;
+  [[phaseCanvas,pCtx],[tsCanvas,tCtx]].forEach(([c,x])=>{
+    const r=c.getBoundingClientRect(); c.width=r.width*dpr; c.height=r.height*dpr;
+    x.resetTransform(); x.scale(dpr,dpr);
+  });
+  draw();
+}
+window.addEventListener('resize', resizeCanvases);
+
+// Canvas math-style label: italic serif base with a small subscript
+function mathLabel(ctx, base, sub, x, y, color){
+  ctx.fillStyle=color; ctx.textBaseline='alphabetic';
+  ctx.font='italic 600 14px "STIX Two Text", "Times New Roman", serif';
+  ctx.fillText(base, x, y);
+  const bw=ctx.measureText(base).width;
+  ctx.font='italic 600 10px "STIX Two Text", "Times New Roman", serif';
+  ctx.fillText(sub, x+bw+1, y+4);
+}
+
+function drawPhaseSpace(){
+  const w=phaseCanvas.clientWidth, h=phaseCanvas.clientHeight, L=state.axisLimit;
+  pCtx.clearRect(0,0,w,h);
+  const sx=x=>((x+L)/(2*L))*w, sy=y=>((L-y)/(2*L))*h;
+
+  pCtx.strokeStyle='rgba(51,65,85,0.4)'; pCtx.lineWidth=1;
+  const step = L<=10 ? 2 : 5;
+  pCtx.font='10px JetBrains Mono'; pCtx.fillStyle='#64748b';
+  for(let v=-L; v<=L; v+=step){
+    if(v===0) continue;
+    pCtx.beginPath(); pCtx.moveTo(sx(v),0); pCtx.lineTo(sx(v),h); pCtx.stroke();
+    pCtx.beginPath(); pCtx.moveTo(0,sy(v)); pCtx.lineTo(w,sy(v)); pCtx.stroke();
+    pCtx.fillText(v.toString(), sx(v)+3, sy(0)+12);
+    pCtx.fillText(v.toString(), sx(0)+4, sy(v)-3);
+  }
+  pCtx.strokeStyle='#475569'; pCtx.lineWidth=1.5;
+  pCtx.beginPath(); pCtx.moveTo(0,sy(0)); pCtx.lineTo(w,sy(0)); pCtx.stroke();
+  pCtx.beginPath(); pCtx.moveTo(sx(0),0); pCtx.lineTo(sx(0),h); pCtx.stroke();
+
+  // axis titles in math style
+  mathLabel(pCtx,'Y','t−1', w-52, sy(0)-8, '#94a3b8');
+  mathLabel(pCtx,'Y','t', sx(0)+8, 18, '#94a3b8');
+
+  if(state.showRegLine){
+    pCtx.save(); pCtx.strokeStyle='#34b34a'; pCtx.lineWidth=2; pCtx.setLineDash([5,4]);
+    pCtx.beginPath(); pCtx.moveTo(sx(-L), sy(state.phi*-L)); pCtx.lineTo(sx(L), sy(state.phi*L)); pCtx.stroke();
+    pCtx.restore();
+  }
+
+  if(state.showEllipses && Math.abs(state.phi)<0.999){
+    const varY=(state.sigma**2)/(1-state.phi**2);
+    const a1=Math.sqrt(Math.max(0,varY*(1+state.phi))), b1=Math.sqrt(Math.max(0,varY*(1-state.phi)));
+    const scX=w/(2*L), scY=h/(2*L);
+    const ell=(k,stroke,fill)=>{
+      // build the ellipse in data coordinates (45° rotation, then scale to pixels) so a non-square canvas doesn't distort it
+      pCtx.save(); pCtx.translate(sx(0),sy(0)); pCtx.scale(scX,-scY); pCtx.rotate(Math.PI/4);
+      pCtx.beginPath(); pCtx.ellipse(0,0,k*a1,k*b1,0,0,2*Math.PI); pCtx.restore();
+      pCtx.strokeStyle=stroke; pCtx.lineWidth=1.5; pCtx.stroke();
+      pCtx.fillStyle=fill; pCtx.fill();
+    };
+    ell(2.448,'rgba(59,130,246,0.45)','rgba(59,130,246,0.04)');
+    ell(1.515,'rgba(96,165,250,0.85)','rgba(96,165,250,0.08)');
+  }
+
+  const y=state.series, n=state.N;
+  if(state.showTrajectory){
+    pCtx.save(); pCtx.strokeStyle='rgba(148,163,184,0.2)'; pCtx.lineWidth=0.8; pCtx.beginPath();
+    for(let t=1;t<Math.min(n,400);t++){ const x1=sx(y[t-1]), y1=sy(y[t]); t===1?pCtx.moveTo(x1,y1):pCtx.lineTo(x1,y1); }
+    pCtx.stroke(); pCtx.restore();
+  }
+  const alpha=Math.max(0.2,0.8-n/7000), r=n>2500?1.5:2.2;
+  pCtx.fillStyle=`rgba(56,189,248,${alpha})`;
+  for(let t=1;t<n;t++){
+    const px=sx(y[t-1]), py=sy(y[t]);
+    if(px>=0&&px<=w&&py>=0&&py<=h){ pCtx.beginPath(); pCtx.arc(px,py,r,0,2*Math.PI); pCtx.fill(); }
+  }
+  if(n>1){
+    pCtx.beginPath(); pCtx.arc(sx(y[n-2]),sy(y[n-1]),4,0,2*Math.PI);
+    pCtx.fillStyle='#f43f5e'; pCtx.fill(); pCtx.lineWidth=2; pCtx.strokeStyle='#fff'; pCtx.stroke();
+  }
+}
+function drawTimeSeries(){
+  const w=tsCanvas.clientWidth, h=tsCanvas.clientHeight, L=state.axisLimit;
+  tCtx.clearRect(0,0,w,h);
+  const mid=h/2;
+  tCtx.strokeStyle='rgba(71,85,105,0.6)'; tCtx.lineWidth=1;
+  tCtx.beginPath(); tCtx.moveTo(0,mid); tCtx.lineTo(w,mid); tCtx.stroke();
+  const pts=Math.min(state.N,250), dx=w/(pts-1);
+  tCtx.strokeStyle='#38bdf8'; tCtx.lineWidth=1.6; tCtx.beginPath();
+  for(let t=0;t<pts;t++){ const yy=mid-(state.series[t]/L)*(h/2); t===0?tCtx.moveTo(0,yy):tCtx.lineTo(t*dx,yy); }
+  tCtx.stroke();
+}
+function draw(){ drawPhaseSpace(); drawTimeSeries(); }
+
+phiSlider.addEventListener('input',e=>{ state.phi=parseFloat(e.target.value); phiVal.textContent=state.phi.toFixed(2); computeSeries(); });
+nSlider.addEventListener('input',e=>{ state.N=parseInt(e.target.value,10); nVal.textContent=state.N; computeSeries(); });
+sigmaSlider.addEventListener('input',e=>{ state.sigma=parseFloat(e.target.value); sigmaVal.textContent=state.sigma.toFixed(2); computeSeries(); });
+$('btnResample').addEventListener('click', sampleInnovations);
+$('chkEllipses').addEventListener('change',e=>{ state.showEllipses=e.target.checked; draw(); });
+$('chkRegLine').addEventListener('change',e=>{ state.showRegLine=e.target.checked; draw(); });
+$('chkTrajectory').addEventListener('change',e=>{ state.showTrajectory=e.target.checked; draw(); });
+
+document.querySelectorAll('.range-btn').forEach(btn=>{
+  btn.addEventListener('click',e=>{
+    document.querySelectorAll('.range-btn').forEach(b=>b.className='range-btn py-1.5 text-xs rounded border border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-700 font-mono transition');
+    e.currentTarget.className='range-btn py-1.5 text-xs rounded border border-blue-600 bg-blue-900/50 text-blue-200 font-mono font-bold transition';
+    state.axisLimit=parseFloat(e.currentTarget.dataset.range); draw();
+  });
+});
+
+function showCoord(e){
+  const rect=phaseCanvas.getBoundingClientRect(), L=state.axisLimit;
+  const p=e.touches?e.touches[0]:e;
+  const dx=((p.clientX-rect.left)/rect.width)*2*L-L, dy=L-((p.clientY-rect.top)/rect.height)*2*L;
+  coordOverlay.innerHTML=`<span class="m">Y<sub>t−1</sub></span>: ${dx.toFixed(2)}, <span class="m">Y<sub>t</sub></span>: ${dy.toFixed(2)}`;
+  coordOverlay.style.opacity='1';
+}
+phaseCanvas.addEventListener('mousemove',showCoord);
+phaseCanvas.addEventListener('mouseleave',()=>coordOverlay.style.opacity='0');
+
+window.addEventListener('DOMContentLoaded',()=>{ sampleInnovations(); resizeCanvases(); });
+</script>
+</body>
+</html>

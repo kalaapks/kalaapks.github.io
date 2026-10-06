@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spatial Poisson Point Process Prototype</title>
+  <style>
+    :root {
+      --bg-radial: radial-gradient(circle at 50% 15%, #0f2744 0%, #050b14 50%, #0a192f 100%);
+      --btn-bg: #161b22;
+      --btn-border: #30363d;
+      --btn-text: #c9d1d9;
+    }
+    body.light-mode {
+      --bg-radial: radial-gradient(circle at 50% 15%, #ede9dc 0%, #fbfbfa 60%, #f2f1ec 100%);
+      --btn-bg: #e8e3d5;
+      --btn-border: #c8c0ae;
+      --btn-text: #23272d;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg-radial);
+      background-attachment: fixed;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      font-family: monospace;
+      transition: background 0.3s ease;
+    }
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .theme-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 100;
+      background: var(--btn-bg);
+      border: 1px solid var(--btn-border);
+      color: var(--btn-text);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      transition: transform 0.2s ease;
+    }
+    .theme-btn:hover { transform: scale(1.08); }
+    .label {
+      position: fixed;
+      bottom: 20px;
+      left: 24px;
+      color: var(--btn-text);
+      opacity: 0.6;
+      font-size: 0.85rem;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <button class="theme-btn" id="themeBtn" title="Toggle Light / Dark Mode">💡</button>
+  <div class="label">Spatial Poisson Point Process with Diffusive ε-Graph</div>
+  <canvas id="simCanvas"></canvas>
+
+  <script>
+    const canvas = document.getElementById('simCanvas');
+    const ctx = canvas.getContext('2d');
+    const themeBtn = document.getElementById('themeBtn');
+
+    let width, height;
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    themeBtn.addEventListener('click', () => {
+      document.body.classList.toggle('light-mode');
+    });
+
+    // Poisson point intensity
+    const NUM_POINTS = 52;
+    const EPSILON_DIST = 145; // Connection threshold
+    const points = [];
+
+    class PoissonPoint {
+      constructor() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.vx = (Math.random() - 0.5) * 0.45;
+        this.vy = (Math.random() - 0.5) * 0.45;
+        this.radius = 1.2 + Math.random() * 0.8;
+      }
+
+      update() {
+        // Microscopic stochastic drift
+        this.vx += (Math.random() - 0.5) * 0.08;
+        this.vy += (Math.random() - 0.5) * 0.08;
+
+        // Damping velocity
+        this.vx *= 0.98;
+        this.vy *= 0.98;
+
+        this.x += this.vx;
+        this.y += this.vy;
+
+        // Torus wrapping
+        if (this.x < 0) this.x = width;
+        if (this.x > width) this.x = 0;
+        if (this.y < 0) this.y = height;
+        if (this.y > height) this.y = 0;
+      }
+
+      draw(isLight) {
+        ctx.fillStyle = isLight 
+          ? 'rgba(43, 122, 62, 0.4)' 
+          : 'rgba(63, 185, 80, 0.45)';
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    for (let i = 0; i < NUM_POINTS; i++) {
+      points.push(new PoissonPoint());
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+      const isLight = document.body.classList.contains('light-mode');
+
+      for (let p of points) {
+        p.update();
+        p.draw(isLight);
+      }
+
+      // Draw epsilon neighborhood connections
+      for (let i = 0; i < points.length; i++) {
+        for (let j = i + 1; j < points.length; j++) {
+          const dx = points[i].x - points[j].x;
+          const dy = points[i].y - points[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < EPSILON_DIST) {
+            const alpha = (1 - dist / EPSILON_DIST) * 0.16;
+            ctx.strokeStyle = isLight 
+              ? `rgba(35, 39, 45, ${alpha * 1.2})` 
+              : `rgba(88, 166, 255, ${alpha})`;
+            ctx.lineWidth = 0.8;
+            ctx.beginPath();
+            ctx.moveTo(points[i].x, points[i].y);
+            ctx.lineTo(points[j].x, points[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      requestAnimationFrame(animate);
+    }
+    animate();
+  </script>
+</body>
+</html>

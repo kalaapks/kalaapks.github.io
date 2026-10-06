@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Animations | Kalaap Sadhu</title>
+  
+  <!-- Favicon: Exact Signature Circular KS Badge -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 38 38'><circle cx='19' cy='19' r='17' fill='%23161b22' stroke='%233fb950' stroke-width='2'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-family='monospace' font-weight='bold' font-size='14' fill='%233fb950'>KS</text></svg>">
+
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <!-- Highlight.js for Code Highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/animations_style.css">
+</head>
+<body>
+
+  <!-- Sticky Top Navigation Bar -->
+  <nav class="top-nav">
+    <div class="nav-left">
+      <button class="ks-badge" id="ksBtn" title="Toggle Contents Sidebar">KS</button>
+      <div class="ks-hint-tooltip" id="ksHintTooltip">Tap for Content</div>
+      <button class="theme-toggle" id="themeBtn" title="Toggle Light / Dark Mode"> 💡 </button>
+    </div>
+    <div class="nav-links">
+      <a href="index.html#me" class="nav-btn">HOME</a>
+      
+      <div class="dropdown" id="funDropdown">
+        <button class="nav-btn active" id="funBtn">Fun ▾</button>
+        <div class="dropdown-content">
+          <a href="notes.html">&gt; Notes</a>
+          <a href="simulated.html">&gt; Simulations</a>
+          <a href="index.html#fun">&gt; Games</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Extreme-Left Docked CONTENTS Sidebar -->
+  <aside class="contents-sidebar" id="contentsSidebar">
+    <div class="contents-header">
+      <span class="shape-green-square"></span>
+      CONTENTS
+    </div>
+    <ul class="contents-list" id="contentsList"></ul>
+  </aside>
+
+  <!-- Background Blur Backdrop -->
+  <div class="preview-stage-overlay" id="stageOverlay"></div>
+
+  <!-- Reactive Preview Card -->
+  <div class="preview-card-right" id="previewCardRight">
+    <div class="preview-card-header">
+      <span id="previewHeaderTitle">Section Preview</span>
+      <span class="shape-green-square"></span>
+    </div>
+    <div class="preview-card-body" id="previewBodyContent"></div>
+  </div>
+
+  <div class="preview-hint-pill">Tap/Hover a topic in CONTENTS • Esc or KS to close</div>
+
+  <!-- Outward Source Particle Canvas Behind Home/Portal Button -->
+  <canvas id="sourceCanvas"></canvas>
+
+  <div class="container" id="mainContainer">
+    <div style="height: 2vh;"></div> 
+    <div class="breadcrumb">
+      <a href="simulated.html">← Back to Simulations Hub</a> / Animations
+    </div>
+    <div class="gallery-intro">
+      <h1><span style="display:inline-block; width:15px; height:15px; background-color: #e6a008; border-radius: 50%; margin-right:8px;"></span>Animated Simulations</h1>
+      <p>Interactive simulations, mathematical animations, and computational dynamics built using HTML/Canvas, Manim, Three.js, and Blender.</p>
+    </div>
+
+    <!-- BOX 1: Interactive HTML Simulation -->
+    <section id="anim-AR1" class="terminal-window" data-title="AR(1) Interactive window">
+      <div class="terminal-header">
+        <div class="header-left">
+          <span class="shape-green-square"></span>
+          <span class="shape-yellow-circle"></span>
+          <span class="shape-red-arrowhead"></span>
+        </div>
+        <span class="terminal-header-title">bash ~ Simulations/Animations/AR1</span>
+      </div>
+      <div class="terminal-body">
+        <div class="doc-headline-row">
+          <span class="doc-link-title">
+            <span class="red-arrow-prompt"></span> AR(1) Interactive window
+          </span>
+        </div>
+        
+        <div class="stack-badge">html | js</div>
+
+        <div class="card">
+          In the AR-model we have the Persistance parameter (φ) that tells us how significant the previous day is to us today. Adjusting φ shows us the various possibilities of how the consecutive values of the AR(1) Time series evolve over time.
+        </div>
+
+        <div class="anim-action-row">
+          <button type="button" class="code-view-btn" data-title="AR(1) Source Code" data-file="anime/AR(1) Phase Space Visualization.html" title="View Source Code">/.</button>
+          <a href="anime/AR(1) Phase Space Visualization.html" target="_blank" rel="noopener" class="anim-trigger-btn">
+            Begin Interaction ↗
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section id="anim-MA1" class="terminal-window" data-title="MA(1) Interactive window">
+      <div class="terminal-header">
+        <div class="header-left">
+          <span class="shape-green-square"></span>
+          <span class="shape-yellow-circle"></span>
+          <span class="shape-red-arrowhead"></span>
+        </div>
+        <span class="terminal-header-title">bash ~ Simulations/Animations/MA1</span>
+      </div>
+      <div class="terminal-body">
+        <div class="doc-headline-row">
+          <span class="doc-link-title">
+            <span class="red-arrow-prompt"></span> MA(1) Interactive window
+          </span>
+        </div>
+        
+        <div class="stack-badge">html | js</div>
+
+        <div class="card">
+          In the MA-models we take into account previous error with weightage θ along with the current error. At θ = \(0\) we have pure White noise. Slide the θ bar towards \(1\) to see the White noise evolving into a process with tendancy to have same sign for consecutive values and slide it to \(-1\) to see extreme oscillatory tendancies.
+        </div>
+
+        <div class="anim-action-row">
+          <button type="button" class="code-view-btn" data-title="MA(1) Source Code" data-file="anime/MA(1) Phase Space Visualization.html" title="View Source Code">/.</button>
+          <a href="anime/MA(1) Phase Space Visualization.html" target="_blank" rel="noopener" class="anim-trigger-btn">
+            Begin Interaction ↗
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section id="anim-AR2" class="terminal-window" data-title="AR(2) Interactive window">
+      <div class="terminal-header">
+        <div class="header-left">
+          <span class="shape-green-square"></span>
+          <span class="shape-yellow-circle"></span>
+          <span class="shape-red-arrowhead"></span>
+        </div>
+        <span class="terminal-header-title">bash ~ Simulations/Animations/AR2</span>
+      </div>
+      <div class="terminal-body">
+        <div class="doc-headline-row">
+          <span class="doc-link-title">
+            <span class="red-arrow-prompt"></span> AR(2) Interactive window
+          </span>
+        </div>
+        
+        <div class="stack-badge">html | js</div>
+
+        <div class="card">
+          In the AR(2) model we have values from previous two days affecting us today. To understand the relationship between \(Y_{t-2}\), \(Y_{t-1}\), and \(Y_{t}\) properly we need to plot all three.
+        </div>
+
+        <div class="anim-action-row">
+          <button type="button" class="code-view-btn" data-title="AR(2) Source Code" data-file="anime/AR(2) Phase Space Visualization.html" title="View Source Code">/.</button>
+          <a href="anime/AR(2) Phase Space Visualization.html" target="_blank" rel="noopener" class="anim-trigger-btn">
+            Begin Interaction ↗
+          </a>
+        </div>
+      </div>
+    </section>
+    
+    <section id="anim-MA2" class="terminal-window" data-title="MA(2) Interactive window">
+      <div class="terminal-header">
+        <div class="header-left">
+          <span class="shape-green-square"></span>
+          <span class="shape-yellow-circle"></span>
+          <span class="shape-red-arrowhead"></span>
+        </div>
+        <span class="terminal-header-title">bash ~ Simulation/Animations/MA2</span>
+      </div>
+      <div class="terminal-body">
+        <div class="doc-headline-row">
+          <span class="doc-link-title">
+            <span class="red-arrow-prompt"></span> MA(2) Interactive window
+          </span>
+        </div>
+        
+        <div class="stack-badge">html | js</div>
+
+        <div class="card">
+          MA(2) models take into two previous errors with weight θ₁ and θ₂. This is also in \(3\)-D like the AR(2) Interactive window but note that the Covariance ellipsoid behave differently for MA and AR processes.
+        </div>
+
+        <div class="anim-action-row">
+          <button type="button" class="code-view-btn" data-title="MA2 Source Code" data-file="anime/MA(2) Phase Space Visualization.html" title="View Source Code">/.</button>
+          <a href="anime/MA(2) Phase Space Visualization.html" target="_blank" rel="noopener" class="anim-trigger-btn">
+            Begin Interaction ↗
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section id="anim-ribbons" class="terminal-window" data-title="Ribbons Dynamics">
+      <div class="terminal-header">
+        <div class="header-left">
+          <span class="shape-green-square"></span>
+          <span class="shape-yellow-circle"></span>
+          <span class="shape-red-arrowhead"></span>
+        </div>
+        <span class="terminal-header-title">bash ~ /Animations/HTML/Ribbons</span>
+      </div>
+      <div class="terminal-body">
+        <div class="doc-headline-row">
+          <span class="doc-link-title">
+            <span class="red-arrow-prompt"></span> Fokker-Planck probability ribbons
+          </span>
+        </div>
+        
+        <div class="stack-badge">html | js</div>
+
+        <div class="card">
+          Autonomous particle strands propagating across a sinusoidal velocity field rendered in real-time on HTML5 canvas.
+        </div>
+
+        <div class="anim-action-row">
+          <button type="button" class="code-view-btn" data-title="Ribbons Source Code" data-file="anime/ribbons.html" title="View Source Code">/.</button>
+          <a href="anime/ribbons.html" target="_blank" rel="noopener" class="anim-trigger-btn">
+            Launch Simulation ↗
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- BOX 2: Python / Manim Animation -->
+    <!-- <section id="anim-manim" class="terminal-window" data-title="Brownian Motion (Manim)">
+      <div class="terminal-header">
+        <div class="header-left">
+          <span class="shape-green-square"></span>
+          <span class="shape-yellow-circle"></span>
+          <span class="shape-red-arrowhead"></span>
+        </div>
+        <span class="terminal-header-title">bash ~ /Animations/Python/Brownian</span>
+      </div>
+      <div class="terminal-body">
+        <div class="doc-headline-row">
+          <span class="doc-link-title">
+            <span class="red-arrow-prompt"></span> Brownian Motion Paths
+          </span>
+        </div>
+        
+        <div class="stack-badge">{python, manim}</div>
+
+        <div class="card">
+          Filtration trajectories and sample paths for 1D standard Brownian motion with Martingale stopping envelopes.
+        </div>
+
+        <div class="anim-action-row">
+          <button type="button" class="code-view-btn" data-title="Manim Python Script" data-file="anime/brownian.py" title="View Source Code">/.</button>
+          <button type="button" class="anim-trigger-btn media-modal-trigger" data-type="video" data-src="anime/brownian.mp4" data-title="Brownian Motion Paths (Manim)">
+            Play Animation ▶
+          </button>
+        </div>
+      </div>
+    </section> -->
+
+    <!-- BOX 3: Three.js WebGL Project -->
+    <!-- <section id="anim-three" class="terminal-window" data-title="Stochastic Volatility Manifold">
+      <div class="terminal-header">
+        <div class="header-left">
+          <span class="shape-green-square"></span>
+          <span class="shape-yellow-circle"></span>
+          <span class="shape-red-arrowhead"></span>
+        </div>
+        <span class="terminal-header-title">bash ~ /Animations/ThreeJS/Surface</span>
+      </div>
+      <div class="terminal-body">
+        <div class="doc-headline-row">
+          <span class="doc-link-title">
+            <span class="red-arrow-prompt"></span> Volatility Surface Manifold
+          </span>
+        </div>
+        
+        <div class="stack-badge">{three.js, webgl}</div>
+
+        <div class="card">
+          Interactive WebGL parametric mesh depicting implied volatility smile geometries under the Heston model dynamics.
+        </div>
+
+        <div class="anim-action-row">
+          <button type="button" class="code-view-btn" data-title="Three.js Shader Code" data-file="anime/vol_surface.js" title="View Source Code">/.</button>
+          <a href="anime/vol_surface.html" target="_blank" rel="noopener" class="anim-trigger-btn">
+            Open WebGL ↗
+          </a>
+        </div>
+      </div>
+    </section> -->
+
+    <!-- BOX 4: Blender Physics Render -->
+    <!-- <section id="anim-blender" class="terminal-window" data-title="Three-Body Problem">
+      <div class="terminal-header">
+        <div class="header-left">
+          <span class="shape-green-square"></span>
+          <span class="shape-yellow-circle"></span>
+          <span class="shape-red-arrowhead"></span>
+        </div>
+        <span class="terminal-header-title">bash ~ /Animations/Blender/Orbits</span>
+      </div>
+      <div class="terminal-body">
+        <div class="doc-headline-row">
+          <span class="doc-link-title">
+            <span class="red-arrow-prompt"></span> 3-Body Gravitational Choreography
+          </span>
+        </div>
+        
+        <div class="stack-badge">{blender, cycles}</div>
+
+        <div class="card">
+          Symplectic integration of chaotic 3-body gravitational orbits rendered via Blender Cycles ray-tracing.
+        </div>
+
+        <div class="anim-action-row">
+          <button type="button" class="code-view-btn" data-title="Blender Python Setup" data-file="anime/three_body.py" title="View Source Code">/.</button>
+          <button type="button" class="anim-trigger-btn media-modal-trigger" data-type="video" data-src="anime/three_body.mp4" data-title="3-Body Gravitational Choreography (Cycles)">
+            Watch Render ▶
+          </button>
+        </div>
+      </div>
+    </section> -->
+
+  </div>
+
+  <!-- FLOATING ACTIONS CLUSTER (Jump, Share, ~ Switch) -->
+  <div class="floating-corner-actions" id="floatingCluster">
+    <button class="clean-float-btn" id="btnJumpTop" data-tooltip="Jump to top" aria-label="Jump to top">
+      <span class="float-arrowhead-icon"></span>
+    </button>
+
+    <button class="clean-float-btn" id="btnSharePage" data-tooltip="Share page" aria-label="Share page">
+      <svg class="float-share-icon" viewBox="0 0 24 24">
+        <circle cx="18" cy="5" r="3"></circle>
+        <circle cx="6" cy="12" r="3"></circle>
+        <circle cx="18" cy="19" r="3"></circle>
+        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+      </svg>
+    </button>
+
+    <!-- Portal Switch with id="portalSwitch" -->
+    <a href="simulated.html" class="sim-portal-switch" id="portalSwitch" title="Simulations"> ⌂ </a>
+  </div>
+
+  <!-- Space spacer before footer -->
+  <div style="height: 25vh;"></div>
+
+  <!-- Footer Banner -->
+  <footer class="site-footer-banner" id="siteFooter">
+    &copy; 2026 Kalaap Sadhu. All rights reserved.
+    <span class="footer-icons">
+      <a href="mailto:kalaap.ks@gmail.com" class="contact-drop-icon" title="Send Email">
+        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+      </a>
+      <a href="https://github.com/kalaapks" target="_blank" class="contact-drop-icon" title="GitHub">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+      </a>
+      <a href="YOUR_LINKEDIN_URL" target="_blank" class="contact-drop-icon" title="LinkedIn">
+        <svg viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.65 1.65 0 1 0 0 3.3 1.65 1.65 0 0 0 0-3.3z"/></svg>
+      </a>
+    </span>
+  </footer>
+
+  <!-- Code Modal Window -->
+  <div class="custom-modal-backdrop" id="codeModal">
+    <div class="custom-modal-card">
+      <div class="custom-modal-header">
+        <span class="title" id="codeModalTitle">Terminal View</span>
+        <button class="custom-modal-close" id="codeModalClose">&times;</button>
+      </div>
+      <div class="custom-modal-body">
+        <pre><code id="codeModalContent"></code></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Media (Video/Gif) Modal Window -->
+  <div class="custom-modal-backdrop" id="mediaModal">
+    <div class="custom-modal-card">
+      <div class="custom-modal-header">
+        <span class="title" id="mediaModalTitle">Animation Preview</span>
+        <button class="custom-modal-close" id="mediaModalClose">&times;</button>
+      </div>
+      <div class="custom-modal-body" id="mediaModalContent" style="background:#000; padding:0;">
+        <!-- Embedded Video Render -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Theme Engine
+    const themeBtn = document.getElementById('themeBtn');
+    if (localStorage.getItem('site-theme') === 'light') {
+      document.body.classList.add('light-mode');
+    }
+    themeBtn.addEventListener('click', () => {
+      document.body.classList.toggle('light-mode');
+      const isLight = document.body.classList.contains('light-mode');
+      localStorage.setItem('site-theme', isLight ? 'light' : 'dark');
+    });
+
+    // Dropdown Navigation
+    const funDropdown = document.getElementById('funDropdown');
+    const funBtn = document.getElementById('funBtn');
+    funBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      funDropdown.classList.toggle('show');
+    });
+    window.addEventListener('click', () => {
+      if (funDropdown.classList.contains('show')) funDropdown.classList.remove('show');
+    });
+
+    // ========================================================
+    // 6-SECOND KS HINT TOOLTIP (PAGE-SPECIFIC SESSION STORAGE)
+    // ========================================================
+    const ksHintTooltip = document.getElementById('ksHintTooltip');
+    const ksBtn = document.getElementById('ksBtn');
+    const currentPageKey = 'ks-tooltip-seen-' + (window.location.pathname.split('/').pop() || 'simulated');
+
+    function dismissTooltip() {
+      if (!ksHintTooltip || !ksHintTooltip.parentNode) return;
+      sessionStorage.setItem(currentPageKey, 'true');
+      ksHintTooltip.classList.add('fade-out');
+      setTimeout(() => {
+        if (ksHintTooltip.parentNode) ksHintTooltip.remove();
+      }, 350);
+    }
+
+    if (sessionStorage.getItem(currentPageKey) === 'true') {
+      if (ksHintTooltip) ksHintTooltip.remove();
+    } else if (ksHintTooltip) {
+      const tooltipTimer = setTimeout(dismissTooltip, 6000);
+      ksBtn.addEventListener('mouseenter', () => { clearTimeout(tooltipTimer); dismissTooltip(); });
+      ksBtn.addEventListener('touchstart', () => { clearTimeout(tooltipTimer); dismissTooltip(); }, { passive: true });
+      ksHintTooltip.addEventListener('mouseenter', () => { clearTimeout(tooltipTimer); dismissTooltip(); });
+      ksHintTooltip.addEventListener('click', () => { clearTimeout(tooltipTimer); dismissTooltip(); });
+
+      window.addEventListener('click', (e) => {
+        if (e.target !== ksHintTooltip) {
+          clearTimeout(tooltipTimer);
+          dismissTooltip();
+        }
+      }, { once: true });
+    }
+
+    // ========================================================
+    // CONTENTS SIDEBAR & HOVER PREVIEW
+    // ========================================================
+    const contentsSidebar = document.getElementById('contentsSidebar');
+    const contentsList = document.getElementById('contentsList');
+    const previewCardRight = document.getElementById('previewCardRight');
+    const previewHeaderTitle = document.getElementById('previewHeaderTitle');
+    const previewBodyContent = document.getElementById('previewBodyContent');
+    const stageOverlay = document.getElementById('stageOverlay');
+    const sections = document.querySelectorAll('.terminal-window');
+
+    let isInspectActive = false;
+
+    function renderPreview(sec, idx, title) {
+      previewHeaderTitle.textContent = `${idx + 1}. ${title}`;
+      previewBodyContent.innerHTML = sec.querySelector('.terminal-body').innerHTML;
+      previewCardRight.classList.add('visible');
+
+      document.querySelectorAll('.contents-item').forEach(el => el.classList.remove('active'));
+      const activeLi = contentsList.children[idx];
+      if (activeLi) activeLi.classList.add('active');
+
+      if (window.MathJax) {
+        MathJax.typesetPromise([previewBodyContent]).catch(err => console.log(err));
+      }
+    }
+
+    function populateContents() {
+      contentsList.innerHTML = '';
+      sections.forEach((sec, idx) => {
+        const title = sec.getAttribute('data-title') || `Animation ${idx + 1}`;
+        const li = document.createElement('li');
+        li.className = 'contents-item';
+        li.innerHTML = `
+          <span class="contents-index-num">${idx + 1}.</span>
+          <span>${title}</span>
+        `;
+
+        li.addEventListener('mouseenter', () => renderPreview(sec, idx, title));
+        li.addEventListener('touchstart', () => renderPreview(sec, idx, title), { passive: true });
+
+        li.addEventListener('click', () => {
+          renderPreview(sec, idx, title);
+          if (window.innerWidth <= 768) {
+            setTimeout(() => {
+              toggleInspectMode(false);
+              sec.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 300);
+          } else {
+            toggleInspectMode(false);
+            sec.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        });
+
+        contentsList.appendChild(li);
+      });
+    }
+    populateContents();
+
+    function toggleInspectMode(state) {
+      isInspectActive = typeof state === 'boolean' ? state : !isInspectActive;
+      document.body.classList.toggle('ks-inspect-active', isInspectActive);
+      ksBtn.classList.toggle('active', isInspectActive);
+
+      dismissTooltip();
+
+      if (!isInspectActive) {
+        previewCardRight.classList.remove('visible');
+      } else {
+        const firstSec = sections[0];
+        if (firstSec) {
+          renderPreview(firstSec, 0, firstSec.getAttribute('data-title'));
+        }
+      }
+    }
+
+    ksBtn.addEventListener('click', () => toggleInspectMode());
+    stageOverlay.addEventListener('click', () => toggleInspectMode(false));
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (isInspectActive) toggleInspectMode(false);
+        closeAllModals();
+      }
+    });
+
+    // =========================================================
+    // OUTWARD SOURCE ANIMATION CANVAS (EXACT MATCH TO CODE A)
+    // Tracks visual viewport, adapts to light/dark mode and DPR
+    // =========================================================
+    const srcCanvas = document.getElementById('sourceCanvas');
+    const srcCtx = srcCanvas.getContext('2d');
+    const numParticles = 48;
+    const particles = [];
+    const R_max = 210; 
+    const r_min = 22;  
+
+    function getViewportSize() {
+      const vv = window.visualViewport;
+      return {
+        width: vv ? vv.width : window.innerWidth,
+        height: vv ? vv.height : window.innerHeight
+      };
+    }
+
+    function resizeCanvas() {
+      const dpr = window.devicePixelRatio || 1;
+      const { width, height } = getViewportSize();
+      srcCanvas.width = width * dpr;
+      srcCanvas.height = height * dpr;
+      srcCtx.resetTransform();
+      srcCtx.scale(dpr, dpr);
+    }
+    window.addEventListener('resize', resizeCanvas);
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', resizeCanvas);
+    }
+    resizeCanvas();
+
+    class SourceParticle {
+      constructor() {
+        this.reset();
+        this.r = r_min + Math.random() * (R_max - r_min);
+      }
+      reset() {
+        this.theta = Math.random() * Math.PI * 2;
+        this.r = r_min;
+        this.speed = 0.5 + Math.random() * 0.5;
+      }
+      update() {
+        this.r += this.speed;
+        if (this.r >= R_max) this.reset();
+      }
+      draw(origin) {
+        const x = origin.x + this.r * Math.cos(this.theta);
+        const y = origin.y + this.r * Math.sin(this.theta);
+        let opacity = 0.28;
+        if (this.r - r_min < 25) opacity *= (this.r - r_min) / 25;
+        else if (R_max - this.r < 45) opacity *= (R_max - this.r) / 45;
+
+        srcCtx.fillStyle = document.body.classList.contains('light-mode')
+          ? `rgba(35, 39, 45, ${opacity * 1.5})`
+          : `rgba(63, 185, 80, ${opacity})`;
+        srcCtx.beginPath();
+        srcCtx.arc(x, y, 1.25, 0, Math.PI * 2);
+        srcCtx.fill();
+      }
+    }
+
+    for (let i = 0; i < numParticles; i++) particles.push(new SourceParticle());
+
+    // =========================================================
+    // UNIFIED SMOOTH RAF LOOP: Read Phase -> Write Phase
+    // Handles floating cluster translation and particle source
+    // =========================================================
+    const portalSwitch = document.getElementById('portalSwitch');
+    const btnJumpTop = document.getElementById('btnJumpTop');
+    const btnSharePage = document.getElementById('btnSharePage');
+    const floatingCluster = document.getElementById('floatingCluster');
+    const siteFooter = document.getElementById('siteFooter');
+
+    function mainLoop() {
+      // ---- READ PHASE ----
+      const { width: vpWidth, height: vpHeight } = getViewportSize();
+      const scrollY = window.scrollY;
+      const footerRect = siteFooter.getBoundingClientRect();
+
+      let origin = { x: vpWidth - 46, y: vpHeight - 46 };
+      if (portalSwitch) {
+        const rect = portalSwitch.getBoundingClientRect();
+        origin = {
+          x: rect.left + rect.width / 2,
+          y: rect.top + rect.height / 2
+        };
+      }
+
+      // ---- WRITE PHASE ----
+      if (scrollY > 120) {
+        btnJumpTop.classList.add('is-active');
+        btnSharePage.classList.add('is-active');
+      } else {
+        btnJumpTop.classList.remove('is-active');
+        btnSharePage.classList.remove('is-active');
+      }
+
+      if (footerRect.top < vpHeight) {
+        const overlap = vpHeight - footerRect.top;
+        floatingCluster.style.transform = `translate3d(0, -${overlap}px, 0)`;
+      } else {
+        floatingCluster.style.transform = 'translate3d(0, 0, 0)';
+      }
+
+      srcCtx.clearRect(0, 0, vpWidth, vpHeight);
+      for (let p of particles) {
+        p.update();
+        p.draw(origin);
+      }
+
+      requestAnimationFrame(mainLoop);
+    }
+    requestAnimationFrame(mainLoop);
+
+    // Button Actions
+    btnJumpTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    btnSharePage.addEventListener('click', async () => {
+      const shareData = {
+        title: document.title,
+        url: window.location.href
+      };
+      if (navigator.share) {
+        try { await navigator.share(shareData); } catch (e) {}
+      } else {
+        navigator.clipboard.writeText(window.location.href);
+        btnSharePage.setAttribute('data-tooltip', 'Link Copied!');
+        setTimeout(() => btnSharePage.setAttribute('data-tooltip', 'Share page'), 2200);
+      }
+    });
+
+    // ========================================================
+    // MODAL WINDOWS & DYNAMIC CODE / MEDIA FETCH ENGINE
+    // ========================================================
+    const codeModal = document.getElementById('codeModal');
+    const codeModalTitle = document.getElementById('codeModalTitle');
+    const codeModalContent = document.getElementById('codeModalContent');
+    const codeModalClose = document.getElementById('codeModalClose');
+
+    const mediaModal = document.getElementById('mediaModal');
+    const mediaModalTitle = document.getElementById('mediaModalTitle');
+    const mediaModalContent = document.getElementById('mediaModalContent');
+    const mediaModalClose = document.getElementById('mediaModalClose');
+
+    function closeAllModals() {
+      codeModal.classList.remove('open');
+      mediaModal.classList.remove('open');
+      mediaModalContent.innerHTML = '';
+    }
+
+    codeModalClose.addEventListener('click', closeAllModals);
+    mediaModalClose.addEventListener('click', closeAllModals);
+    codeModal.addEventListener('click', (e) => { if (e.target === codeModal) closeAllModals(); });
+    mediaModal.addEventListener('click', (e) => { if (e.target === mediaModal) closeAllModals(); });
+
+    // Open Code Modal (Dynamically fetches any file linked in data-file)
+    document.addEventListener('click', async (e) => {
+      const btn = e.target.closest('.code-view-btn');
+      if (!btn) return;
+
+      const title = btn.getAttribute('data-title') || 'Terminal Code';
+      const filePath = btn.getAttribute('data-file');
+
+      codeModalTitle.textContent = title;
+      codeModalContent.className = '';
+      codeModalContent.removeAttribute('data-highlighted');
+      codeModalContent.textContent = 'Loading source code from ' + filePath + '...';
+      codeModal.classList.add('open');
+
+      if (!filePath) {
+        codeModalContent.textContent = '// Error: No file linked in data-file attribute.';
+        return;
+      }
+
+      const ext = filePath.split('.').pop().toLowerCase();
+      const langMap = {
+        'html': 'xml',
+        'htm': 'xml',
+        'js': 'javascript',
+        'py': 'python',
+        'css': 'css',
+        'c': 'c',
+        'cpp': 'cpp',
+        'json': 'json'
+      };
+      const lang = langMap[ext] || 'plaintext';
+      codeModalContent.classList.add(`language-${lang}`);
+
+      try {
+        const response = await fetch(filePath);
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status} (${response.statusText})`);
+        }
+        const text = await response.text();
+        codeModalContent.textContent = text;
+        if (window.hljs) hljs.highlightElement(codeModalContent);
+      } catch (err) {
+        codeModalContent.textContent = 
+`// Failed to load file: ${filePath}
+// Reason: ${err.message}
+
+/* Note on testing:
+   If testing locally on a computer by double clicking (file:///), 
+   the browser blocks local fetch requests due to security protocols.
+   Run it using VS Code Live Server, "python -m http.server", or push to GitHub Pages! */`;
+      }
+    });
+
+    // Open Video / Media Player Modal
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('.media-modal-trigger');
+      if (!btn) return;
+      const type = btn.getAttribute('data-type') || 'video';
+      const src = btn.getAttribute('data-src');
+      const title = btn.getAttribute('data-title') || 'Animation Playback';
+
+      mediaModalTitle.textContent = title;
+      if (type === 'video') {
+        mediaModalContent.innerHTML = `
+          <video controls autoplay loop playsinline style="width:100%; height:auto; display:block;">
+            <source src="${src}" type="video/mp4">
+            Your browser does not support HTML5 video.
+          </video>`;
+      } else {
+        mediaModalContent.innerHTML = `<img src="${src}" alt="${title}" style="width:100%; height:auto; display:block;">`;
+      }
+      mediaModal.classList.add('open');
+    });
+
+    /* ========================================================
+       FEATURE: The background grid control using keyboard G
+       ======================================================== */
+    const gridModes = ['', 'grid-lines', 'grid-graph', 'grid-diag', 'grid-dots-lg', 'grid-off'];
+let gridIdx = gridModes.indexOf(localStorage.getItem('site-grid') || '');
+if (gridIdx < 0) gridIdx = 0;
+if (gridModes[gridIdx]) document.body.classList.add(gridModes[gridIdx]);
+
+document.addEventListener('keydown', (e) => {
+  if (e.key.toLowerCase() !== 'g' || e.ctrlKey || e.metaKey || e.altKey) return;
+  if (['INPUT', 'TEXTAREA'].includes(e.target.tagName) || e.target.isContentEditable) return;
+  document.body.classList.remove('grid-lines', 'grid-graph', 'grid-diag', 'grid-dots-lg', 'grid-off');
+  gridIdx = (gridIdx + 1) % gridModes.length;
+  if (gridModes[gridIdx]) document.body.classList.add(gridModes[gridIdx]);
+  localStorage.setItem('site-grid', gridModes[gridIdx]);
+});
+
+  </script>
+
+</body>
+</html>

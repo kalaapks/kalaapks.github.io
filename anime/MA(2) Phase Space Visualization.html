@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MA(2) Phase Space Visualization</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=STIX+Two+Text:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+  :root{color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+  body{font-family:'Inter',system-ui,sans-serif;background:#020617}
+  .font-mono{font-family:'JetBrains Mono',monospace}
+  /* math-mode look */
+  .m{font-family:'STIX Two Text','Times New Roman',serif;font-style:italic;font-size:1.08em}
+  .m sub,sub.m{font-size:.72em;line-height:0;font-style:italic}
+  .mr{font-family:'STIX Two Text','Times New Roman',serif;font-style:normal}
+  input[type=range]{accent-color:#3b82f6}
+  .g{color:#34b34a}
+
+  .mode-btn{padding:.3rem .7rem;font-size:.72rem;border-radius:.5rem;border:1px solid #334155;background:#1e293b;color:#cbd5e1;transition:.15s;font-weight:600}
+  .mode-btn:hover{background:#334155}
+  .mode-btn.on{border-color:#2563eb;background:rgba(30,58,138,.5);color:#bfdbfe}
+</style>
+</head>
+<body class="text-slate-100 min-h-screen flex flex-col antialiased selection:bg-blue-600 selection:text-white">
+
+<header class="border-b border-slate-800 bg-slate-900/70 backdrop-blur px-4 md:px-6 py-4 flex flex-wrap items-center justify-between gap-4">
+  <div class="flex items-center gap-3">
+    <a href="https://kalaapks.github.io/" target="_blank" rel="noopener" title="Go to kalaapks.github.io" aria-label="Go to kalaapks.github.io" class="shrink-0 transition-transform hover:scale-105 active:scale-95">
+      <svg width="38" height="38" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg">
+        <rect x="1.5" y="1.5" width="35" height="35" rx="8" fill="#0b1220" stroke="#34b34a" stroke-width="3"/>
+        <text x="19" y="25" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-weight="700" font-size="16" fill="#34b34a">KS</text>
+      </svg>
+    </a>
+    <div>
+      <h1 class="text-base md:text-lg font-bold tracking-tight text-white flex flex-wrap items-center gap-2">
+        MA(2) Phase Space Visualization
+        <span class="text-xs px-2 py-0.5 rounded-full bg-blue-950 text-blue-400 border border-blue-800"><span class="m">Y<sub>t</sub></span> = <span class="m">ϵ<sub>t</sub></span> + <span class="m">θ<sub>1</sub> ϵ<sub>t−1</sub></span> + <span class="m">θ<sub>2</sub> ϵ<sub>t−2</sub></span></span>
+      </h1>
+      <p class="text-xs text-slate-400">Rotatable 3D Phase space showcasing the role of θ in MA(2)</p>
+    </div>
+  </div>
+  <button id="btnResample" class="px-3.5 py-1.5 rounded-lg bg-[#34b34a] hover:bg-[#3fc556] text-xs font-semibold text-slate-950 transition-all shadow-md active:scale-95 flex items-center gap-1.5">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+    Re-new Shocks
+  </button>
+</header>
+
+<main class="flex-1 p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6 max-w-[1600px] w-full mx-auto items-start">
+
+  <section class="contents lg:flex lg:flex-col lg:col-span-4 lg:gap-5">
+
+    <div class="order-1 bg-slate-900/90 border border-slate-800 rounded-xl p-5 shadow-xl flex flex-col gap-4">
+      <div class="border-b border-slate-800 pb-3"><h2 class="text-sm font-semibold uppercase tracking-wider text-slate-300">Model Parameters</h2></div>
+
+      <div class="space-y-1.5">
+        <div class="flex justify-between items-center text-sm">
+          <label for="phi1Slider" class="font-medium text-slate-300">First MA Coefficient (<span class="m text-blue-400 font-bold">θ<sub>1</sub></span>)</label>
+          <span id="phi1Val" class="font-mono font-bold text-sm bg-blue-950/70 border border-blue-800/80 text-blue-300 px-2 py-0.5 rounded">0.50</span>
+        </div>
+        <input id="phi1Slider" type="range" min="-1.99" max="1.99" step="0.01" value="0.50" class="w-full h-2 bg-slate-800 rounded-lg cursor-pointer">
+        <div class="flex justify-between text-[10px] text-slate-500 font-mono px-0.5"><span>-1.99</span><span>0.0</span><span>+1.99</span></div>
+      </div>
+
+      <div class="space-y-1.5">
+        <div class="flex justify-between items-center text-sm">
+          <label for="phi2Slider" class="font-medium text-slate-300">Second MA Coefficient (<span class="m text-blue-400 font-bold">θ<sub>2</sub></span>)</label>
+          <span id="phi2Val" class="font-mono font-bold text-sm bg-blue-950/70 border border-blue-800/80 text-blue-300 px-2 py-0.5 rounded">0.30</span>
+        </div>
+        <input id="phi2Slider" type="range" min="-0.99" max="0.99" step="0.01" value="0.30" class="w-full h-2 bg-slate-800 rounded-lg cursor-pointer">
+        <div class="flex justify-between text-[10px] text-slate-500 font-mono px-0.5"><span>-0.99</span><span>0.0</span><span>+0.99</span></div>
+      </div>
+
+      <button id="btnMore" type="button" aria-expanded="false" class="flex items-center justify-center gap-1.5 text-xs font-semibold text-slate-300 hover:text-white border border-slate-700 bg-slate-800/70 hover:bg-slate-800 rounded-lg py-1.5 transition">
+        <span id="moreLbl">More</span>
+        <svg id="moreIco" class="h-3.5 w-3.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </button>
+
+      <div id="morePanel" class="hidden flex-col gap-4">
+        <div class="space-y-1.5 pt-1">
+          <div class="flex justify-between items-center text-sm">
+            <label for="nSlider" class="font-medium text-slate-300">Sample Size (<span class="m text-emerald-400 font-bold">N</span>)</label>
+            <span id="nVal" class="font-mono font-bold text-sm bg-emerald-950/70 border border-emerald-800/80 text-emerald-300 px-2 py-0.5 rounded">1000</span>
+          </div>
+          <input id="nSlider" type="range" min="100" max="5000" step="50" value="1000" class="w-full h-2 bg-slate-800 rounded-lg cursor-pointer accent-emerald-500">
+          <div class="flex justify-between text-[10px] text-slate-500 font-mono px-0.5"><span>100 pts</span><span>2500 pts</span><span>5000 pts</span></div>
+        </div>
+        <div class="space-y-1.5 pt-1">
+          <div class="flex justify-between items-center text-sm">
+            <label for="sigmaSlider" class="font-medium text-slate-300">Noise Std Dev (<span class="m text-purple-400 font-bold">σ<sub>ϵ</sub></span>)</label>
+            <span id="sigmaVal" class="font-mono font-bold text-sm bg-purple-950/70 border border-purple-800/80 text-purple-300 px-2 py-0.5 rounded">1.00</span>
+          </div>
+          <input id="sigmaSlider" type="range" min="0.2" max="2.5" step="0.05" value="1.00" class="w-full h-2 bg-slate-800 rounded-lg cursor-pointer accent-purple-500">
+          <div class="flex justify-between text-[10px] text-slate-500 font-mono px-0.5"><span>0.20</span><span>1.00</span><span>2.50</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="order-4 bg-slate-900/90 border border-slate-800 rounded-xl p-5 shadow-xl flex flex-col gap-4">
+      <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-300 border-b border-slate-800 pb-3">Fixed Display &amp; Overlays</h2>
+      <div>
+        <label class="block text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wide">Phase Axis Range (Fixed ±L)</label>
+        <div class="grid grid-cols-4 gap-2">
+          <button class="range-btn py-1.5 text-xs rounded border border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-700 font-mono transition" data-range="6">±6</button>
+          <button class="range-btn py-1.5 text-xs rounded border border-blue-600 bg-blue-900/50 text-blue-200 font-mono font-bold transition" data-range="10">±10</button>
+          <button class="range-btn py-1.5 text-xs rounded border border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-700 font-mono transition" data-range="15">±15</button>
+          <button class="range-btn py-1.5 text-xs rounded border border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-700 font-mono transition" data-range="25">±25</button>
+        </div>
+        <p class="text-[11px] text-slate-500 mt-2 leading-tight">Axes remain fixed while adjusting <span class="m">θ<sub>1</sub></span> and <span class="m">θ<sub>2</sub></span> to observe variance elongation and the limits on <span class="m">ρ<sub>1</sub></span>, <span class="m">ρ<sub>2</sub></span>.</p>
+      </div>
+      <div class="space-y-2.5 pt-2 border-t border-slate-800">
+        <label class="flex items-center gap-2.5 text-xs font-medium text-slate-300 cursor-pointer select-none">
+          <input id="chkEllipses" type="checkbox" checked class="w-4 h-4 rounded bg-slate-800 border-slate-700 text-blue-600 focus:ring-0">
+          <span>Theoretical 1σ Covariance Ellipsoid</span>
+        </label>
+        <label class="flex items-center gap-2.5 text-xs font-medium text-slate-300 cursor-pointer select-none">
+          <input id="chkTrajectory" type="checkbox" class="w-4 h-4 rounded bg-slate-800 border-slate-700 text-slate-400 focus:ring-0">
+          <span>Successive Trajectory Vectors (Connect points)</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="order-5 bg-slate-900/90 border border-slate-800 rounded-xl p-5 shadow-xl flex flex-col gap-3">
+      <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-300 border-b border-slate-800 pb-2">Statistical Comparison</h2>
+      <div class="grid grid-cols-2 gap-3 text-xs font-mono">
+        <div class="bg-slate-950/60 p-2.5 rounded border border-slate-800/80">
+          <div class="text-slate-400 text-[10px] uppercase font-sans font-medium">Theoretical Var(<span class="m normal-case">Y</span>)</div>
+          <div id="statTheoVar" class="text-base font-bold text-cyan-400 mt-0.5">-</div>
+          <div class="text-[10px] text-slate-500 mt-0.5"><span class="m">σ²</span>(1 + <span class="m">θ<sub>1</sub>²</span> + <span class="m">θ<sub>2</sub>²</span>)</div>
+        </div>
+        <div class="bg-slate-950/60 p-2.5 rounded border border-slate-800/80">
+          <div class="text-slate-400 text-[10px] uppercase font-sans font-medium">Sample Var(<span class="m normal-case">Y</span>)</div>
+          <div id="statEmpVar" class="text-base font-bold text-emerald-400 mt-0.5">-</div>
+          <div class="text-[10px] text-slate-500 mt-0.5"><span class="m">s²</span> = Σ(<span class="m">y</span> − <span class="m">ȳ</span>)²/<span class="m">N</span></div>
+        </div>
+        <div class="bg-slate-950/60 p-2.5 rounded border border-slate-800/80">
+          <div class="text-slate-400 text-[10px] uppercase font-sans font-medium">Theoretical <span class="m normal-case">ρ<sub>1</sub></span></div>
+          <div id="statTheoRho1" class="text-base font-bold text-amber-400 mt-0.5">-</div>
+          <div class="text-[10px] text-slate-500 mt-0.5"><span class="m">θ<sub>1</sub></span>(1 + <span class="m">θ<sub>2</sub></span>) / (1 + <span class="m">θ<sub>1</sub>²</span> + <span class="m">θ<sub>2</sub>²</span>)</div>
+        </div>
+        <div class="bg-slate-950/60 p-2.5 rounded border border-slate-800/80">
+          <div class="text-slate-400 text-[10px] uppercase font-sans font-medium">Sample <span class="m normal-case">r<sub>1</sub></span></div>
+          <div id="statEmpRho1" class="text-base font-bold text-lime-400 mt-0.5">-</div>
+          <div class="text-[10px] text-slate-500 mt-0.5">Corr(<span class="m">Y<sub>t</sub></span>, <span class="m">Y<sub>t−1</sub></span>)</div>
+        </div>
+        <div class="bg-slate-950/60 p-2.5 rounded border border-slate-800/80">
+          <div class="text-slate-400 text-[10px] uppercase font-sans font-medium">Theoretical <span class="m normal-case">ρ<sub>2</sub></span></div>
+          <div id="statTheoRho2" class="text-base font-bold text-amber-400 mt-0.5">-</div>
+          <div class="text-[10px] text-slate-500 mt-0.5"><span class="m">θ<sub>2</sub></span> / (1 + <span class="m">θ<sub>1</sub>²</span> + <span class="m">θ<sub>2</sub>²</span>)</div>
+        </div>
+        <div class="bg-slate-950/60 p-2.5 rounded border border-slate-800/80">
+          <div class="text-slate-400 text-[10px] uppercase font-sans font-medium">Sample <span class="m normal-case">r<sub>2</sub></span></div>
+          <div id="statEmpRho2" class="text-base font-bold text-lime-400 mt-0.5">-</div>
+          <div class="text-[10px] text-slate-500 mt-0.5">Corr(<span class="m">Y<sub>t</sub></span>, <span class="m">Y<sub>t−2</sub></span>)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="contents lg:flex lg:flex-col lg:col-span-8 lg:gap-4">
+
+    <div class="order-2 bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-xl flex flex-col">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-3 px-1">
+        <div class="flex items-center gap-2">
+          <div class="w-2.5 h-2.5 rounded-full bg-[#34b34a]"></div>
+          <span class="text-sm font-semibold text-slate-200">3D-Phase Space Plot</span>
+          <span class="text-xs text-slate-400">(<span class="m">Y<sub>t−2</sub></span>, <span class="m">Y<sub>t−1</sub></span>, <span class="m">Y<sub>t</sub></span>)</span>
+        </div>
+        <div id="boundaryBadge" class="text-[11px] px-2.5 py-0.5 rounded font-mono font-semibold text-emerald-400 bg-emerald-950/50 border border-emerald-800/60">INVERTIBLE</div>
+      </div>
+      <div class="flex flex-wrap items-center gap-2 mb-3 px-1">
+        <span class="text-[11px] uppercase tracking-wide text-slate-500 font-semibold mr-1">View</span>
+        <button id="btnV1" class="mode-btn"><span class="m">Y<sub>t</sub></span> vs <span class="m">Y<sub>t−1</sub></span></button>
+        <button id="btnV2" class="mode-btn"><span class="m">Y<sub>t</sub></span> vs <span class="m">Y<sub>t−2</sub></span></button>
+        <span id="viewHint" class="text-[11px] text-slate-500 ml-auto">Drag to rotate · click a view again to return to 3D</span>
+      </div>
+      <div class="relative w-full aspect-square md:aspect-[4/3] max-h-[560px] bg-slate-950 rounded-lg border border-slate-800 overflow-hidden">
+        <canvas id="phaseCanvas" class="w-full h-full block cursor-grab" style="touch-action:pan-y"></canvas>
+        <div id="coordOverlay" class="absolute bottom-3 left-3 bg-slate-900/90 border border-slate-700/80 px-2 py-1 rounded text-[11px] font-mono text-slate-300 pointer-events-none opacity-0 transition-opacity"></div>
+      </div>
+    </div>
+
+    <div class="order-3 bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-xl flex flex-col">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-2 px-1">
+        <div class="flex items-center gap-2">
+          <div class="w-2.5 h-2.5 rounded-full bg-[#34b34a]"></div>
+          <span class="text-sm font-semibold text-slate-200">Companion Time Series</span>
+          <span class="text-xs text-slate-400"><span class="m">(Y<sub>t</sub></span> vs <span class="m">t)</span></span>
+        </div>
+        <span class="text-[11px] text-slate-500 font-mono">Zero Mean Process</span>
+      </div>
+      <div class="relative w-full h-36 bg-slate-950 rounded-lg border border-slate-800 overflow-hidden"><canvas id="tsCanvas" class="w-full h-full block"></canvas></div>
+    </div>
+  </section>
+
+  <section id="explainer" class="order-last lg:col-span-12 bg-slate-900/90 border border-slate-800 rounded-xl p-5 shadow-xl">
+    <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-300 border-b border-slate-800 pb-3 mb-3">Explainer</h2>
+    <div class="text-sm text-slate-300 leading-relaxed space-y-3">
+      <!-- Write your explanation here. Use <span class="m">Y<sub>t</sub></span> for math-style symbols. -->
+      <p class="text-slate-500 italic">Explanation to be added.</p>
+    </div>
+  </section>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+const state = {p1:0.5, p2:0.3, N:1000, sigma:1, L:10, ellipsoid:true, traj:false, burn:300, e:[], y:[], yaw:0.75, pitch:0.45, mode:null};
+const saved3D = {yaw:0.75, pitch:0.45};
+const phase=$('phaseCanvas'), pc=phase.getContext('2d'), tsC=$('tsCanvas'), tc=tsC.getContext('2d'), badge=$('boundaryBadge'), overlay=$('coordOverlay');
+
+$('btnMore').addEventListener('click',()=>{
+  const p=$('morePanel'), open=p.classList.contains('hidden');
+  p.classList.toggle('hidden',!open); p.classList.toggle('flex',open);
+  $('moreLbl').textContent=open?'Collapse':'More'; $('moreIco').style.transform=open?'rotate(180deg)':'';
+  $('btnMore').setAttribute('aria-expanded',open);
+});
+
+function gauss(){let u=0,v=0;while(!u)u=Math.random();while(!v)v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
+function sampleInnovations(){state.e=new Float32Array(5000+state.burn);for(let i=0;i<state.e.length;i++)state.e[i]=gauss();computeSeries();}
+const clampV=v=>Math.max(-1e6,Math.min(1e6,v));
+function computeSeries(){
+  const{p1,p2,sigma,burn,N,e}=state, y=new Float32Array(N);
+  for(let t=0;t<N;t++){const i=burn+t; y[t]=sigma*(e[i]+p1*e[i-1]+p2*e[i-2]);}   // Y_t = σ(ε_t + θ1 ε_{t-1} + θ2 ε_{t-2})
+  state.y=y; metrics(); draw();
+}
+function theory(){
+  const{p1,p2,sigma}=state, k=1+p1*p1+p2*p2;
+  return {g0:sigma*sigma*k, r1:p1*(1+p2)/k, r2:p2/k};
+}
+function metrics(){
+  const y=state.y,n=state.N; let s=0; for(let i=0;i<n;i++)s+=y[i]; const m=s/n; let v=0,c1=0,c2=0;
+  for(let i=0;i<n;i++){const d=y[i]-m; v+=d*d; if(i>0)c1+=d*(y[i-1]-m); if(i>1)c2+=d*(y[i-2]-m);}
+  v/=n; const th=theory();
+  $('statTheoVar').textContent=th.g0.toFixed(2);
+  $('statTheoRho1').textContent=th.r1.toFixed(3);
+  $('statTheoRho2').textContent=th.r2.toFixed(3);
+  $('statEmpVar').textContent=v.toFixed(2);
+  $('statEmpRho1').textContent=v>0?(c1/(n-1)/v).toFixed(3):'0';
+  $('statEmpRho2').textContent=v>0?(c2/(n-2)/v).toFixed(3):'0';
+  const{p1,p2}=state, margin=Math.min(1+p1+p2,1-p1+p2,1-Math.abs(p2));
+  const base='text-[11px] px-2.5 py-0.5 rounded font-mono font-semibold ';
+  if(margin<=0){badge.textContent='NON-INVERTIBLE';badge.className=base+'text-rose-400 bg-rose-950/50 border border-rose-800/60';}
+  else if(margin<0.05){badge.textContent='NEAR NON-INVERTIBLE';badge.className=base+'text-amber-400 bg-amber-950/50 border border-amber-800/60';}
+  else {badge.textContent='INVERTIBLE';badge.className=base+'text-emerald-400 bg-emerald-950/50 border border-emerald-800/60';}
+}
+function resize(){
+  const d=window.devicePixelRatio||1;
+  [[phase,pc],[tsC,tc]].forEach(([c,x])=>{const r=c.getBoundingClientRect();c.width=r.width*d;c.height=r.height*d;x.setTransform(d,0,0,d,0,0);});
+  draw();
+}
+window.addEventListener('resize',resize);
+
+// ---- 3D helpers. Display axes: X = Y(t-1), Y(up) = Y(t), Z = Y(t-2). Orthographic projection.
+function rows(){
+  const cy=Math.cos(state.yaw),sy=Math.sin(state.yaw),cp=Math.cos(state.pitch),sp=Math.sin(state.pitch);
+  return [[cy,0,sy],[sp*sy,cp,-sp*cy],[-cp*sy,sp,cp*cy]]; // screen-x, screen-up, depth
+}
+function mathLabel(ctx,base,sub,x,y,color,size=14){
+  ctx.fillStyle=color; ctx.textBaseline='alphabetic'; ctx.textAlign='left';
+  ctx.font=`italic 600 ${size}px "STIX Two Text","Times New Roman",serif`; ctx.fillText(base,x,y);
+  const bw=ctx.measureText(base).width; ctx.font=`italic 600 ${size-4}px "STIX Two Text","Times New Roman",serif`; ctx.fillText(sub,x+bw+1,y+4);
+}
+function drawPhase(){
+  const w=phase.clientWidth,h=phase.clientHeight,L=state.L,R=rows(),cx=w/2,cy=h/2,s=Math.min(w,h)/(2*L)*0.9;
+  const P=(x,y,z)=>{const a=R[0][0]*x+R[0][1]*y+R[0][2]*z,b=R[1][0]*x+R[1][1]*y+R[1][2]*z,d=R[2][0]*x+R[2][1]*y+R[2][2]*z;return[cx+s*a,cy-s*b,d];};
+  pc.clearRect(0,0,w,h);
+  const line=(p,q)=>{const A=P(...p),B=P(...q);pc.moveTo(A[0],A[1]);pc.lineTo(B[0],B[1]);};
+  const step=L<=10?2:5;
+  // grids on the three coordinate planes
+  pc.strokeStyle='rgba(51,65,85,0.28)';pc.lineWidth=1;pc.beginPath();
+  for(let v=-L;v<=L;v+=step){
+    line([v,-L,0],[v,L,0]);line([-L,v,0],[L,v,0]);      // XY plane (z=0)
+    line([0,-L,v],[0,L,v]);line([0,v,-L],[0,v,L]);      // ZY plane (x=0)
+    line([v,0,-L],[v,0,L]);line([-L,0,v],[L,0,v]);      // XZ plane (y=0)
+  }
+  pc.stroke();
+  // bounding frame
+  pc.strokeStyle='rgba(71,85,105,0.35)';pc.beginPath();
+  for(const a of[-L,L])for(const b of[-L,L]){line([-L,a,b],[L,a,b]);line([a,-L,b],[a,L,b]);line([a,b,-L],[a,b,L]);}
+  pc.stroke();
+  // axes
+  pc.strokeStyle='#475569';pc.lineWidth=1.5;pc.beginPath();line([-L,0,0],[L,0,0]);line([0,-L,0],[0,L,0]);line([0,0,-L],[0,0,L]);pc.stroke();
+  pc.font='10px JetBrains Mono';pc.fillStyle='#64748b';pc.textAlign='left';
+  for(let v=-L;v<=L;v+=step){if(!v)continue;
+    let p=P(v,0,0);pc.fillText(v,p[0]+3,p[1]+12);p=P(0,v,0);pc.fillText(v,p[0]+4,p[1]-3);p=P(0,0,v);pc.fillText(v,p[0]+4,p[1]+12);}
+  let t=P(L,0,0);mathLabel(pc,'Y','t−1',t[0]-4,t[1]-8,'#94a3b8');
+  t=P(0,L,0);mathLabel(pc,'Y','t',t[0]+8,t[1]+12,'#94a3b8');
+  t=P(0,0,L);mathLabel(pc,'Y','t−2',t[0]+6,t[1]-8,'#94a3b8');
+
+  const th=theory();
+  // ellipsoids (low alpha): silhouette fill + principal rings
+  if(state.ellipsoid&&th){
+    const {r1,r2,g0}=th, A=1+r2,B=Math.SQRT2*r1,C=1, ang=0.5*Math.atan2(2*B,A-C), m=(A+C)/2, dd=Math.hypot((A-C)/2,B);
+    const c1=Math.cos(ang),s1=Math.sin(ang), q=Math.SQRT1_2;
+    // eigenpairs expressed in display coords (X=b, Y=c, Z=a) from canonical (a,b,c)=(Y_{t-2},Y_{t-1},Y_t)
+    const toDisp=(a,b,c)=>[b,c,a];
+    const eig=[
+      {l:g0*(m+dd), v:toDisp(c1*q,s1,c1*q)},
+      {l:Math.max(0,g0*(m-dd)), v:toDisp(-s1*q,c1,-s1*q)},
+      {l:g0*(1-r2), v:toDisp(q,0,-q)}
+    ].map(o=>({l:o.l,v:o.v}));
+    // 2D projected covariance for exact silhouette
+    const px=R[0],py=R[1]; let sxx=0,sxy=0,syy=0;
+    eig.forEach(o=>{const a=px[0]*o.v[0]+px[1]*o.v[1]+px[2]*o.v[2],b=py[0]*o.v[0]+py[1]*o.v[1]+py[2]*o.v[2];sxx+=o.l*a*a;sxy+=o.l*a*b;syy+=o.l*b*b;});
+    const mm=(sxx+syy)/2,dr=Math.hypot((sxx-syy)/2,sxy),ea=Math.sqrt(Math.max(mm+dr,0)),eb=Math.sqrt(Math.max(mm-dr,0)),th2=0.5*Math.atan2(2*sxy,sxx-syy);
+    [[1,'rgba(167,139,250,0.32)','rgba(196,181,253,0.70)']].forEach(([k,fill,stroke])=>{
+      pc.save();pc.translate(cx,cy);pc.scale(s,-s);pc.rotate(th2);pc.beginPath();pc.ellipse(0,0,k*ea,k*eb,0,0,2*Math.PI);pc.restore();
+      pc.fillStyle=fill;pc.fill();pc.strokeStyle=stroke;pc.lineWidth=1.2;pc.stroke();
+      // principal-plane rings give the 3D shape
+      pc.strokeStyle=stroke.replace(/[\d.]+\)$/,'0.12)');pc.lineWidth=1;
+      [[0,1],[0,2],[1,2]].forEach(([i,j])=>{pc.beginPath();
+        for(let u=0;u<=48;u++){const a=u/48*2*Math.PI,ci=Math.cos(a)*k*Math.sqrt(eig[i].l),sj=Math.sin(a)*k*Math.sqrt(eig[j].l);
+          const p=P(ci*eig[i].v[0]+sj*eig[j].v[0],ci*eig[i].v[1]+sj*eig[j].v[1],ci*eig[i].v[2]+sj*eig[j].v[2]);u?pc.lineTo(p[0],p[1]):pc.moveTo(p[0],p[1]);}
+        pc.stroke();});
+    });
+  }
+  const y=state.y,n=state.N;
+  if(state.traj){pc.save();pc.strokeStyle='rgba(148,163,184,0.2)';pc.lineWidth=0.8;pc.beginPath();
+    for(let i=2;i<Math.min(n,400);i++){const p=P(y[i-1],y[i],y[i-2]);i===2?pc.moveTo(p[0],p[1]):pc.lineTo(p[0],p[1]);}pc.stroke();pc.restore();}
+  const alpha=Math.max(0.25,0.85-n/7000),r0=n>2500?1.4:2;
+  for(let i=2;i<n;i++){
+    const p=P(y[i-1],y[i],y[i-2]);
+    if(p[0]<0||p[0]>w||p[1]<0||p[1]>h)continue;
+    const dn=p[2]/(L*1.7);                       // depth cue: nearer points larger and brighter
+    pc.fillStyle=`rgba(56,189,248,${Math.min(1,alpha*(0.8+0.35*dn))})`;
+    pc.beginPath();pc.arc(p[0],p[1],r0*(1+0.3*dn),0,6.2832);pc.fill();
+  }
+  if(n>2){const p=P(y[n-2],y[n-1],y[n-3]);pc.beginPath();pc.arc(p[0],p[1],4,0,6.2832);pc.fillStyle='#f43f5e';pc.fill();pc.lineWidth=2;pc.strokeStyle='#fff';pc.stroke();}
+}
+function drawTS(){
+  const w=tsC.clientWidth,h=tsC.clientHeight,L=state.L,mid=h/2;
+  tc.clearRect(0,0,w,h);tc.strokeStyle='rgba(71,85,105,0.6)';tc.lineWidth=1;tc.beginPath();tc.moveTo(0,mid);tc.lineTo(w,mid);tc.stroke();
+  const pts=Math.min(state.N,350),dx=w/(pts-1);tc.strokeStyle='#38bdf8';tc.lineWidth=1.6;tc.beginPath();
+  for(let t=0;t<pts;t++){const yy=mid-(state.y[t]/L)*(h/2);t?tc.lineTo(t*dx,yy):tc.moveTo(0,yy);}tc.stroke();
+}
+function draw(){drawPhase();drawTS();}
+
+// ---- view switching (animated rotation: Y_{t-2} or Y_{t-1} turned to face the viewer => exact 2D projection)
+let anim=null;
+function rotateTo(yaw,pitch){
+  const y0=state.yaw,p0=state.pitch,t0=performance.now();let dy=yaw-y0;dy=Math.atan2(Math.sin(dy),Math.cos(dy));
+  const id=anim={};
+  (function step(now){if(anim!==id)return;const k=Math.min(1,(now-t0)/550),e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;
+    state.yaw=y0+dy*e;state.pitch=p0+(pitch-p0)*e;draw();if(k<1)requestAnimationFrame(step);else{state.yaw=yaw;state.pitch=pitch;draw();}})(t0);
+}
+function setMode(m){
+  if(state.mode===null)Object.assign(saved3D,{yaw:state.yaw,pitch:state.pitch});
+  state.mode=(state.mode===m)?null:m;
+  if(state.mode==='v1')rotateTo(0,0);
+  else if(state.mode==='v2')rotateTo(Math.PI/2,0);
+  else rotateTo(saved3D.yaw,saved3D.pitch);
+  syncButtons();
+}
+function syncButtons(){
+  $('btnV1').classList.toggle('on',state.mode==='v1');$('btnV2').classList.toggle('on',state.mode==='v2');
+  $('viewHint').textContent=state.mode?'Projected 2D view · click again or drag to return to 3D':'Drag to rotate · click a view again to return to 3D';
+}
+$('btnV1').addEventListener('click',()=>setMode('v1'));$('btnV2').addEventListener('click',()=>setMode('v2'));
+
+// drag to rotate (mouse: both axes; touch: horizontal so the page can still scroll)
+let drag=null;
+phase.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,touch:e.pointerType==='touch',moved:false};phase.setPointerCapture(e.pointerId);phase.style.cursor='grabbing';});
+phase.addEventListener('pointermove',e=>{
+  if(drag){const dx=e.clientX-drag.x,dy=e.clientY-drag.y;
+    if(Math.abs(dx)+Math.abs(dy)>2&&!drag.moved){drag.moved=true;anim=null;if(state.mode){state.mode=null;syncButtons();}}
+    if(drag.moved){state.yaw+=dx*0.01;if(!drag.touch)state.pitch=Math.max(-1.45,Math.min(1.45,state.pitch+dy*0.01));drag.x=e.clientX;drag.y=e.clientY;draw();}
+  }
+  showCoord(e);
+});
+phase.addEventListener('pointerup',()=>{drag=null;phase.style.cursor='';});
+phase.addEventListener('pointerleave',()=>{overlay.style.opacity='0';});
+function showCoord(e){
+  if(!state.mode||drag&&drag.moved){overlay.style.opacity='0';return;}
+  const r=phase.getBoundingClientRect(),w=r.width,h=r.height,s=Math.min(w,h)/(2*state.L)*0.9;
+  const a=(e.clientX-r.left-w/2)/s,b=-(e.clientY-r.top-h/2)/s,sub=state.mode==='v1'?'t−1':'t−2';
+  overlay.innerHTML=`<span class="m">Y<sub>${sub}</sub></span>: ${a.toFixed(2)}, <span class="m">Y<sub>t</sub></span>: ${b.toFixed(2)}`;overlay.style.opacity='1';
+}
+
+// controls
+const bind=(id,key,out,fmt,parse=parseFloat)=>$(id).addEventListener('input',e=>{state[key]=parse(e.target.value,10);$(out).textContent=fmt(state[key]);computeSeries();});
+bind('phi1Slider','p1','phi1Val',v=>v.toFixed(2));bind('phi2Slider','p2','phi2Val',v=>v.toFixed(2));
+bind('nSlider','N','nVal',v=>v,parseInt);bind('sigmaSlider','sigma','sigmaVal',v=>v.toFixed(2));
+$('btnResample').addEventListener('click',sampleInnovations);
+$('chkEllipses').addEventListener('change',e=>{state.ellipsoid=e.target.checked;draw();});
+$('chkTrajectory').addEventListener('change',e=>{state.traj=e.target.checked;draw();});
+document.querySelectorAll('.range-btn').forEach(btn=>btn.addEventListener('click',e=>{
+  document.querySelectorAll('.range-btn').forEach(b=>b.className='range-btn py-1.5 text-xs rounded border border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-700 font-mono transition');
+  e.currentTarget.className='range-btn py-1.5 text-xs rounded border border-blue-600 bg-blue-900/50 text-blue-200 font-mono font-bold transition';
+  state.L=parseFloat(e.currentTarget.dataset.range);draw();
+}));
+window.addEventListener('DOMContentLoaded',()=>{sampleInnovations();resize();});
+</script>
+</body>
+</html>
