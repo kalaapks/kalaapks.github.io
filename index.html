@@ -4,24 +4,32 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>Kalaap Sadhu | Portfolio</title>
-  
-  <!-- Favicon: Signature Circular KS Badge -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 38 38'><circle cx='19' cy='19' r='17' fill='%23161b22' stroke='%233fb950' stroke-width='2'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-family='monospace' font-weight='bold' font-size='14' fill='%233fb950'>KS</text></svg>">
 
-  <!-- <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script> -->  
-   <!-- TOOK UPTO 40 SECS TO LOAD BECAUSE OF THIS -->
+  <!-- Favicon: Signature Circular KS Badge -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 38 38'><circle cx='19' cy='19' r='17' fill='%231c241a' stroke='%238cb174' stroke-width='2'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-family='monospace' font-weight='bold' font-size='14' fill='%238cb174'>KS</text></svg>">
+
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
-  
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="css/index_style.css">
 </head>
 <body>
+  <!-- Apply saved modes before first paint (no flash) -->
+  <script>
+    (function () {
+      try {
+        var b = document.body;
+        if (localStorage.getItem('site-theme') === 'light') b.classList.add('light-mode');
+        if (localStorage.getItem('site-academic') === 'on') b.classList.add('academic-mode');
+      } catch (e) {}
+    })();
+  </script>
 
   <!-- Fullscreen Welcome Intro Terminal -->
-  <div id="welcomeIntro">
+  <div id="welcomeIntro" class="normal-only">
     <div class="intro-terminal-box">
       <div id="typeLine1"><span id="welcomeText"></span><span class="cursor" id="cursor1">_</span></div>
       <div id="typeLine2"><span id="ksText"></span><span class="cursor" id="cursor2" style="display: none;">_</span></div>
@@ -29,16 +37,16 @@
   </div>
 
   <!-- Flying KS Badge -->
-  <div id="flyingKs">KS</div>
+  <div id="flyingKs" class="normal-only">KS</div>
 
   <!-- Full-Screen Evolving Probability Density Ribbons Canvas -->
-  <canvas id="bgCanvas"></canvas>
+  <canvas id="bgCanvas" class="normal-only"></canvas>
 
   <!-- Sticky Top Navigation Bar -->
-  <nav class="top-nav">
+  <nav class="top-nav normal-only">
     <div class="nav-left">
       <button class="ks-badge" id="ksBtn" title="Toggle Task View">KS</button>
-      <button class="theme-toggle" id="themeBtn" title="Toggle Light / Dark Mode"> 💡 </button>
+      <button class="theme-toggle" id="themeBtn" title="Toggle Light / Dark Mode (L)"> 💡 </button>
 
       <div class="contact-dropdown" id="contactDropdown">
         <button class="contact-btn" id="contactBtn" title="Quick Contact">Contact ▾</button>
@@ -54,15 +62,12 @@
           </a>
         </div>
       </div>
-
-      <!-- Quick G Badge: Jump to Games section -->
-      <a href="#games" class="game-nav-badge" id="navGamesQuickBtn" title="Jump to Games"> 𝓖 </a>
     </div>
 
     <div class="nav-links">
       <a href="#resume" class="nav-btn" id="nav-resume">Resume</a>
       <a href="#projects" class="nav-btn" id="nav-projects">Projects</a>
-      
+
       <div class="dropdown" id="funDropdown">
         <button class="nav-btn" id="funBtn">Fun ▾</button>
         <div class="dropdown-content">
@@ -74,23 +79,28 @@
     </div>
   </nav>
 
-  <!-- Task View Overlay -->
-  <div class="task-view-overlay" id="taskViewOverlay">
-    <div class="task-view-grid" id="taskViewGrid"></div>
-    <div class="task-view-hint">Task View: Click any window to switch • Esc or KS to exit</div>
+  <!-- Task View Overlay (KS) -->
+  <div class="task-view-overlay normal-only" id="taskViewOverlay">
+    <div class="task-view-scroll" id="taskViewScroll">
+      <div class="task-view-keys" aria-label="Keyboard shortcuts">
+        <button type="button" class="key-chip" data-action="theme" title="Switch between light and dark mode"><kbd>L</kbd><span>light / dark mode</span></button>
+        <button type="button" class="key-chip" data-action="academic" title="Switch to the plain academic page"><kbd>A</kbd><span>academic mode</span></button>
+      </div>
+      <div class="task-view-grid" id="taskViewGrid"></div>
+    </div>
+    <div class="task-view-fade"></div>
+    <div class="task-view-hint">Esc or KS to exit</div>
   </div>
 
-  <!-- FIXED VECTOR FIELD SINK CANVAS: Points directly into ~ switch -->
-  <canvas id="sinkCanvas" width="360" height="360"></canvas>
+  <!-- FIXED VECTOR FIELD SINK CANVAS: Points directly into the portal switch -->
+  <canvas id="sinkCanvas" class="normal-only" width="360" height="360"></canvas>
 
-  <!-- FLOATING ACTIONS CLUSTER (Jump to Top, Share, ~ Switch) -->
-  <div class="floating-corner-actions" id="floatingCluster">
-    <!-- Clean Borderless Jump-To-Top Button -->
+  <!-- FLOATING ACTIONS CLUSTER (Jump to Top, Share, Portal Switch) -->
+  <div class="floating-corner-actions normal-only" id="floatingCluster">
     <button class="clean-float-btn" id="btnJumpTop" data-tooltip="Jump to top" aria-label="Jump to top">
       <span class="float-arrowhead-icon"></span>
     </button>
 
-    <!-- Clean Borderless Share Button -->
     <button class="clean-float-btn" id="btnSharePage" data-tooltip="Share page" aria-label="Share page">
       <svg class="float-share-icon" viewBox="0 0 24 24">
         <circle cx="18" cy="5" r="3"></circle>
@@ -101,66 +111,83 @@
       </svg>
     </button>
 
-    <!-- "~" Portal Switch -->
     <a href="notes.html" class="sim-portal-switch" id="portalSwitch" title="Go to Notes"> 𝖓 </a>
   </div>
 
   <!-- Main Container -->
   <div class="container" id="mainContainer">
 
-    <!-- 1. ME SECTION -->
-    <div class="page-section" id="me">
-      <div class="hero-greeting">HEY!</div>
-      <section class="terminal-window" data-title="bash: ME (about)">
-        <div class="terminal-header">
-          <span class="shape-green-square"></span>
-          <span class="shape-yellow-circle"></span>
-          <span class="shape-red-arrowhead"></span>
-          <span class="terminal-header-title">bash ~ \me</span>
+    <!-- ACADEMIC MODE MASTHEAD (visible only after pressing A) -->
+    <header class="academic-only" id="academicMasthead">
+      <nav class="am-nav">
+        <div class="am-nav-links">
+          <a href="#resume">Resume</a><span>&middot;</span>
+          <a href="#projects">Projects</a><span>&middot;</span>
+          <a href="notes.html">Notes</a><span>&middot;</span>
+          <a href="simulated.html">Simulations</a>
         </div>
-        <div class="terminal-body">
-          <h1 style="font-size: 4rem; color: var(--green); font-weight: 100;">KALAAP SADHU</h1>
-          <p>MS Mathematics, IISER Kolkata, India</p>
-          <p>Quantitative Finance | Stochastic Calculus | Scientific Computing</p>
-
-          <hr class="contact-divider">
-          <h2><span style="display:inline-block; width:12px; height:12px; background-color: #e6a008; border-radius: 50%; margin-right:8px;"></span>Contact</h2>
-
-          <div class="contact-row">
-            <svg class="contact-icon-svg" viewBox="0 0 24 24">
-              <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-            </svg>
-            <div>
-              <a href="mailto:kalaap.ks@gmail.com"><code>kalaap.ks@gmail.com</code></a> <br>
-              <a href="mailto:ks24mp030@iiserkol.ac.in"><code>ks24mp030@iiserkol.ac.in</code></a>
-            </div>    
-          </div>
-
-          <div class="contact-row">
-            <svg class="contact-icon-svg" viewBox="0 0 24 24">
-              <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
-            </svg>
-            <a href="https://github.com" target="_blank">github.com/kalaapks</a>
-          </div>
-
-          <div class="contact-row">
-            <svg class="contact-icon-svg" viewBox="0 0 24 24">
-              <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.65 1.65 0 1 0 0 3.3 1.65 1.65 0 0 0 0-3.3z"/>
-            </svg>
-            <a href="#" target="_blank">[Profile Link]</a>
-          </div>
+        <div class="am-tools">
+          <button type="button" class="am-edition" id="amThemeBtn" title="Light / dark (L)">Light / Dark</button>
+          <button type="button" class="am-edition" id="exitAcademicBtn" title="Back to the standard view (A)">Academic ed. &times;</button>
         </div>
-      </section>
+      </nav>
+      <div class="am-rule am-rule-thick"></div>
+      <h1 class="am-title">Kalaap Sadhu</h1>
+      <div class="am-rule am-rule-thick"></div>
+
+      <div class="am-intro">
+        <aside class="am-id">
+          <div class="am-monogram">KS</div>
+          <div class="am-id-name">Kalaap Sadhu</div>
+          <div class="am-id-role">MS Mathematics</div>
+          <div class="am-id-org">IISER Kolkata, India</div>
+          <div class="am-id-contact">
+            <a href="mailto:kalaap.ks@gmail.com">kalaap.ks@gmail.com</a>
+            <a href="mailto:ks24mp030@iiserkol.ac.in">ks24mp030@iiserkol.ac.in</a>
+            <span><a href="https://github.com/kalaapks" target="_blank">GitHub</a> &middot; <a href="YOUR_LINKEDIN_URL" target="_blank">LinkedIn</a></span>
+          </div>
+        </aside>
+
+        <div class="am-about">
+          <p>Quantitative Finance, Stochastic Calculus and Scientific Computing. I make visual tools for mathematics: simulations, interactive models and small games that make probability and differential equations easier to see.</p>
+          <p>My MS thesis (IISER Kolkata, 2025&ndash;26) develops stochastic calculus from measure-theoretic foundations and applies it to the Black&ndash;Scholes PDE. Current work covers time series analysis for quantitative finance, numerical approximation of jump-diffusion models, and Markov chain Monte Carlo.</p>
+        </div>
+
+        <aside class="am-highlights">
+          <div class="am-hl-title">Highlights</div>
+          <ul>
+            <li><b>4</b> Research projects</li>
+            <li><b>6</b> Note collections</li>
+            <li><b>4</b> Simulation galleries</li>
+            <li><b>1</b> Interactive game</li>
+          </ul>
+        </aside>
+      </div>
+    </header>
+
+    <!-- 1. HERO: name, fields, tagline, contact icons -- free on the background -->
+    <div class="page-section normal-only" id="me">
+      <div class="hero">
+        <h1 class="hero-name">KALAAP SADHU</h1>
+        <p class="hero-fields"><span>Quantitative Finance</span><span class="sep">|</span><span>Stochastic Calculus</span><span class="sep">|</span><span>Scientific Computing</span></p>
+        <p class="hero-tagline">Making visual tools for Maths</p>
+        <div class="hero-links">
+          <a href="mailto:kalaap.ks@gmail.com" title="Send Email" aria-label="Email"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></a>
+          <span class="bar"></span>
+          <a href="https://github.com/kalaapks" target="_blank" title="GitHub" aria-label="GitHub"><svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg></a>
+          <span class="bar"></span>
+          <a href="YOUR_LINKEDIN_URL" target="_blank" title="LinkedIn" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.65 1.65 0 1 0 0 3.3 1.65 1.65 0 0 0 0-3.3z"/></svg></a>
+        </div>
+      </div>
     </div>
 
     <!-- ========================================================
          2. LIVE GAMES SHOWCASE (AUTOPILOT DEMO & EXTENSIBLE TRACK)
          ======================================================== -->
-    <div class="page-section" id="game-showcase">
+    <!-- <div class="page-section normal-only" id="game-showcase">
       <div class="games-showcase-container">
         <div class="games-carousel-track" id="gamesShowcaseTrack">
 
-          <!-- SLIDE 1: ACTIVE LIVE MONTE CARLO DEMO (Tap to play game1.html) -->
           <a href="game1.html" class="game-demo-slide" title="Click to play Game of Estimation">
             <div class="mini-game-terminal">
               <div class="mini-game-header">
@@ -205,51 +232,13 @@
             </div>
           </a>
 
-          <!-- SLIDE 2: FUTURE GAME 02 PLACEHOLDER (EXTENSIBLE TRACK) -->
-          <!-- 
-          <a href="#" class="game-demo-slide" style="pointer-events: none;" title="Game 02 Coming Soon">
-            <div class="mini-game-terminal" style="opacity: 0.7; border-style: dashed;">
-              <div class="mini-game-header">
-                <span class="shape-green-square"></span>
-                <span class="shape-yellow-circle"></span>
-                <span class="shape-red-arrowhead"></span>
-                <span class="terminal-header-title">bash ~ /games/Game02 [Coming Soon]</span>
-              </div>
-              <div class="mini-game-body" style="grid-template-columns: 1fr; text-align: center; padding: 48px 24px;">
-                <div class="mini-meta-title" style="color: var(--text-muted);">Game 02: Brownian Path Finder</div>
-                <div class="mini-meta-desc">Stochastic random walk simulations through dynamic obstacles. Coming soon!</div>
-              </div>
-            </div>
-          </a>
-          -->
-
-          <!-- SLIDE 3: FUTURE GAME 03 PLACEHOLDER (EXTENSIBLE TRACK) -->
-          <!--
-          <a href="#" class="game-demo-slide" style="pointer-events: none;" title="Game 03 Coming Soon">
-            <div class="mini-game-terminal" style="opacity: 0.7; border-style: dashed;">
-              <div class="mini-game-header">
-                <span class="shape-green-square"></span>
-                <span class="shape-yellow-circle"></span>
-                <span class="shape-red-arrowhead"></span>
-                <span class="terminal-header-title">bash ~ /games/Game03 [Coming Soon]</span>
-              </div>
-              <div class="mini-game-body" style="grid-template-columns: 1fr; text-align: center; padding: 48px 24px;">
-                <div class="mini-meta-title" style="color: var(--text-muted);">Game 03: Markov Chain Maze</div>
-                <div class="mini-meta-desc">Probability state transitions and absorbing boundary puzzles. Coming soon!</div>
-              </div>
-            </div>
-          </a>
-          -->
-
         </div>
         <div class="carousel-nav-hint">
-          <!-- <span>&gt; Live preview</span> -->
           <span>Click to launch game &bull; Scroll right for upcoming modules &rarr;</span>
         </div>
       </div>
-    </div>
-    <div style="height: 5vh;"></div>
-
+    </div> -->
+    <div class="section-gap normal-only"></div>
 
     <!-- 3. RESUME SECTION -->
     <div class="page-section" id="resume">
@@ -261,48 +250,32 @@
           <span class="terminal-header-title">bash ~ \resume</span>
         </div>
         <div class="terminal-body">
-          <h2><span style="display:inline-block; width:12px; height:12px; background-color: var(--green); margin-right:8px;"></span>Resume</h2>
+          <h2><span class="h2-sq"></span>Resume</h2>
 
-          <div style="margin-left: 14px; margin-top: 20px;">
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-              <div style="display: flex; align-items: center; gap: 8px; font-weight: bold; color: var(--text);">
+          <div class="sub-block">
+            <div class="cv-row">
+              <div class="sub-title">
                 <span class="shape-yellow-circle"></span>
                 <span>Curriculum Vitae (CV)</span>
               </div>
-
-              <a href="resume.pdf" download="Kalaap_Sadhu_CV.pdf" title="Download CV (PDF)" style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 8px; border: 1px solid var(--border); border-radius: 4px; background: var(--inner-card-bg); font-size: 0.78rem; color: var(--accent); text-decoration: none;">
-                <svg style="width: 13px; height: 13px; fill: #ff5f56; flex-shrink: 0;" viewBox="0 0 24 24">
-                  <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9.5 8.5h-1v2h1c.55 0 1-.45 1-1s-.45-1-1-1zm6.5 0h-1.5v3H16c.55 0 1-.45 1-1v-1c0-.55-.45-1-1-1zm-6-4.5H6.5v7H8V12h1.5c1.1 0 2-.9 2-2s-.9-2-2-2zm5.5 0h-3v7h3c1.1 0 2-.9 2-2v-3c0-1.1-.9-2-2-2zm6.5 0h-4v7h1.5v-2.5h2V10h-2V8.5h2.5V7z"/>
-                </svg>
+              <a class="pdf-badge" href="resume.pdf" download="Kalaap_Sadhu_CV.pdf" title="Download CV (PDF)">
+                <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9.5 8.5h-1v2h1c.55 0 1-.45 1-1s-.45-1-1-1zm6.5 0h-1.5v3H16c.55 0 1-.45 1-1v-1c0-.55-.45-1-1-1zm-6-4.5H6.5v7H8V12h1.5c1.1 0 2-.9 2-2s-.9-2-2-2zm5.5 0h-3v7h3c1.1 0 2-.9 2-2v-3c0-1.1-.9-2-2-2zm6.5 0h-4v7h1.5v-2.5h2V10h-2V8.5h2.5V7z"/></svg>
                 <span>PDF</span>
               </a>
             </div>
-
-            <p style="margin-left: 18px; margin-top: 4px; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0;">
-              For complete academic details and coursework see CV.
-            </p>
+            <p class="cv-note">For complete academic details and coursework see CV.</p>
           </div>
 
-          <div style="margin-left: 14px; margin-top: 18px; margin-bottom: 20px;">
-            <div style="display: flex; align-items: center; gap: 8px; font-weight: bold; margin-bottom: 8px; color: var(--text);">
+          <div class="sub-block">
+            <div class="sub-title">
               <span class="shape-yellow-circle"></span>
               <span>Current Interests</span>
             </div>
-
-            <div class="card" style="margin-left: 18px; margin-top: 6px; padding: 12px 16px;">
-              <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px;">
-                <li style="display: flex; align-items: center; gap: 10px; margin-bottom: 0;">
-                  <span class="shape-red-arrowhead" style="margin-left: 0; flex-shrink: 0;"></span>
-                  <span>American Option pricing</span>
-                </li>
-                <li style="display: flex; align-items: center; gap: 10px; margin-bottom: 0;">
-                  <span class="shape-red-arrowhead" style="margin-left: 0; flex-shrink: 0;"></span>
-                  <span>Multidimensional Statistical modelling</span>
-                </li>
-                <li style="display: flex; align-items: center; gap: 10px; margin-bottom: 0;">
-                  <span class="shape-red-arrowhead" style="margin-left: 0; flex-shrink: 0;"></span>
-                  <span>Game based on Probability and Maze (like <a href="#games" style="color:var(--accent); font-weight:bold;">Game 1</a>).</span>
-                </li>
+            <div class="card interest-card">
+              <ul class="interest-list">
+                <li><span class="shape-red-arrowhead"></span><span>American Option pricing with discrete dividend return</span></li>
+                <li><span class="shape-red-arrowhead"></span><span>Multidimensional Statistical modelling</span></li>
+                <li><span class="shape-red-arrowhead"></span><span>Game based on Probability and Maze (like <a href="#games">Game 1</a>).</span></li>
               </ul>
             </div>
           </div>
@@ -320,215 +293,137 @@
           <span class="terminal-header-title">bash ~ \projects</span>
         </div>
         <div class="terminal-body">
-          <h2><span style="display:inline-block; width:12px; height:12px; background-color: var(--green); margin-right:8px;"></span>Projects</h2>
+          <h2><span class="h2-sq"></span>Projects</h2>
           <ul>
 
-            <!-- MS Project -->
             <li>
-              <div class="project-title-row"></div>
-              <div style="margin-left: 14px; margin-top: 16px;">
+              <div class="project-head">
                 <div class="project-header-flex">
-                  <span class="shape-yellow-circle" style="margin-right: 6px;"></span> 
-                  <strong class="project-title-text" id="title-ms">Stochastic Calculus and Black Scholes PDE</strong> <br>
+                  <span class="shape-yellow-circle"></span>
+                  <strong class="project-title-text" id="title-ms">Stochastic Calculus and Black Scholes PDE</strong>
                 </div>
-                <div class="project-subtitle"> Under Dr. Anirvan Chakraborty, IISER Kolkata (2025-2026)<a href="https://scholar.google.com/citations?user=8zOX2SoAAAAJ&hl=en" target="_blank" class="scholar-link">[Google Scholar]</a>
-                </div>
+                <div class="project-subtitle">Under Dr. Anirvan Chakraborty, IISER Kolkata (2025-2026)<a href="https://scholar.google.com/citations?user=8zOX2SoAAAAJ&hl=en" target="_blank" class="scholar-link">[Google Scholar]</a></div>
               </div>
-              <span class="tag" style="margin-left: 30px;">MS-Thesis | Stochastic Calculus</span> 
+              <span class="tag">MS-Thesis | Stochastic Calculus</span>
               <div class="card">
-                <span class="shape-red-arrowhead"></span> Lévy and Random-walk construction of Brownian motion and its properties in \(\mathbb{R}^d\).<br> 
+                <span class="shape-red-arrowhead"></span> hhhh<br>
                 <span class="shape-red-arrowhead"></span> Developed stochastic calculus from foundational measure-theoretic concepts and applied it to solve the standard Black-Scholes PDE for European option pricing using Gaussian kernel and Girsanov's risk-neutral measure.<br>
-                                   
+
                 <div class="card-action-switches">
-                  <a href="#" target="_blank">View MS-Thesis</a>
-                  <a class="switch-help" href="mailto:kalaap.ks@gmail.com?subject=Question: MS Thesis" title="Doubts? Tap to mail me">?</a>
-                  <div class="switch-extra" 
-                       onclick="openExtraModal(this, 'title-ms')"      
-                       data-story="<p> >> \(\textbf{The thesis I almost did:}\) <br>I almost picked the <i>Schrödinger equation</i> for my MS-Thesis topic because I wanted to study some particular PDE in details. Well, that could have taken my life in a very different direction I guess.</p> <p> >> \(\textbf{Once there lived a man who could not do simulations:}\) <br>When I did my thesis, I did not know how to do path simulations but my urge to add picture to the thesis led me to draw 100s of paths by hands! <br> You will still find them in the pdf. I never updated that.<br> I am never going to.</p><p> >> \(\textbf{Defeated defender:}\) <br>During my thesis defense, there was a room booking issue and I had to do the presentation in a different room. Naturally, my thesis presentation slides weren't on this room's computer. I tried transferring them over a wire and kept failing. The professors were right infront of me, looking at me and waiting for me to start. In case you've never been part of a defence, I should let you know, this is exactly what a bad start of a presentation looks like! <br> In these hard times, I realized I can simply log into Whatsapp Web on this computer. I had the pdf there. Download it on this device and we will be done. I did that.<br> Immediately.<br> Well, I shouldn't have. What I forgot, amidst all this chaos, was that the computer screen was already being shared and the professors could see it. My friends' texts were visible. And they were, let's just say, <i>not very kindly-worded!!</i> And, with this peaceful and calm mind, I proceeded to defend my thesis. <br> To this date, I think the professors did not notice them. I HAVE to believe that. They did take me up for a paid project later on though ... they must have not seen it then, right?</p>" 
+                  <a href="#" target="_blank" class="report-link">View MS-Thesis</a>
+                  <a class="switch-help" href="mailto:kalaap.ks@gmail.com?subject=Question: MS Thesis" title="Doubts? Tap to mail me" aria-label="Ask a question by email">Q</a>
+                  <div class="switch-extra" role="button" tabindex="0" title="More about this project"
+                       onclick="openExtraModal(this, 'title-ms')"
+                       data-topics="<p>\(\bullet\) Lévy method, Cholesky's Exact construction and Random-walk limit construction of Brownian motion<br>\(\bullet\) Analytic and distributional properties of Brownian motion in \(\mathbb{R}^d\)<br>\(\bullet\) Stochastic calculus built from measure-theoretic foundations<br>\(\bullet\) Gaussian-kernel solution of the Black-Scholes PDE<br>\(\bullet\) Girsanov's theorem and the risk-neutral measure<br>\(\bullet\) European constant volatility 0-dividend call option pricing</p>"
                        data-why="<p> Why Black-Scholes PDE? </p><p> Did you know, there are two types of trade we can do? One is exchange of product. These you see when you do informal exchanges or when you buy something. This is the boring one. <br> The fun one is when You and I can come into contract even when neither one of us actually owns the object we are dealing with. We come into contract such as no matter what happens within 2 months I will fetch you the object in question. </p><p> But many things can go wrong. What if it gets very costly suddenly? I will still be bound by contract. I am bearing a risk, and, for that I would like be compensated. </p><p> What is a fair value for this? How much is this risk worth? How do we account for all that could happen to the cost in future? That is what BS model does. It models the uncertainty in a way that we can tell a fair value today based on future possible payoffs. There are several variants of course depending on what type of contract it is: European call, American put, etc.</p><p> \(\textbf{p.s. :}\) If you can see into future, you do not need such BS model. Yay! Contact me though, we need to talk about Stocks-markets. For research purposes of course. </p>"
-                       data-takeaway="<p> To appreciate this project truly, you need to have had seen Heat Equation modelling and Probability Theory.</p><p> To get the Heat equation we actually use the idea that temperature at a point is the average of the temperature of the neighbouring points in a discrete set up. We extend this to continuous set up to get \(u_{t}=cu_{xx}\). <br> The curious among you, might wonder, if averaging is involved then can we look at the same problem from the lens of Probability using Expectation? Well, you can. It is called the <i>Method of risk-neutral measure</i>.</p><p>That is the main takeaway. How Expectations (under a very specific type of measure) and diffusion are essentially the same thing but from two different perspective!</p>" 
-                       data-branches="<p>Branches & future scopes you can explore.</p><p> \(\bullet\) The Hurst exponent variant in fractional Brownian motion. [I did not explore yet]<br> \(\bullet\) Black-Scholes model in \(\mathbb{R}^d\) that can model multiple risky assets.<br> \(\bullet\) American Options that can be exercised any time before expiration and hence another variable worth of complexity is introduced.<br> \(\bullet\) Jump-Diffusion models that accounts for how stock prices may have jumps.<br> \(\bullet\) Numerical approximate solutions of BS-models.</p>">
-                    <span class="extra-label">extra</span>
-                    <span class="x-box">X</span>
+                       data-takeaway="<p> To appreciate this project truly, you need to have had seen Heat Equation modelling and Probability Theory.</p><p> To get the Heat equation we actually use the idea that temperature at a point is the average of the temperature of the neighbouring points in a discrete set up. We extend this to continuous set up to get \(u_{t}=cu_{xx}\). <br> The curious among you, might wonder, if averaging is involved then can we look at the same problem from the lens of Probability using Expectation? Well, you can. It is called the <i>Method of risk-neutral measure</i>.</p><p>That is the main takeaway. How Expectations (under a very specific type of measure) and diffusion are essentially the same thing but from two different perspective!</p>"
+                       data-branches="<p>Branches & future scopes you can explore.</p><p> \(\bullet\) The Hurst exponent variant in fractional Brownian motion. [I did not explore yet]<br> \(\bullet\) Black-Scholes model in \(\mathbb{R}^d\) that can model multiple risky assets.<br> \(\bullet\) American Options that can be exercised any time before expiration and hence another variable worth of complexity is introduced.<br> \(\bullet\) Jump-Diffusion models that accounts for how stock prices may have jumps.<br> \(\bullet\) Numerical approximate solutions of BS-models.</p>"
+                       data-books=""
+                       data-story="<p> >> \(\textbf{The thesis I almost did:}\) <br>I almost picked the <i>Schrödinger equation</i> for my MS-Thesis topic because I wanted to study some particular PDE in details. Well, that could have taken my life in a very different direction I guess.</p> <p> >> \(\textbf{Once there lived a man who could not do simulations:}\) <br>When I did my thesis, I did not know how to do path simulations but my urge to add picture to the thesis led me to draw 100s of paths by hands! <br> You will still find them in the pdf. I never updated that.<br> I am never going to.</p><p> >> \(\textbf{Defeated defender:}\) <br>During my thesis defense, there was a room booking issue and I had to do the presentation in a different room. Naturally, my thesis presentation slides weren't on this room's computer. I tried transferring them over a wire and kept failing. The professors were right infront of me, looking at me and waiting for me to start. In case you've never been part of a defence, I should let you know, this is exactly what a bad start of a presentation looks like! <br> In these hard times, I realized I can simply log into Whatsapp Web on this computer. I had the pdf there. Download it on this device and we will be done. I did that.<br> Immediately.<br> Well, I shouldn't have. What I forgot, amidst all this chaos, was that the computer screen was already being shared and the professors could see it. My friends' texts were visible. And they were, let's just say, <i>not very kindly-worded!!</i> And, with this peaceful and calm mind, I proceeded to defend my thesis. <br> To this date, I think the professors did not notice them. I HAVE to believe that. They did take me up for a paid project later on though ... they must have not seen it then, right?</p>">
+                    <span class="extra-label">More</span>
+                    <span class="x-box">M</span>
                   </div>
                 </div>
               </div>
             </li>
 
-            <!-- Project 1 -->
             <li>
-              <div class="project-title-row"></div>
-              <div style="margin-left: 14px; margin-top: 16px;">
+              <div class="project-head">
                 <div class="project-header-flex">
-                  <span class="shape-yellow-circle" style="margin-right: 6px;"></span> 
-                  <strong class="project-title-text" id="title-ts">Time Series Analysis for Quantitative Finance</strong><br>
+                  <span class="shape-yellow-circle"></span>
+                  <strong class="project-title-text" id="title-ts">Time Series Analysis for Quantitative Finance</strong>
                 </div>
-                <div class="project-subtitle">
-                  Under Dr. Anirvan Chakraborty, IISER Kolkata (2026)<a href="https://scholar.google.com/citations?user=8zOX2SoAAAAJ&hl=en" target="_blank" class="scholar-link">[Google Scholar]</a>
-                </div>
+                <div class="project-subtitle">Under Dr. Anirvan Chakraborty, IISER Kolkata (2026)<a href="https://scholar.google.com/citations?user=8zOX2SoAAAAJ&hl=en" target="_blank" class="scholar-link">[Google Scholar]</a></div>
               </div>
-              <span class="tag" style="margin-left: 30px;">R Studios | Stochastic Processes</span>
+              <span class="tag">R Studios | Stochastic Processes</span>
               <div class="card">
-                <span class="shape-red-arrowhead"></span> Built interactive <a href="https://kalaapks.github.io/animations.html#anim-AR1">AR(1)</a>, <a href="https://kalaapks.github.io/animations.html#anim-MA1">MA(1)</a>, <a href="https://kalaapks.github.io/animations.html#anim-AR2">AR(2)</a> and <a href="https://kalaapks.github.io/animations.html#anim-MA2">MA(2)</a> models to understand the ARMA(p,q) models. <br>
-                <!-- <span class="shape-red-arrowhead"></span> Blahhh. -->
+                <span class="shape-red-arrowhead"></span> Built interactive <a href="animations.html#anim-AR1">AR(1)</a>, <a href="animations.html#anim-MA1">MA(1)</a>, <a href="animations.html#anim-AR2">AR(2)</a> and <a href="animations.html#anim-MA2">MA(2)</a> models to understand the ARMA(p,q) models.<br>
 
                 <div class="card-action-switches">
-                  <a href="https://kalaapks.github.io/notesStoc.html#table-TSA" target="_blank">Report (ongoing)</a>
-                  <a class="switch-help" href="mailto:kalaap.ks@gmail.com?subject=Question: Time Series" title="Doubts? Tap to mail me">?</a>
-                  <div class="switch-extra" 
-                       onclick="openExtraModal(this, 'title-ts')" 
-                       data-story="" 
-                       data-why="" 
-                       data-takeaway="" 
-                       data-branches="">
-                    <span class="extra-label">extra</span>
-                    <span class="x-box">X</span>
+                  <a href="notesStoc.html#table-TSA" target="_blank" class="report-link">Report (ongoing)</a>
+                  <a class="switch-help" href="mailto:kalaap.ks@gmail.com?subject=Question: Time Series" title="Doubts? Tap to mail me" aria-label="Ask a question by email">Q</a>
+                  <div class="switch-extra" role="button" tabindex="0" title="More about this project"
+                       onclick="openExtraModal(this, 'title-ts')"
+                       data-topics="<p>\(\bullet\) Autoregressive models: AR(1) and AR(2)<br>\(\bullet\) Moving-average models: MA(1) and MA(2)<br>\(\bullet\) ARMA(p,q) models<br>\(\bullet\) Interactive visualisations of each model</p>"
+                       data-why=""
+                       data-takeaway=""
+                       data-branches=""
+                       data-books=""
+                       data-story="">
+                    <span class="extra-label">More</span>
+                    <span class="x-box">M</span>
                   </div>
                 </div>
               </div>
             </li>
 
-            <!-- Project 2 -->
             <li>
-              <div class="project-title-row"></div>
-              <div style="margin-left: 14px; margin-top: 16px;">
+              <div class="project-head">
                 <div class="project-header-flex">
-                  <span class="shape-yellow-circle" style="margin-right: 6px;"></span> 
+                  <span class="shape-yellow-circle"></span>
                   <strong class="project-title-text" id="title-na">Numerical approximation of multi-dimensional Jump-diffusion model for European options</strong>
-                </div>  
-                <div class="project-subtitle">
-                  Under Dr. Rajib Dutta, IISER Kolkata (2026-2027)<a href="https://scholar.google.com/citations?user=tedFiUUAAAAJ&hl=en" target="_blank" class="scholar-link">[Google Scholar]</a>
                 </div>
-              </div>  
-              <span class="tag" style="margin-left: 30px;">Python | Finite Differences</span>
+                <div class="project-subtitle">Under Dr. Rajib Dutta, IISER Kolkata (2026-2027)<a href="https://scholar.google.com/citations?user=tedFiUUAAAAJ&hl=en" target="_blank" class="scholar-link">[Google Scholar]</a></div>
+              </div>
+              <span class="tag">Python | Finite Differences</span>
               <div class="card">
-                <!-- <span class="shape-red-arrowhead"></span> ~summary~ <br>
-                <span class="shape-red-arrowhead"></span> ~summary~ -->
-
                 <div class="card-action-switches">
-                  <a href="#" target="_blank">Report (ongoing)</a>
-                  <a class="switch-help" href="mailto:kalaap.ks@gmail.com?subject=Question: Numerical approx J-D" title="Doubts? Tap to mail me">?</a>
-                  <div class="switch-extra" 
-                       onclick="openExtraModal(this, 'title-na')"      
-                       data-story="" 
-                       data-why="" 
-                       data-takeaway="" 
-                       data-branches="">
-                    <span class="extra-label">extra</span>
-                    <span class="x-box">X</span>
+                  <a href="#" target="_blank" class="report-link">Report (ongoing)</a>
+                  <a class="switch-help" href="mailto:kalaap.ks@gmail.com?subject=Question: Numerical approx J-D" title="Doubts? Tap to mail me" aria-label="Ask a question by email">Q</a>
+                  <div class="switch-extra" role="button" tabindex="0" title="More about this project"
+                       onclick="openExtraModal(this, 'title-na')"
+                       data-topics="<p>\(\bullet\) Multi-dimensional jump-diffusion models<br>\(\bullet\) European option pricing<br>\(\bullet\) Finite-difference numerical approximation</p>"
+                       data-why=""
+                       data-takeaway=""
+                       data-branches=""
+                       data-books=""
+                       data-story="">
+                    <span class="extra-label">More</span>
+                    <span class="x-box">M</span>
                   </div>
                 </div>
               </div>
             </li>
 
-            <!-- Project 3 -->
             <li>
-              <div class="project-title-row"></div>
-              <div style="margin-left: 14px; margin-top: 16px;">
+              <div class="project-head">
                 <div class="project-header-flex">
-                  <span class="shape-yellow-circle" style="margin-right: 6px;"></span> 
-                  <strong class="project-title-text" id="title-MC">Markov Chain Monte Carlo methods</strong> <br>
+                  <span class="shape-yellow-circle"></span>
+                  <strong class="project-title-text" id="title-MC">Markov Chain Monte Carlo methods</strong>
                 </div>
-                <div class="project-subtitle">
-                  Under Dr. Satyaki Mazumder, IISER Kolkata (2026)<a href="https://scholar.google.com/citations?user=4d6qQV0AAAAJ&hl=en" target="_blank" class="scholar-link">[Google Scholar]</a>
-                </div>
+                <div class="project-subtitle">Under Dr. Satyaki Mazumder, IISER Kolkata (2026)<a href="https://scholar.google.com/citations?user=4d6qQV0AAAAJ&hl=en" target="_blank" class="scholar-link">[Google Scholar]</a></div>
               </div>
-              <span class="tag" style="margin-left: 30px;">Python / Probability & Statistics</span>
+              <span class="tag">Python / Probability & Statistics</span>
               <div class="card">
-                <!-- <span class="shape-red-arrowhead"></span> ~summary~ <br>
-                <span class="shape-red-arrowhead"></span> ~summary~ -->
-                              
                 <div class="card-action-switches">
-                  <a href="#" target="_blank">Report (ongoing)</a>
-                  <a class="switch-help" href="mailto:kalaap.ks@gmail.com?subject=Question: Markov Chains" title="Doubts? Tap to mail me">?</a>
-                  <div class="switch-extra" 
-                       onclick="openExtraModal(this, 'title-MC')" 
-                       data-story="" 
-                       data-why="" 
-                       data-takeaway="" 
-                       data-branches="">
-                    <span class="extra-label">extra</span>
-                    <span class="x-box">X</span>
+                  <a href="#" target="_blank" class="report-link">Report (ongoing)</a>
+                  <a class="switch-help" href="mailto:kalaap.ks@gmail.com?subject=Question: Markov Chains" title="Doubts? Tap to mail me" aria-label="Ask a question by email">Q</a>
+                  <div class="switch-extra" role="button" tabindex="0" title="More about this project"
+                       onclick="openExtraModal(this, 'title-MC')"
+                       data-topics=""
+                       data-why=""
+                       data-takeaway=""
+                       data-branches=""
+                       data-books=""
+                       data-story="">
+                    <span class="extra-label">More</span>
+                    <span class="x-box">M</span>
                   </div>
                 </div>
               </div>
             </li>
 
-            <!-- Project 4 -->
-            <!-- <li>
-              <div class="project-title-row"></div>
-              <div style="margin-left: 14px; margin-top: 16px;">
-                <div class="project-header-flex">
-                  <span class="shape-yellow-circle" style="margin-right: 6px;"></span> 
-                  <strong class="project-title-text" id="title-p4">Efficiency of...</strong> <br>
-                </div>
-                <div class="project-subtitle">
-                  Under Dr. Satyaki Mazumder, IISER Kolkata (2026)<a href="https://scholar.google.com/citations?user=4d6qQV0AAAAJ&hl=en" target="_blank" class="scholar-link">[Google Scholar]</a>
-                </div>
-              </div>
-              <span class="tag" style="margin-left: 40px;">Python / Probability & Statistics</span>
-              <div class="card">
-                <span class="shape-red-arrowhead"></span> ~summary~ <br>
-                <span class="shape-red-arrowhead"></span> ~summary~
-                              
-                <div class="card-action-switches">
-                  <a href="#" target="_blank">View Report</a>
-                  <a class="switch-help" href="mailto:kalaap.ks@gmail.com?subject=Question:???? " title="Doubts? Tap to mail me">?</a>
-                  <div class="switch-extra" 
-                       onclick="openExtraModal(this, 'title-p4')" 
-                       data-story="Story about Time Series..." 
-                       data-why="Why Time Series for Quant Finance..." 
-                       data-takeaway="Key takeaway..." 
-                       data-branches="GARCH, ARIMA...">
-                    <span class="extra-label">extra</span>
-                    <span class="x-box">X</span>
-                  </div>
-                </div>
-              </div>
-            </li> -->
-
-            <!-- Project 5 -->
-            <!-- <li>
-              <div class="project-title-row"></div>
-              <div style="margin-left: 14px; margin-top: 16px;">
-                <div class="project-header-flex">
-                  <span class="shape-yellow-circle" style="margin-right: 6px;"></span> 
-                  <strong class="project-title-text" id="title-p5">Geometry of...</strong> <br>
-                </div>
-                <div class="project-subtitle">
-                  Under Dr. Satyaki Mazumder, IISER Kolkata (2026)<a href="https://scholar.google.com/citations?user=4d6qQV0AAAAJ&hl=en" target="_blank" class="scholar-link">[Google Scholar]</a>
-                </div>
-              </div>
-              <span class="tag" style="margin-left: 40px;">Python / Probability & Statistics</span>
-              <div class="card">
-                <span class="shape-red-arrowhead"></span> ~summary~ <br>
-                <span class="shape-red-arrowhead"></span> ~summary~
-                              
-                <div class="card-action-switches">
-                  <a href="#" target="_blank">View Report</a>
-                  <a class="switch-help" href="mailto:kalaap.ks@gmail.com?subject=Question:???? " title="Doubts? Tap to mail me">?</a>
-                  <div class="switch-extra" 
-                       onclick="openExtraModal(this, 'title-p5')" 
-                       data-story="Story about Time Series..." 
-                       data-why="Why Time Series for Quant Finance..." 
-                       data-takeaway="Key takeaway..." 
-                       data-branches="GARCH, ARIMA...">
-                    <span class="extra-label">extra</span>
-                    <span class="x-box">X</span>
-                  </div>
-                </div>
-              </div>
-            </li> -->
-
+            <!-- To add a project: copy one <li> above. Fill data-topics / data-why / data-takeaway /
+                 data-branches / data-books / data-story (empty ones show "Coming soon."). -->
 
           </ul>
         </div>
       </section>
-    </div> 
-    <div style="height: 5vh;"></div>       
+    </div>
+    <div class="section-gap normal-only"></div>
 
     <!-- 5. FUN SECTION -->
-    <div class="page-section" id="fun">
+    <div class="page-section normal-only" id="fun">
       <section class="terminal-window" data-title="bash: The Fun">
         <div class="terminal-header">
           <span class="shape-green-square"></span>
@@ -537,13 +432,13 @@
           <span class="terminal-header-title">bash ~ /fun</span>
         </div>
         <div class="terminal-body">
-          <h2><span style="display:inline-block; width:12px; height:12px; background-color: var(--green); margin-right:8px;"></span>Let there be... Fun</h2>
-          <p style="font-size: 0.88rem; color: var(--text-mutedD); margin-bottom: 12px;">Curated notes, computational graphics, and mini-games created during study & research.</p>
-          
+          <h2><span class="h2-sq"></span>Let there be... Fun</h2>
+          <p class="fun-intro">Curated notes, computational graphics, and mini-games created during study &amp; research.</p>
+
           <div class="fun-grid">
             <a href="notes.html" class="fun-card">
               <div>
-                <div class="fun-card-title">Notes</div>
+                <div class="fun-card-title"><span class="shape-yellow-circle"></span>Notes</div>
                 <div class="fun-card-desc">Typed LaTeX lecture notes (mostly) and geometric proof surveys.</div>
               </div>
               <span class="btn-link" style="margin-top: 14px; text-align: center;">Open Notes &rarr;</span>
@@ -551,25 +446,25 @@
 
             <a href="simulated.html" class="fun-card">
               <div>
-                <div class="fun-card-title">Simulations</div>
+                <div class="fun-card-title"><span class="shape-yellow-circle"></span>Simulations</div>
                 <div class="fun-card-desc">Visualizations of Differential Equations and Stochastic paths.</div>
               </div>
               <span class="btn-link" style="margin-top: 14px; text-align: center;">View Simulations &rarr;</span>
             </a>
           </div>
 
-          <div style="margin-top: 32px; border-top: 1px dashed var(--border); padding-top: 20px;">
-            <div class="fun-card-title" style="font-size: 1.2rem; margin-bottom: 4px;" id="games">Games</div>
-            <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 12px;">Interactive mathematical puzzles and visual estimation experiments.</p>
-            
+          <div class="games-block">
+            <div class="fun-card-title games-title" id="games"><span class="shape-yellow-circle"></span>Games</div>
+            <p class="fun-intro">Interactive mathematical puzzles and visual estimation experiments.</p>
+
             <div class="games-grid">
-              
+
               <!-- Game 01: Active Game of Estimation -->
               <div class="game-box-item">
                 <a href="game1.html" class="game-icon-card" title="Play Game of Estimation">
                   <svg class="game-icon-svg" viewBox="0 0 64 64">
                     <circle cx="32" cy="32" r="24" stroke-width="2.2" stroke-dasharray="3 3"/>
-                    <path d="M 32 8 A 24 24 0 0 1 54 42 L 32 32 Z" fill="rgba(63, 185, 80, 0.35)" stroke-width="2.2"/>
+                    <path d="M 32 8 A 24 24 0 0 1 54 42 L 32 32 Z" fill="rgba(140, 177, 116, 0.35)" stroke-width="2.2"/>
                     <circle cx="24" cy="24" r="1.5" fill="var(--green)"/>
                     <circle cx="28" cy="40" r="1.5" fill="var(--green)"/>
                     <circle cx="40" cy="26" r="1.5" fill="var(--green)"/>
@@ -585,22 +480,22 @@
               <!-- Game 02 Placeholder -->
               <div class="game-box-item">
                 <div class="game-icon-card placeholder" title="Coming Soon">
-                  <span style="font-size: 1.5rem; color: var(--border);">+</span>
+                  <span class="placeholder-plus">+</span>
                 </div>
                 <div class="game-info">
-                  <div class="game-title" style="color: var(--text-muted);">Coming Soon</div>
-                  <div class="game-tags-card" style="opacity: 0.6;">Game 02</div>
+                  <div class="game-title muted">Coming Soon</div>
+                  <div class="game-tags-card dim">Game 02</div>
                 </div>
               </div>
 
               <!-- Game 03 Placeholder -->
               <div class="game-box-item">
                 <div class="game-icon-card placeholder" title="Coming Soon">
-                  <span style="font-size: 1.5rem; color: var(--border);">+</span>
+                  <span class="placeholder-plus">+</span>
                 </div>
                 <div class="game-info">
-                  <div class="game-title" style="color: var(--text-muted);">Coming Soon</div>
-                  <div class="game-tags-card" style="opacity: 0.6;">Game 03</div>
+                  <div class="game-title muted">Coming Soon</div>
+                  <div class="game-tags-card dim">Game 03</div>
                 </div>
               </div>
             </div>
@@ -610,52 +505,54 @@
     </div>
 
     <!-- Controls the gap at the bottom of the home page -->
-    <div style="height: 20vh;"></div>
+    <div class="bottom-gap normal-only"></div>
 
-    <!-- 6. CLEAN INFTAG AT THE BOTTOM -->
-    <div style="text-align: center; margin: 30px auto 40px auto;">
+    <!-- 6. "DID YOU KNOW" NOTES (normal mode only) -->
+    <div class="inftag-wrap normal-only">
       <div class="inftag">
-        Did you know? These background animations are motivated by Probability density ribbons (Fokker-Planck equation). 
+        Did you know? These background animations are motivated by Probability density ribbons (Fokker-Planck equation).
         <a href="notesComp.html#table-PDR" target="_blank">Explore the math &rarr;</a>
       </div>
     </div>
 
-    <div style="text-align: center; margin: 30px auto 40px auto;">
+    <div class="inftag-wrap normal-only">
       <div class="inftag">
-        Also, did you know? The inward moving animation in the bottom-right is motivated by a normalized sink-flow vector field (-x,-y) with some modification that handles simulation at singularity (0,0). 
+        Also, did you know? The inward moving animation in the bottom-right is motivated by a normalized sink-flow vector field (-x,-y) with some modification that handles simulation at singularity (0,0).
         <a href="notesComp.html#table-BbFS" target="_blank">Explore the math &rarr;</a>
       </div>
     </div>
 
   </div>
 
-  <!-- MODAL ARCHITECTURE -->
+  <!-- "MORE" MODAL -->
   <div id="extra-modal-overlay">
-    <div class="extra-window">
+    <div class="extra-window" role="dialog" aria-modal="true" aria-labelledby="modal-project-title">
       <div class="floating-extra-title">
-        E<span class="title-x-box">X</span>TRA<span class="blinking-dot">.</span>
+        <span class="title-x-box">M</span>ORE<span class="blinking-dot">.</span>
       </div>
 
       <div class="extra-header">
         <span id="modal-project-title">Project Title</span>
-        <button class="close-extra-btn" onclick="closeExtraModal()">×</button>
+        <button class="close-extra-btn" onclick="closeExtraModal()" aria-label="Close">×</button>
       </div>
 
       <div class="extra-body">
         <div class="extra-tabs">
-          <div class="extra-tab-link active" data-panel="panel-story">story</div>
+          <div class="extra-tab-link active" data-panel="panel-topics">topics covered</div>
           <div class="extra-tab-link" data-panel="panel-why">why</div>
           <div class="extra-tab-link" data-panel="panel-takeaway">main takeaway</div>
-          <div class="extra-tab-link" data-panel="panel-custom1">branches</div>
-          <div class="extra-tab-link" data-panel="panel-custom2">books</div>
+          <div class="extra-tab-link" data-panel="panel-branches">branches</div>
+          <div class="extra-tab-link" data-panel="panel-books">books</div>
+          <div class="extra-tab-link" data-panel="panel-story">story</div>
         </div>
 
         <div class="extra-content-viewport">
-          <div class="extra-tab-panel active" id="panel-story">story text</div>
-          <div class="extra-tab-panel" id="panel-why">data on why</div>
-          <div class="extra-tab-panel" id="panel-takeaway">takeaway text</div>
-          <div class="extra-tab-panel" id="panel-custom1">text</div>
-          <div class="extra-tab-panel" id="panel-custom2">text</div>
+          <div class="extra-tab-panel active" id="panel-topics"></div>
+          <div class="extra-tab-panel" id="panel-why"></div>
+          <div class="extra-tab-panel" id="panel-takeaway"></div>
+          <div class="extra-tab-panel" id="panel-branches"></div>
+          <div class="extra-tab-panel" id="panel-books"></div>
+          <div class="extra-tab-panel" id="panel-story"></div>
         </div>
 
         <div class="extra-comment-section">
@@ -671,25 +568,24 @@
     </div>
   </div>
 
-
   <!-- Controls the gap at the bottom of the home page -->
-  <div style="height: 30vh;"></div>
+  <div class="footer-gap normal-only"></div>
 
   <!-- FOOTER BANNER -->
-<footer class="site-footer-banner" id="siteFooter">
-  &copy; 2026 Kalaap Sadhu. All rights reserved.
-  <span class="footer-icons">
-    <a href="mailto:kalaap.ks@gmail.com" class="contact-drop-icon" title="Send Email">
-      <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-    </a>
-    <a href="https://github.com/kalaapks" target="_blank" class="contact-drop-icon" title="GitHub">
-      <svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
-    </a>
-    <a href="YOUR_LINKEDIN_URL" target="_blank" class="contact-drop-icon" title="LinkedIn">
-      <svg viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.65 1.65 0 1 0 0 3.3 1.65 1.65 0 0 0 0-3.3z"/></svg>
-    </a>
-  </span>
-</footer>
+  <footer class="site-footer-banner" id="siteFooter">
+    &copy; 2026 Kalaap Sadhu. All rights reserved.
+    <span class="footer-icons">
+      <a href="mailto:kalaap.ks@gmail.com" class="contact-drop-icon" title="Send Email">
+        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+      </a>
+      <a href="https://github.com/kalaapks" target="_blank" class="contact-drop-icon" title="GitHub">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+      </a>
+      <a href="YOUR_LINKEDIN_URL" target="_blank" class="contact-drop-icon" title="LinkedIn">
+        <svg viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.65 1.65 0 1 0 0 3.3 1.65 1.65 0 0 0 0-3.3z"/></svg>
+      </a>
+    </span>
+  </footer>
 
 <script src="js/index.js" defer></script>
 
