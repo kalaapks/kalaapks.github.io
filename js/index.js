@@ -17,6 +17,11 @@
     let ribbonTime = 0;
 
     function animateRibbons() {
+      // Academic mode: no animation at all (canvas is hidden), just idle
+      if (document.body.classList.contains('academic-mode')) {
+        requestAnimationFrame(animateRibbons);
+        return;
+      }
       bgCtx.clearRect(0, 0, bgWidth, bgHeight);
       ribbonTime += 0.005;
 
@@ -44,16 +49,16 @@
 
         bgCtx.lineWidth = 1.1;
         bgCtx.strokeStyle = isLight 
-          ? `rgba(30, 96, 145, ${0.11 + r * 0.025})` 
-          : `rgba(88, 166, 255, ${0.10 + r * 0.025})`;
+          ? `rgba(92, 104, 40, ${0.13 + r * 0.025})` 
+          : `rgba(176, 190, 104, ${0.10 + r * 0.025})`;
         bgCtx.stroke();
 
         bgCtx.lineTo(bgWidth, bgHeight);
         bgCtx.lineTo(0, bgHeight);
         bgCtx.closePath();
         bgCtx.fillStyle = isLight
-          ? `rgba(43, 122, 62, 0.012)`
-          : `rgba(63, 185, 80, 0.012)`;
+          ? `rgba(63, 107, 43, 0.014)`
+          : `rgba(201, 167, 74, 0.014)`;
         bgCtx.fill();
       }
 
@@ -72,7 +77,7 @@
     const flyingKs = document.getElementById('flyingKs');
     const targetBadge = document.getElementById('ksBtn');
 
-    if (sessionStorage.getItem('introPlayed')) {
+    if (sessionStorage.getItem('introPlayed') || document.body.classList.contains('academic-mode')) {
       introOverlay.style.display = 'none';
     } else {
       const phrase = "welcome";
@@ -187,8 +192,8 @@
         }
 
         sinkCtx.fillStyle = document.body.classList.contains('light-mode') 
-          ? `rgba(35, 39, 45, ${opacity * 1.5})` 
-          : `rgba(63, 185, 80, ${opacity})`;
+          ? `rgba(38, 42, 24, ${opacity * 1.5})` 
+          : `rgba(140, 177, 116, ${opacity})`;
 
         sinkCtx.beginPath();
         sinkCtx.arc(x, y, 1.2, 0, Math.PI * 2);
@@ -199,6 +204,11 @@
     for (let i = 0; i < numParticles; i++) particles.push(new Particle());
 
     function animateSink() {
+      // Academic mode: no animation at all (canvas is hidden), just idle
+      if (document.body.classList.contains('academic-mode')) {
+        requestAnimationFrame(animateSink);
+        return;
+      }
       sinkCtx.clearRect(0, 0, sinkCanvas.width, sinkCanvas.height);
       const origin = getSinkOrigin();
 
@@ -363,19 +373,38 @@ requestFloatingUpdate();
     });
 
     /* ========================================================
-       5. THEME TOGGLE & TASK VIEW LOGIC
+       5. MODES (L = light/dark, A = academic), DROPDOWNS, TASK VIEW
        ======================================================== */
-    const themeBtn = document.getElementById('themeBtn');
-    if (localStorage.getItem('site-theme') === 'light') {
-      document.body.classList.add('light-mode');
+    const docBody = document.body;
+
+    function safeStore(key, value) {
+      try { localStorage.setItem(key, value); } catch (e) { /* storage unavailable */ }
     }
 
-    themeBtn.addEventListener('click', () => {
-      document.body.classList.toggle('light-mode');
-      const isLight = document.body.classList.contains('light-mode');
-      localStorage.setItem('site-theme', isLight ? 'light' : 'dark');
+    function toggleTheme() {
+      docBody.classList.toggle('light-mode');
+      safeStore('site-theme', docBody.classList.contains('light-mode') ? 'light' : 'dark');
       renderMiniScene();
-    });
+    }
+
+    function toggleAcademic() {
+      const on = docBody.classList.toggle('academic-mode');
+      safeStore('site-academic', on ? 'on' : 'off');
+      closeTaskView();
+      if (funDropdown) funDropdown.classList.remove('show');
+      if (contactDropdown) contactDropdown.classList.remove('show');
+      window.scrollTo({ top: 0, behavior: 'auto' });
+      if (!on) requestFloatingUpdate();
+    }
+
+    const themeBtn = document.getElementById('themeBtn');
+    themeBtn.addEventListener('click', toggleTheme);
+
+    // Academic-mode masthead buttons (needed on phones, where there is no keyboard)
+    const amThemeBtn = document.getElementById('amThemeBtn');
+    const exitAcademicBtn = document.getElementById('exitAcademicBtn');
+    if (amThemeBtn) amThemeBtn.addEventListener('click', toggleTheme);
+    if (exitAcademicBtn) exitAcademicBtn.addEventListener('click', toggleAcademic);
 
     const funDropdown = document.getElementById('funDropdown');
     const funBtn = document.getElementById('funBtn');
@@ -413,6 +442,7 @@ requestFloatingUpdate();
       });
     }
 
+    /* ---------- Task View (KS) ---------- */
     const ksBtn = document.getElementById('ksBtn');
     const taskViewOverlay = document.getElementById('taskViewOverlay');
     const taskViewGrid = document.getElementById('taskViewGrid');
@@ -423,6 +453,16 @@ requestFloatingUpdate();
       taskViewGrid.innerHTML = '';
       sections.forEach(sec => {
         const title = sec.getAttribute('data-title') || 'Terminal Window';
+
+        // Clone the body, then strip ids / heavy data attributes so the preview
+        // never collides with the real page (e.g. #title-ms, #games).
+        const bodyClone = sec.querySelector('.terminal-body').cloneNode(true);
+        bodyClone.querySelectorAll('[id]').forEach(n => n.removeAttribute('id'));
+        bodyClone.querySelectorAll('[data-topics],[data-why],[data-takeaway],[data-branches],[data-books],[data-story]').forEach(n => {
+          ['data-topics', 'data-why', 'data-takeaway', 'data-branches', 'data-books', 'data-story'].forEach(a => n.removeAttribute(a));
+          n.removeAttribute('onclick');
+        });
+
         const card = document.createElement('div');
         card.className = 'task-preview-card';
         card.innerHTML = `
@@ -430,10 +470,9 @@ requestFloatingUpdate();
             <span class="shape-green-square" style="width:8px; height:8px;"></span>
             <span style="margin-left: 6px;">${title}</span>
           </div>
-          <div class="preview-body-content">
-            ${sec.querySelector('.terminal-body').innerHTML}
-          </div>
+          <div class="preview-body-content"></div>
         `;
+        card.querySelector('.preview-body-content').appendChild(bodyClone);
         card.addEventListener('click', () => {
           closeTaskView();
           setTimeout(() => {
@@ -445,18 +484,22 @@ requestFloatingUpdate();
     }
 
     function openTaskView() {
+      if (docBody.classList.contains('academic-mode')) return;
       buildTaskView();
       isTaskViewActive = true;
       taskViewOverlay.classList.add('active');
-      document.body.classList.add('task-view-active');
+      docBody.classList.add('task-view-active');
       ksBtn.classList.add('active');
+      const scroller = document.getElementById('taskViewScroll');
+      if (scroller) scroller.scrollTop = 0;
     }
 
     function closeTaskView() {
       isTaskViewActive = false;
       taskViewOverlay.classList.remove('active');
-      document.body.classList.remove('task-view-active');
+      docBody.classList.remove('task-view-active');
       ksBtn.classList.remove('active');
+      taskViewGrid.innerHTML = '';
     }
 
     ksBtn.addEventListener('click', () => {
@@ -464,20 +507,58 @@ requestFloatingUpdate();
       else openTaskView();
     });
 
+    // Click on empty space (not on a window or a shortcut chip) closes the view
     taskViewOverlay.addEventListener('click', (e) => {
-      if (e.target === taskViewOverlay) closeTaskView();
+      const chip = e.target.closest('.key-chip');
+      if (chip) {
+        if (chip.dataset.action === 'theme') toggleTheme();
+        else if (chip.dataset.action === 'academic') toggleAcademic();
+        return;
+      }
+      if (!e.target.closest('.task-preview-card')) closeTaskView();
     });
 
+    /* ---------- Keyboard: L = light/dark, A = academic, Esc = close ---------- */
+    function modalIsOpen() {
+      return modalOverlay.classList.contains('is-visible');
+    }
+
     window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && isTaskViewActive) closeTaskView();
+      if (e.key === 'Escape') {
+        if (modalIsOpen()) closeExtraModal();
+        else if (isTaskViewActive) closeTaskView();
+        return;
+      }
+
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+      const t = e.target;
+      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT' || t.isContentEditable)) return;
+      if (modalIsOpen()) return;
+
+      const k = e.key.toLowerCase();
+      if (k === 'l') {
+        toggleTheme();
+      } else if (k === 'a') {
+        toggleAcademic();
+      }
     });
 
     /* ========================================================
-       6. EXTRA MODAL CONTROLS
+       6. "MORE" MODAL CONTROLS
        ======================================================== */
     const modalOverlay = document.getElementById('extra-modal-overlay');
     const modalTitle = document.getElementById('modal-project-title');
     const commentInput = document.getElementById('extra-comment-input');
+
+    // tab panel id  ->  data-attribute on the clicked "M" switch
+    const MORE_PANELS = {
+      'panel-topics': 'topics',
+      'panel-why': 'why',
+      'panel-takeaway': 'takeaway',
+      'panel-branches': 'branches',
+      'panel-books': 'books',
+      'panel-story': 'story'
+    };
 
     function openExtraModal(btn, projectTitleId) {
       const triggeringElement = document.getElementById(projectTitleId);
@@ -487,29 +568,27 @@ requestFloatingUpdate();
 
       commentInput.value = '';
 
-      if (btn) {
-        const storyPanel = document.getElementById('panel-story');
-        const whyPanel = document.getElementById('panel-why');
-        const takeawayPanel = document.getElementById('panel-takeaway');
-        const branchesPanel = document.getElementById('panel-custom1');
+      // Always refill every panel, so one project's text never leaks into another's
+      const filled = [];
+      Object.keys(MORE_PANELS).forEach(panelId => {
+        const panel = document.getElementById(panelId);
+        if (!panel) return;
+        const value = btn && btn.dataset[MORE_PANELS[panelId]];
+        panel.innerHTML = value && value.trim()
+          ? value
+          : '<p class="extra-empty">Coming soon.</p>';
+        filled.push(panel);
+      });
 
-        if (storyPanel && btn.dataset.story) storyPanel.innerHTML = btn.dataset.story;
-        if (whyPanel && btn.dataset.why) whyPanel.innerHTML = btn.dataset.why;
-        if (takeawayPanel && btn.dataset.takeaway) takeawayPanel.innerHTML = btn.dataset.takeaway;
-        if (branchesPanel && btn.dataset.branches) branchesPanel.innerHTML = btn.dataset.branches;
-
-        if (window.MathJax && MathJax.typesetPromise) {
-          MathJax.typesetPromise([storyPanel, whyPanel, takeawayPanel, branchesPanel]);
-        }
+      if (window.MathJax && MathJax.typesetPromise) {
+        MathJax.typesetPromise(filled);
       }
 
-      const allTabs = document.querySelectorAll('.extra-tab-link');
-      const allPanels = document.querySelectorAll('.extra-tab-panel');
-      allTabs.forEach(t => t.classList.remove('active'));
-      allPanels.forEach(p => p.classList.remove('active'));
-
-      const defaultTab = document.querySelector('.extra-tab-link[data-panel="panel-story"]');
-      const defaultPanel = document.getElementById('panel-story');
+      // First tab = "topics covered"
+      document.querySelectorAll('.extra-tab-link').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.extra-tab-panel').forEach(p => p.classList.remove('active'));
+      const defaultTab = document.querySelector('.extra-tab-link[data-panel="panel-topics"]');
+      const defaultPanel = document.getElementById('panel-topics');
       if (defaultTab) defaultTab.classList.add('active');
       if (defaultPanel) defaultPanel.classList.add('active');
 
@@ -519,6 +598,24 @@ requestFloatingUpdate();
     function closeExtraModal() {
       modalOverlay.classList.remove('is-visible');
     }
+
+    // Close when the user clicks anywhere outside the window
+    // (press and release must both happen outside, so text selection that ends outside doesn't close it)
+    let pressStartedOutside = false;
+    modalOverlay.addEventListener('mousedown', (e) => { pressStartedOutside = (e.target === modalOverlay); });
+    modalOverlay.addEventListener('touchstart', (e) => { pressStartedOutside = (e.target === modalOverlay); }, { passive: true });
+    modalOverlay.addEventListener('click', (e) => {
+      if (e.target === modalOverlay && pressStartedOutside) closeExtraModal();
+      pressStartedOutside = false;
+    });
+
+    // Keyboard access for the M switches
+    document.addEventListener('keydown', (e) => {
+      if ((e.key === 'Enter' || e.key === ' ') && e.target && e.target.classList && e.target.classList.contains('switch-extra')) {
+        e.preventDefault();
+        e.target.click();
+      }
+    });
 
     const extraTabsContainer = document.querySelector('.extra-tabs');
     if (extraTabsContainer) {
@@ -604,10 +701,32 @@ requestFloatingUpdate();
       }
     }
 
+    // Palette for the live demo (olive / mustard, theme-aware; refreshed by renderMiniScene)
+    let miniPalette = {};
+
+    function refreshMiniPalette(isLight) {
+      miniPalette = isLight ? {
+        stroke: '#262a18',
+        fill: 'rgba(0, 0, 0, 0.04)',
+        brush: 'rgba(160, 118, 20, 0.55)',
+        proposal: 'rgba(80, 84, 50, 0.28)',
+        hit: '#3f6b2b',
+        miss: 'rgba(184, 69, 47, 0.85)'
+      } : {
+        stroke: '#e2e6d2',
+        fill: 'rgba(255, 255, 255, 0.04)',
+        brush: 'rgba(214, 176, 74, 0.55)',
+        proposal: 'rgba(163, 173, 146, 0.22)',
+        hit: '#8cb174',
+        miss: 'rgba(216, 102, 79, 0.85)'
+      };
+    }
+
     function renderMiniScene() {
       const isLight = document.body.classList.contains('light-mode');
-      const strokeColor = isLight ? '#23272d' : '#c9d1d9';
-      const fillColor = isLight ? 'rgba(0, 0, 0, 0.04)' : 'rgba(255, 255, 255, 0.04)';
+      refreshMiniPalette(isLight);
+      const strokeColor = miniPalette.stroke;
+      const fillColor = miniPalette.fill;
 
       miniShapeCtx.clearRect(0, 0, MW, MH);
       miniMaskCtx.clearRect(0, 0, MW, MH);
@@ -714,7 +833,7 @@ requestFloatingUpdate();
         miniDrawCtx.lineWidth = 18 * S;
         miniDrawCtx.lineCap = 'round';
         miniDrawCtx.lineJoin = 'round';
-        miniDrawCtx.strokeStyle = 'rgba(140, 220, 255, 0.55)';
+        miniDrawCtx.strokeStyle = miniPalette.brush;
 
         miniDrawCtx.beginPath();
         if (currentMiniShape === 'K') {
@@ -762,11 +881,11 @@ requestFloatingUpdate();
           miniMathCtx.arc(pt.x, pt.y, 1.3, 0, Math.PI * 2);
 
           if (!pt.inDom) {
-            miniMathCtx.fillStyle = 'rgba(139, 148, 158, 0.20)'; // Grey proposals
+            miniMathCtx.fillStyle = miniPalette.proposal; // Muted proposals
           } else if (pt.inShd) {
-            miniMathCtx.fillStyle = '#3fb950'; // Vibrant Green hit
+            miniMathCtx.fillStyle = miniPalette.hit; // Green hit
           } else {
-            miniMathCtx.fillStyle = 'rgba(255, 95, 86, 0.85)'; // Bright Red miss
+            miniMathCtx.fillStyle = miniPalette.miss; // Red miss
           }
           miniMathCtx.fill();
         }
