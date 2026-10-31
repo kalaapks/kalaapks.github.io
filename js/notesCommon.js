@@ -7,8 +7,8 @@
 
    TABLE OF CONTENTS
      1. Small helpers (safe storage access)
-     2. Theme toggle (light / dark)
-     3. "Fun" dropdown menu
+     2. Theme toggle (light / dark)  -  also the L key
+     3. Table ids (every table gets a unique id, so #links always work)
      4. "KS" hint tooltip (shown once per page per session)
      5. Contents sidebar + hover preview ("inspect mode")
      6. Sink animation (particles flowing into the S button)
@@ -16,7 +16,7 @@
      8. Startup
 
    ELEMENT IDs THIS SCRIPT EXPECTS IN EVERY PAGE
-     themeBtn, funDropdown, funBtn, ksBtn, ksHintTooltip,
+     themeBtn, gridBtn, ksBtn, ksHintTooltip,
      contentsList, previewCardRight, previewHeaderTitle,
      previewBodyContent, stageOverlay, sinkCanvas, portalSwitch,
      btnJumpTop, btnSharePage, floatingCluster, siteFooter
@@ -52,29 +52,55 @@ if (safeGet(localStorage, 'site-theme') === 'light') {
   document.body.classList.add('light-mode');
 }
 
-themeBtn.addEventListener('click', () => {
+function toggleTheme() {
   document.body.classList.toggle('light-mode');
   const isLight = document.body.classList.contains('light-mode');
   safeSet(localStorage, 'site-theme', isLight ? 'light' : 'dark');
+}
+
+themeBtn.addEventListener('click', toggleTheme);
+
+/* True when a key press should be ignored (typing in a field, or a browser shortcut). */
+function shouldIgnoreKey(e) {
+  if (e.ctrlKey || e.metaKey || e.altKey) return true;
+  const t = e.target;
+  return !!(t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT' || t.isContentEditable));
+}
+
+/* L = light / dark mode */
+document.addEventListener('keydown', (e) => {
+  if (shouldIgnoreKey(e)) return;
+  if (e.key.toLowerCase() === 'l') toggleTheme();
 });
 
 
 /* =====================================================================
-   3. "FUN" DROPDOWN MENU
-   Click the button to open/close. Clicking anywhere else closes it.
+   3. TABLE IDS
+   Every <section class="terminal-window"> needs a unique id so that links
+   like notesComp.html#table-NM land on the right table. The Notes page
+   (Academic mode > Index) builds its links with exactly the same rule, so
+   if you reorder or rename tables, both stay in sync:
+     - missing id        ->  "table-<position>"      (table-1, table-2 ...)
+     - repeated id       ->  "<id>-2", "<id>-3" ...
    ===================================================================== */
 
-const funDropdown = document.getElementById('funDropdown');
-const funBtn = document.getElementById('funBtn');
+(function assignTableIds() {
+  const used = new Set();
+  document.querySelectorAll('.terminal-window').forEach((sec, i) => {
+    let id = sec.id || `table-${i + 1}`;
+    const base = id;
+    let n = 2;
+    while (used.has(id)) id = `${base}-${n++}`;
+    used.add(id);
+    if (sec.id !== id) sec.id = id;
+  });
 
-funBtn.addEventListener('click', (e) => {
-  e.stopPropagation();                 // stop the window click below from instantly closing it
-  funDropdown.classList.toggle('show');
-});
-
-window.addEventListener('click', () => {
-  funDropdown.classList.remove('show');
-});
+  // If we arrived through a link to a table, make sure we are scrolled to it
+  if (window.location.hash.length > 1) {
+    const target = document.getElementById(decodeURIComponent(window.location.hash.slice(1)));
+    if (target) window.addEventListener('load', () => target.scrollIntoView());
+  }
+})();
 
 
 /* =====================================================================
@@ -299,8 +325,8 @@ class Particle {
     if (this.r - R_MIN < 35) opacity *= (this.r - R_MIN) / 35;
 
     ctx.fillStyle = isLight
-      ? `rgba(35, 39, 45, ${opacity * 1.5})`
-      : `rgba(63, 185, 80, ${opacity})`;
+      ? `rgba(38, 42, 24, ${opacity * 1.5})`
+      : `rgba(140, 177, 116, ${opacity})`;
     ctx.beginPath();
     ctx.arc(x, y, 1.2, 0, Math.PI * 2);
     ctx.fill();
@@ -420,18 +446,34 @@ window.addEventListener('load', refreshSinkOrigin);
 
 
 /* ====================================================================
-   9. The background grid control using keyboard G
+   9. BACKGROUND GRIDS: press G or tap the G button in the top bar
+   Rolls through: dots > lines > graph paper > diagonal > large dots >
+   scan lines (grey-brown with dense horizontal lines) > off
    ==================================================================== */
-    const gridModes = ['', 'grid-lines', 'grid-graph', 'grid-diag', 'grid-dots-lg', 'grid-off'];
-let gridIdx = gridModes.indexOf(localStorage.getItem('site-grid') || '');
+const gridModes = ['', 'grid-lines', 'grid-graph', 'grid-diag', 'grid-dots-lg', 'grid-scan', 'grid-off'];
+const gridNames = ['dots', 'lines', 'graph paper', 'diagonal', 'large dots', 'scan lines', 'off'];
+const gridBtn = document.getElementById('gridBtn');
+
+let gridIdx = gridModes.indexOf(safeGet(localStorage, 'site-grid') || '');
 if (gridIdx < 0) gridIdx = 0;
 if (gridModes[gridIdx]) document.body.classList.add(gridModes[gridIdx]);
 
-document.addEventListener('keydown', (e) => {
-  if (e.key.toLowerCase() !== 'g' || e.ctrlKey || e.metaKey || e.altKey) return;
-  if (['INPUT', 'TEXTAREA'].includes(e.target.tagName) || e.target.isContentEditable) return;
-  document.body.classList.remove('grid-lines', 'grid-graph', 'grid-diag', 'grid-dots-lg', 'grid-off');
+function updateGridBtnTitle() {
+  if (gridBtn) gridBtn.title = 'Background grid: ' + gridNames[gridIdx] + ' (click or press G for next)';
+}
+updateGridBtnTitle();
+
+function cycleGrid() {
+  document.body.classList.remove(...gridModes.filter(Boolean));
   gridIdx = (gridIdx + 1) % gridModes.length;
   if (gridModes[gridIdx]) document.body.classList.add(gridModes[gridIdx]);
-  localStorage.setItem('site-grid', gridModes[gridIdx]);
+  safeSet(localStorage, 'site-grid', gridModes[gridIdx]);
+  updateGridBtnTitle();
+}
+
+if (gridBtn) gridBtn.addEventListener('click', cycleGrid);
+
+document.addEventListener('keydown', (e) => {
+  if (shouldIgnoreKey(e)) return;
+  if (e.key.toLowerCase() === 'g') cycleGrid();
 });
