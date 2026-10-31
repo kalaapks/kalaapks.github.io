@@ -7,23 +7,31 @@
   <title>Notes & Resources | Kalaap Sadhu</title>
 
   <!-- Favicon: Exact Signature Circular KS Badge -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 38 38'><circle cx='19' cy='19' r='17' fill='%23161b22' stroke='%233fb950' stroke-width='2'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-family='monospace' font-weight='bold' font-size='14' fill='%233fb950'>KS</text></svg>">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 38 38'><circle cx='19' cy='19' r='17' fill='%231c241a' stroke='%238cb174' stroke-width='2'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-family='monospace' font-weight='bold' font-size='14' fill='%238cb174'>KS</text></svg>">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="css/notes_style.css">
 
 </head>
 <body>
+  <script>
+    (function () {
+      try {
+        if (localStorage.getItem('notes-academic') === 'on') document.body.classList.add('academic-mode');
+      } catch (e) {}
+    })();
+  </script>
 
   <!-- Sticky Top Navigation Bar -->
-  <nav class="top-nav">
+  <nav class="top-nav normal-only">
     <div class="nav-left">
       <button class="ks-badge" id="ksBtn" title="Toggle Floating 3+2 View">KS</button>
       <button class="theme-toggle" id="themeBtn" title="Toggle Light / Dark Mode"> 💡 </button>
-      <a href="index.html#games" class="game-nav-badge" title="Go to Games on Home"> 𝓖 </a>
+      <button class="grid-btn" id="gridBtn" title="Cycle background grid (G)" aria-label="Cycle background grid">G</button>
+      <button class="grid-btn mode-btn" id="academicBtn" title="Academic mode (A)" aria-label="Academic mode">A</button>
     </div>
 
     <div class="nav-links">
@@ -40,22 +48,41 @@
     </div>
   </nav>
 
-  <div class="wall-hint">Floating View: Click any card to open • Esc or KS to exit</div>
+  <div class="wall-hint normal-only">Floating View: Click any card to open • Esc or KS to exit</div>
 
-  <canvas id="sinkCanvas" width="360" height="360"></canvas>
+  <canvas id="sinkCanvas" class="normal-only" width="360" height="360"></canvas>
 
   <div class="container">
-    <div class="notes-intro">
+
+    <!-- ACADEMIC MODE (press A): plain list of the six topics, each with an auto-built Index -->
+    <header class="academic-only" id="academicMasthead">
+      <nav class="am-nav">
+        <div class="am-nav-links">
+          <a href="index.html#me">Home</a><span>&middot;</span>
+          <a href="simulated.html">Simulations</a>
+        </div>
+        <div class="am-tools">
+          <button type="button" class="am-edition" id="amThemeBtn" title="Light / dark (L)">Light / Dark</button>
+          <button type="button" class="am-edition" id="exitAcademicBtn" title="Back to the standard view (A)">Academic ed. &times;</button>
+        </div>
+      </nav>
+      <div class="am-rule am-rule-thick"></div>
+      <h1 class="am-title">Mathematics Notes &amp; Exposition</h1>
+      <div class="am-rule am-rule-thick"></div>
+    </header>
+    <div class="am-topics academic-only" id="amTopics"></div>
+
+    <div class="notes-intro normal-only">
       <h1><span style="display:inline-block; width:14px; height:14px; background-color: var(--green); margin-right:8px;"></span> Mathematics Notes & Exposition</h1>
       <p style="margin-bottom: 25px;">Hey! I would like to recommend that you see the <a href="simulated.html" style="color:var(--accent); font-weight:bold;">Simulations</a> section first. That will give you a flavour of what is to be expected in the following collection of notes curated by me. They are heavily geometrically motivated.</p> 
       <p>The preliminary versions of these were mostly made on a tablet in class during my college days, with sleepy eyes and on the 3rd coffee of the day because classes used to start as early as 8! AND, that is early for me. Do not judge. My friends would tell you I never attended the early morning classes. Do not believe them. They are all undercover spies who want to ruin my good name.</p>
       <p>The LaTeX-version is a work in progress and will be done soon. Definitely. Almost surely positively. Hopefully.</p>
     </div>
 
-    <div class="notes-stack">
+    <div class="notes-stack normal-only">
 
       <!-- 0. Quant -->
-      <a href="notesQuant.html" class="topic-card">
+      <a href="notesQuant.html" class="topic-card" data-key="q">
         <div class="topic-dp">
           <img src="DPs/Quant.png" alt="Quant DP">
         </div>
@@ -64,12 +91,11 @@
             <span class="dot-yellow"></span>
             <span class="topic-title">Quantitative Finance</span>
           </div>
-          <span class="topic-arrow-link">Open Notes ➔</span>
         </div>
       </a>  
 
       <!-- 1. Computing -->
-      <a href="notesComp.html" class="topic-card">
+      <a href="notesComp.html" class="topic-card" data-key="c">
         <div class="topic-dp">
           <img src="DPs/Comp.png" alt="Computing DP">
         </div>
@@ -78,12 +104,11 @@
             <span class="dot-yellow"></span>
             <span class="topic-title">Computing</span>
           </div>
-          <span class="topic-arrow-link">Open Notes ➔</span>
         </div>
       </a>      
       
       <!-- 2. Differential Equations -->
-      <a href="notesDE.html" class="topic-card">
+      <a href="notesDE.html" class="topic-card" data-key="d">
         <div class="topic-dp">
           <img src="DPs/DE.png" alt="Differential Equations DP">
         </div>
@@ -92,12 +117,11 @@
             <span class="dot-yellow"></span>
             <span class="topic-title">Differential Equations</span>
           </div>
-          <span class="topic-arrow-link">Open Notes ➔</span>
         </div>
       </a>
 
       <!-- 3. Probability and Statistics -->
-      <a href="notesPaS.html" class="topic-card">
+      <a href="notesPaS.html" class="topic-card" data-key="p">
         <div class="topic-dp">
           <img src="DPs/PaS.png" alt="Probability and Statistics DP">
         </div> 
@@ -106,12 +130,11 @@
             <span class="dot-yellow"></span>
             <span class="topic-title">Probability and Statistics</span>
           </div>
-          <span class="topic-arrow-link">Open Notes ➔</span>
         </div>
       </a>
 
       <!-- 4. Stochastic Analysis -->
-      <a href="notesStoc.html" class="topic-card">
+      <a href="notesStoc.html" class="topic-card" data-key="s">
         <div class="topic-dp">
           <img src="DPs/Stoc.png" alt="Stochastic Analysis DP"> 
         </div>
@@ -120,12 +143,11 @@
             <span class="dot-yellow"></span>
             <span class="topic-title">Stochastic Analysis & Finance</span>
           </div>
-          <span class="topic-arrow-link">Open Notes ➔</span>
         </div>
       </a>
 
       <!-- 5. Calculus -->
-      <a href="notesCalc.html" class="topic-card">
+      <a href="notesCalc.html" class="topic-card" data-key="m">
         <div class="topic-dp">
           <img src="DPs/Calc.png" alt="Calculus DP">
         </div>
@@ -134,7 +156,6 @@
             <span class="dot-yellow"></span>
             <span class="topic-title">Multivariable Calculus & Optimization</span>
           </div>
-          <span class="topic-arrow-link">Open Notes ➔</span>
         </div>
       </a>
 
@@ -142,7 +163,7 @@
   </div>
 
   <!-- Floating KS Modal Grid Overlay -->
-  <div class="floating-wall-overlay" id="wallOverlay">
+  <div class="floating-wall-overlay normal-only" id="wallOverlay">
     <div class="floating-wall-wrapper">
       
       <div class="floating-row-3">
@@ -222,7 +243,7 @@
   </div>
 
   <!-- FLOATING ACTIONS CLUSTER (Jump, Share, ~ Switch) -->
-  <div class="floating-corner-actions" id="floatingCluster">
+  <div class="floating-corner-actions normal-only" id="floatingCluster">
     <button class="clean-float-btn" id="btnJumpTop" data-tooltip="Jump to top" aria-label="Jump to top">
       <span class="float-arrowhead-icon"></span>
     </button>
@@ -241,7 +262,7 @@
   </div>
 
   <!-- Space spacer before footer -->
-  <div style="height: 17vh;"></div>
+  <div class="normal-only" style="height: 17vh;"></div>
 
   <!-- Footer Banner -->
 <footer class="site-footer-banner" id="siteFooter">
