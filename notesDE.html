@@ -4,17 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>Differential Equations | Kalaap Sadhu</title>
-  <!-- Favicon: Exact Signature Circular KS Badge -->
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 38 38'><circle cx='19' cy='19' r='17' fill='%23161b22' stroke='%233fb950' stroke-width='2'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-family='monospace' font-weight='bold' font-size='14' fill='%233fb950'>KS</text></svg>">
-  
+
+  <!-- Favicon: Signature Circular KS Badge -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 38 38'><circle cx='19' cy='19' r='17' fill='%231c241a' stroke='%238cb174' stroke-width='2'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-family='monospace' font-weight='bold' font-size='14' fill='%238cb174'>KS</text></svg>">
+
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
-  
-  <link rel="stylesheet" href="css/notesCommon.css">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
 
+  <link rel="stylesheet" href="css/notesCommon.css">
 </head>
 <body>
 
@@ -23,23 +23,11 @@
     <div class="nav-left">
       <button class="ks-badge" id="ksBtn" title="Toggle Contents Sidebar">KS</button>
       <div class="ks-hint-tooltip" id="ksHintTooltip">Tap for Content</div>
-      <button class="theme-toggle" id="themeBtn" title="Toggle Light / Dark Mode">💡</button>
-            <!-- Quick G-badge -->
-      <a href="index.html#games" class="game-nav-badge" title="Go to Games on Home"> 𝓖 </a>
+      <button class="theme-toggle" id="themeBtn" title="Toggle Light / Dark Mode (L)">💡</button>
+      <button class="grid-btn" id="gridBtn" title="Cycle background grid (G)" aria-label="Cycle background grid">G</button>
     </div>
     <div class="nav-links">
       <a href="index.html#me" class="nav-btn">HOME</a>
-      <!-- <a href="index.html#resume" class="nav-btn">Resume</a>
-      <a href="index.html#projects" class="nav-btn">Projects</a> -->
-      
-      <div class="dropdown" id="funDropdown">
-        <button class="nav-btn active" id="funBtn">Fun ▾</button>
-        <div class="dropdown-content">
-          <a href="notes.html">> Notes</a>
-          <a href="simulated.html">> Simulations</a>
-          <a href="index.html#fun">> Games</a>
-        </div>
-      </div>
     </div>
   </nav>
 
@@ -68,14 +56,12 @@
 
   <canvas id="sinkCanvas" width="360" height="360"></canvas>
 
-  <!-- <a href="simulated.html" class="sim-portal-switch" id="portalSwitch" title="Go to Simulations">~</a> -->
-
   <div class="container" id="mainContainer">
-    
+
     <!-- 16:9 Banner - Flush to top navbar, rounded bottom -->
     <div class="banner-wrapper">
       <a href="notes.html" class="floating-back-btn">← Back</a>
-      <img src="DPs/DE.png" alt="Differential Equations Banner">
+      <img src="DPs/DE.png" alt="Differential Equations banner">
     </div>
 
     <!-- Title & Description directly beneath banner -->
@@ -84,7 +70,11 @@
       <p>These are some of my most favourite notes, mostly because the geometric treatment of DEs is not done in the standard math books. DEs have been quite an experience for me. Over the course of 4 years, I went through "OH! I understand this now!" and "ohh.. I do not understand this. Again." more times than I would like to admit. ODE was one of the first topics I started turning into geometry heavy notes - handwritten but nevertheless, my first. <br> Happy reading! </p>
     </div>
 
-    <!-- BOX 1: ODE -->
+    <!-- ===== TABLES =====
+         One <section class="terminal-window"> per table. Each table needs a unique id, a data-title and a
+         .doc-link-title (that text is what the Index on the Notes page shows). Reorder or rename freely:
+         the Notes page Index and the CONTENTS sidebar read them from this file automatically. -->
+
     <section id="table-ode" class="terminal-window" data-title="Ordinary Differential Equations (ODE)">
       <div class="terminal-header">
         <div class="header-left">
@@ -96,32 +86,19 @@
       </div>
       <div class="terminal-body">
         <div class="doc-headline-row">
-          <a href="pdf/DE/ODE.pdf" target="_blank" class="doc-link-title">
-            <span class="red-arrow-prompt"></span> Ordinary Differential Equations
-          </a>
+          <a href="pdf/DE/ODE.pdf" target="_blank" class="doc-link-title"><span class="red-arrow-prompt"></span> Ordinary Differential Equations</a>
         </div>
-        <div> 
-          <!-- <a href="pdf/DE/" download class="pdf-download-badge" title="Download PDF">
-            <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-            PDF
-          </a> -->
-          <a href="pdf/DE/ODE.pdf" download class="pdf-download-badge" title="Download PDF">
-            <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-            PDF (Dark)
-          </a>
-          <!-- <a href="pdf/DE/" download class="pdf-download-badge" title="Download PDF">
-            <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-            PDF (Hand)
-          </a> -->
+        <div class="pdf-slots">
+          <span class="pdf-slot pdf-slot-light is-empty" title="PDF: not available yet" aria-label="PDF: not available yet"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path class="ico-page" d="M6.5 2.5h7.6l4.9 4.9V20a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 5 20V4A1.5 1.5 0 0 1 6.5 2.5z"/><path class="ico-fold" d="M14 2.7v4.6h4.6"/><rect class="ico-tag" x="2.5" y="11.5" width="14" height="7" rx="1.3"/><text class="ico-txt" x="9.5" y="16.9" text-anchor="middle">PDF</text></svg></span>
+          <a href="pdf/DE/ODE.pdf" download class="pdf-slot pdf-slot-dark" title="Download PDF (dark)" aria-label="Download PDF (dark)"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path class="ico-page" d="M6.5 2.5h7.6l4.9 4.9V20a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 5 20V4A1.5 1.5 0 0 1 6.5 2.5z"/><path class="ico-fold" d="M14 2.7v4.6h4.6"/><rect class="ico-tag" x="2.5" y="11.5" width="14" height="7" rx="1.3"/><text class="ico-txt" x="9.5" y="16.9" text-anchor="middle">PDF</text></svg></a>
+          <span class="pdf-slot pdf-slot-hand is-empty" title="PDF (handwriting): not available yet" aria-label="PDF (handwriting): not available yet"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path class="ico-page" d="M6.5 2.5h7.6l4.9 4.9V20a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 5 20V4A1.5 1.5 0 0 1 6.5 2.5z"/><path class="ico-fold" d="M14 2.7v4.6h4.6"/><path class="ico-scribble" d="M8 10.5c1.2-1.4 2 1.4 3.2 0s2 1.4 3.2 0"/><path class="ico-scribble" d="M8 14h4"/><path class="ico-pen" d="M13.2 21.3l.7-3.1 5.6-5.6a1.3 1.3 0 0 1 1.9 1.9l-5.6 5.6z"/></svg></span>
         </div>
-        <div style="height: 1vh;"></div>
         <div class="card">
           Existence and uniqueness via Picard-Lindelöf, planar autonomous linear systems, phase portraits, invariant manifolds, and Lyapunov stability criteria.
         </div>
       </div>
     </section>
 
-    <!-- BOX 2: PDE -->
     <section id="table-pde" class="terminal-window" data-title="Partial Differential Equations (PDE)">
       <div class="terminal-header">
         <div class="header-left">
@@ -133,32 +110,19 @@
       </div>
       <div class="terminal-body">
         <div class="doc-headline-row">
-          <a href="pdf/DE/PDE.pdf" target="_blank" class="doc-link-title">
-            <span class="red-arrow-prompt"></span> Partial Differential Equations
-          </a>
+          <a href="pdf/DE/PDE.pdf" target="_blank" class="doc-link-title"><span class="red-arrow-prompt"></span> Partial Differential Equations</a>
         </div>
-        <div> 
-          <!-- <a href="pdf/DE/" download class="pdf-download-badge" title="Download PDF">
-            <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-            PDF
-          </a> -->
-          <a href="pdf/DE/PDE.pdf" download class="pdf-download-badge" title="Download PDF">
-            <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-            PDF (Dark)
-          </a>
-          <!-- <a href="pdf/DE/" download class="pdf-download-badge" title="Download PDF">
-            <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-            PDF (Hand)
-          </a> -->
+        <div class="pdf-slots">
+          <span class="pdf-slot pdf-slot-light is-empty" title="PDF: not available yet" aria-label="PDF: not available yet"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path class="ico-page" d="M6.5 2.5h7.6l4.9 4.9V20a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 5 20V4A1.5 1.5 0 0 1 6.5 2.5z"/><path class="ico-fold" d="M14 2.7v4.6h4.6"/><rect class="ico-tag" x="2.5" y="11.5" width="14" height="7" rx="1.3"/><text class="ico-txt" x="9.5" y="16.9" text-anchor="middle">PDF</text></svg></span>
+          <a href="pdf/DE/PDE.pdf" download class="pdf-slot pdf-slot-dark" title="Download PDF (dark)" aria-label="Download PDF (dark)"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path class="ico-page" d="M6.5 2.5h7.6l4.9 4.9V20a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 5 20V4A1.5 1.5 0 0 1 6.5 2.5z"/><path class="ico-fold" d="M14 2.7v4.6h4.6"/><rect class="ico-tag" x="2.5" y="11.5" width="14" height="7" rx="1.3"/><text class="ico-txt" x="9.5" y="16.9" text-anchor="middle">PDF</text></svg></a>
+          <span class="pdf-slot pdf-slot-hand is-empty" title="PDF (handwriting): not available yet" aria-label="PDF (handwriting): not available yet"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path class="ico-page" d="M6.5 2.5h7.6l4.9 4.9V20a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 5 20V4A1.5 1.5 0 0 1 6.5 2.5z"/><path class="ico-fold" d="M14 2.7v4.6h4.6"/><path class="ico-scribble" d="M8 10.5c1.2-1.4 2 1.4 3.2 0s2 1.4 3.2 0"/><path class="ico-scribble" d="M8 14h4"/><path class="ico-pen" d="M13.2 21.3l.7-3.1 5.6-5.6a1.3 1.3 0 0 1 1.9 1.9l-5.6 5.6z"/></svg></span>
         </div>
-        <div style="height: 1vh;"></div>
         <div class="card">
           Method of characteristics for quasilinear equations, Riemann invariants, shock surfaces, parabolic boundary value problems, and fundamental solutions.
         </div>
       </div>
     </section>
 
-    <!-- BOX 3: Fourier Analysis -->
     <section id="table-fourier" class="terminal-window" data-title="Fourier Analysis & Transforms (FA)">
       <div class="terminal-header">
         <div class="header-left">
@@ -170,72 +134,58 @@
       </div>
       <div class="terminal-body">
         <div class="doc-headline-row">
-          <a href="notes/fourier_analysis.pdf" target="_blank" class="doc-link-title">
-            <span class="red-arrow-prompt"></span> Fourier Analysis & Transforms
-          </a>
+          <a href="notes/fourier_analysis.pdf" target="_blank" class="doc-link-title"><span class="red-arrow-prompt"></span> Fourier Analysis & Transforms</a>
         </div>
-        <div> 
-          <!-- <a href="pdf/DE/" download class="pdf-download-badge" title="Download PDF">
-            <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-            PDF
-          </a> -->
-          <!-- <a href="pdf/DE/.pdf" download class="pdf-download-badge" title="Download PDF">
-            <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-            PDF (Dark)
-          </a> -->
-          <!-- <a href="pdf/DE/" download class="pdf-download-badge" title="Download PDF">
-            <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-            PDF (Hand)
-          </a> -->
+        <div class="pdf-slots">
+          <span class="pdf-slot pdf-slot-light is-empty" title="PDF: not available yet" aria-label="PDF: not available yet"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path class="ico-page" d="M6.5 2.5h7.6l4.9 4.9V20a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 5 20V4A1.5 1.5 0 0 1 6.5 2.5z"/><path class="ico-fold" d="M14 2.7v4.6h4.6"/><rect class="ico-tag" x="2.5" y="11.5" width="14" height="7" rx="1.3"/><text class="ico-txt" x="9.5" y="16.9" text-anchor="middle">PDF</text></svg></span>
+          <span class="pdf-slot pdf-slot-dark is-empty" title="PDF (dark): not available yet" aria-label="PDF (dark): not available yet"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path class="ico-page" d="M6.5 2.5h7.6l4.9 4.9V20a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 5 20V4A1.5 1.5 0 0 1 6.5 2.5z"/><path class="ico-fold" d="M14 2.7v4.6h4.6"/><rect class="ico-tag" x="2.5" y="11.5" width="14" height="7" rx="1.3"/><text class="ico-txt" x="9.5" y="16.9" text-anchor="middle">PDF</text></svg></span>
+          <span class="pdf-slot pdf-slot-hand is-empty" title="PDF (handwriting): not available yet" aria-label="PDF (handwriting): not available yet"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path class="ico-page" d="M6.5 2.5h7.6l4.9 4.9V20a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 5 20V4A1.5 1.5 0 0 1 6.5 2.5z"/><path class="ico-fold" d="M14 2.7v4.6h4.6"/><path class="ico-scribble" d="M8 10.5c1.2-1.4 2 1.4 3.2 0s2 1.4 3.2 0"/><path class="ico-scribble" d="M8 14h4"/><path class="ico-pen" d="M13.2 21.3l.7-3.1 5.6-5.6a1.3 1.3 0 0 1 1.9 1.9l-5.6 5.6z"/></svg></span>
         </div>
-        <div style="height: 1vh;"></div>
         <div class="card">
           Fourier series decompositions, orthogonal projections in \(L^2\), integral transforms, convolution algebra, and spectral solutions to the heat & wave operators.
         </div>
       </div>
     </section>
+
   </div>
 
-  
   <!-- FLOATING ACTIONS CLUSTER (Jump, Share, ~ Switch) -->
-<div class="floating-corner-actions" id="floatingCluster">
-  <button class="clean-float-btn" id="btnJumpTop" data-tooltip="Jump to top" aria-label="Jump to top">
-    <span class="float-arrowhead-icon"></span>
-  </button>
+  <div class="floating-corner-actions" id="floatingCluster">
+    <button class="clean-float-btn" id="btnJumpTop" data-tooltip="Jump to top" aria-label="Jump to top">
+      <span class="float-arrowhead-icon"></span>
+    </button>
 
-  <button class="clean-float-btn" id="btnSharePage" data-tooltip="Share page" aria-label="Share page">
-    <svg class="float-share-icon" viewBox="0 0 24 24">
-      <circle cx="18" cy="5" r="3"></circle>
-      <circle cx="6" cy="12" r="3"></circle>
-      <circle cx="18" cy="19" r="3"></circle>
-      <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-      <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
-    </svg>
-  </button>
+    <button class="clean-float-btn" id="btnSharePage" data-tooltip="Share page" aria-label="Share page">
+      <svg class="float-share-icon" viewBox="0 0 24 24">
+        <circle cx="18" cy="5" r="3"></circle>
+        <circle cx="6" cy="12" r="3"></circle>
+        <circle cx="18" cy="19" r="3"></circle>
+        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+      </svg>
+    </button>
 
-  <!-- Existing ~ Portal Switch with id="portalSwitch" -->
-  <a href="simulated.html" class="sim-portal-switch" id="portalSwitch" title="Simulations"> 𝕾 </a>
-</div>
-
+    <a href="simulated.html" class="sim-portal-switch" id="portalSwitch" title="Simulations"> 𝕾 </a>
+  </div>
 
   <!-- Space spacer before footer -->
   <div style="height: 25vh;"></div>
 
-   <!-- Footer Banner -->
-<footer class="site-footer-banner" id="siteFooter">
-  &copy; 2026 Kalaap Sadhu. All rights reserved.
-  <span class="footer-icons">
-    <a href="mailto:kalaap.ks@gmail.com" class="contact-drop-icon" title="Send Email">
-      <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-    </a>
-    <a href="https://github.com/kalaapks" target="_blank" class="contact-drop-icon" title="GitHub">
-      <svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
-    </a>
-    <a href="YOUR_LINKEDIN_URL" target="_blank" class="contact-drop-icon" title="LinkedIn">
-      <svg viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.65 1.65 0 1 0 0 3.3 1.65 1.65 0 0 0 0-3.3z"/></svg>
-    </a>
-  </span>
-</footer>
+  <!-- Footer Banner -->
+  <footer class="site-footer-banner" id="siteFooter">
+    &copy; 2026 Kalaap Sadhu. All rights reserved.
+    <span class="footer-icons">
+      <a href="mailto:kalaap.ks@gmail.com" class="contact-drop-icon" title="Send Email">
+        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+      </a>
+      <a href="https://github.com/kalaapks" target="_blank" class="contact-drop-icon" title="GitHub">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+      </a>
+      <a href="YOUR_LINKEDIN_URL" target="_blank" class="contact-drop-icon" title="LinkedIn">
+        <svg viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.65 1.65 0 1 0 0 3.3 1.65 1.65 0 0 0 0-3.3z"/></svg>
+      </a>
+    </span>
+  </footer>
 
 <script src="js/notesCommon.js" defer></script>
 
