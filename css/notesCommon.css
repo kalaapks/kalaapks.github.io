@@ -689,8 +689,11 @@ body.ks-inspect-active .contents-sidebar { transform: translateX(0); }
   z-index: 2000;
   box-shadow: 0 4px 20px var(--card-shadow);
   display: none;
-  pointer-events: none;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
 }
+
+.preview-hint-pill:hover { background: var(--green); color: var(--on-green); }
 
 body.ks-inspect-active .preview-hint-pill { display: block; }
 
@@ -881,5 +884,5 @@ body.ks-inspect-active .preview-hint-pill { display: block; }
   }
 
   .preview-card-body { max-height: calc(54vh - 120px); padding: 14px; }
-  .preview-hint-pill { font-size: 0.68rem; padding: 5px 12px; bottom: 12px; }
+  .preview-hint-pill { font-size: 0.68rem; padding: 4px 14px; bottom: 12px; }
 }
