@@ -173,7 +173,12 @@ let isInspectActive = false;
 /* Show one section's content in the preview card and highlight its entry. */
 function renderPreview(sec, idx, title) {
   previewHeaderTitle.textContent = `${idx + 1}. ${title}`;
-  previewBodyContent.innerHTML = sec.querySelector('.terminal-body').innerHTML;
+  // The header above already shows the title, so the copy inside the table is dropped
+  // (it used to appear twice: once numbered in the header, once again in the body).
+  const bodyClone = sec.querySelector('.terminal-body').cloneNode(true);
+  bodyClone.querySelectorAll('.doc-headline-row').forEach(n => n.remove());
+  bodyClone.querySelectorAll('[id]').forEach(n => n.removeAttribute('id'));
+  previewBodyContent.replaceChildren(...bodyClone.childNodes);
   previewCardRight.classList.add('visible');
 
   document.querySelectorAll('.contents-item').forEach(el => el.classList.remove('active'));
@@ -238,6 +243,10 @@ function toggleInspectMode(state) {
 
 ksBtn.addEventListener('click', () => toggleInspectMode());
 stageOverlay.addEventListener('click', () => toggleInspectMode(false));
+
+/* The bottom "Esc" pill is a switch: tapping it leaves KS mode (same as the Esc key). */
+const previewHint = document.getElementById('previewHint');
+if (previewHint) previewHint.addEventListener('click', () => toggleInspectMode(false));
 
 window.addEventListener('keydown', (e) => {
   if (e.key === 'Escape' && isInspectActive) toggleInspectMode(false);
