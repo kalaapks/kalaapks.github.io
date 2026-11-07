@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>2D Visualizations | Kalaap Sadhu</title>
   <!-- Favicon: Exact Signature Circular KS Badge -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 38 38'><circle cx='19' cy='19' r='17' fill='%23161b22' stroke='%233fb950' stroke-width='2'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-family='monospace' font-weight='bold' font-size='14' fill='%233fb950'>KS</text></svg>">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 38 38'><circle cx='19' cy='19' r='17' fill='%231c241a' stroke='%238cb174' stroke-width='2'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-family='monospace' font-weight='bold' font-size='14' fill='%238cb174'>KS</text></svg>">
 
   <!-- Enables the math-lib, triggered by \( \) -->
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="css/sim_23Stoc.css">
 
@@ -24,7 +24,8 @@
     <div class="nav-left">
       <button class="ks-badge" id="ksBtn" title="Toggle 3x5 Wall View">KS</button>
       <div class="ks-hint-tooltip" id="ksHintTooltip">Tap for Content</div>
-      <button class="theme-toggle" id="themeBtn" title="Toggle Light / Dark Mode">💡</button>
+      <button class="theme-toggle" id="themeBtn" title="Toggle Light / Dark Mode (L)">💡</button>
+      <button class="grid-btn" id="gridBtn" title="Cycle background grid (G)" aria-label="Cycle background grid">G</button>
     </div>
     <div class="nav-links">
       <a href="index.html#me" class="nav-btn">HOME</a>
@@ -42,7 +43,9 @@
   </nav>
 
   <!-- Wall Mode Hint Bar -->
-  <div class="wall-hint">Wall Mode: Click any card to inspect • Esc or KS to exit</div>
+  <button type="button" class="wall-hint" id="wallHint" title="Close (Esc)">Esc</button>
+  <div class="wall-fade"></div>
+  <div class="goto-pill" id="gotoPill"></div>
 
   <!-- Outward Source Particle Canvas Behind Home Button -->
   <canvas id="sourceCanvas"></canvas>
@@ -72,7 +75,7 @@
     </div>
 
     <div class="gallery-intro">
-      <h1><span style="display:inline-block; width:15px; height:15px; background-color: #e6a008; border-radius: 50%; margin-right:8px;"></span>2D Geometric Simulations</h1>
+      <h1><span style="display:inline-block; width:15px; height:15px; background-color: var(--yellow-dot); border-radius: 50%; margin-right:8px;"></span>2D Geometric Simulations</h1>
       <p>Slope fields, trajectories, planar characteristic curves, radial heat diffusion boundaries and 2D contours extracted directly from the notes.</p>
     </div>
 
@@ -80,7 +83,7 @@
     <div class="sim-grid" id="simGrid">
 
       <!-- Plot 01 -->
-      <div class="sim-card" id="plot1" data-code-file="simco/DirFldExp.py">
+      <div class="sim-card" id="plot-1" data-code-file="simco/DirFldExp.py">
         <div class="sim-card-header">
           <span class="sim-card-header-title">
             <span class="card-header-arrow"></span> plot_01.png
@@ -98,7 +101,7 @@
       </div>
 
       <!-- Plot 02 -->
-      <div class="sim-card" id="plot2" data-code-file="simco/char2.py">
+      <div class="sim-card" id="plot-2" data-code-file="simco/char2.py">
         <div class="sim-card-header">
           <span class="sim-card-header-title">
             <span class="card-header-arrow"></span> plot_02.png
@@ -116,7 +119,7 @@
       </div>
 
       <!-- Plot 03 -->
-      <div class="sim-card" id="plot3" data-code-file="simco/DirFld.py">
+      <div class="sim-card" id="plot-3" data-code-file="simco/DirFld.py">
         <div class="sim-card-header">
           <span class="sim-card-header-title">
             <span class="card-header-arrow"></span> plot_03.png
@@ -162,7 +165,10 @@
         <div class="lightbox-topbar-title" id="lightboxTitle">
           <span class="card-header-arrow"></span> plot.png
         </div>
-        <button class="lightbox-close-btn" id="lightboxCloseBtn" title="Close (Esc)">&times;</button>
+        <div class="lightbox-topbar-actions">
+          <button class="btn-view-code lightbox-code-btn" id="lightboxCodeBtn" title="View Python code">/.</button>
+          <button class="lightbox-close-btn" id="lightboxCloseBtn" title="Close (Esc)">&times;</button>
+        </div>
       </div>
 
       <button class="lightbox-nav-btn lightbox-prev-btn" id="lightboxPrevBtn" title="Previous (Left Arrow)">&#10094;</button>

@@ -6,7 +6,7 @@
   <title>Animations | Kalaap Sadhu</title>
   
   <!-- Favicon: Exact Signature Circular KS Badge -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 38 38'><circle cx='19' cy='19' r='17' fill='%23161b22' stroke='%233fb950' stroke-width='2'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-family='monospace' font-weight='bold' font-size='14' fill='%233fb950'>KS</text></svg>">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 38 38'><circle cx='19' cy='19' r='17' fill='%231c241a' stroke='%238cb174' stroke-width='2'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-family='monospace' font-weight='bold' font-size='14' fill='%238cb174'>KS</text></svg>">
 
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
@@ -16,7 +16,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="css/animations_style.css">
 </head>
@@ -27,7 +27,8 @@
     <div class="nav-left">
       <button class="ks-badge" id="ksBtn" title="Toggle Contents Sidebar">KS</button>
       <div class="ks-hint-tooltip" id="ksHintTooltip">Tap for Content</div>
-      <button class="theme-toggle" id="themeBtn" title="Toggle Light / Dark Mode"> 💡 </button>
+      <button class="theme-toggle" id="themeBtn" title="Toggle Light / Dark Mode (L)"> 💡 </button>
+      <button class="grid-btn" id="gridBtn" title="Cycle background grid (G)" aria-label="Cycle background grid">G</button>
     </div>
     <div class="nav-links">
       <a href="index.html#me" class="nav-btn">HOME</a>
@@ -64,7 +65,7 @@
     <div class="preview-card-body" id="previewBodyContent"></div>
   </div>
 
-  <div class="preview-hint-pill">Tap/Hover a topic in CONTENTS • Esc or KS to close</div>
+  <button type="button" class="preview-hint-pill" id="previewHint" title="Leave (Esc)">Esc</button>
 
   <!-- Outward Source Particle Canvas Behind Home/Portal Button -->
   <canvas id="sourceCanvas"></canvas>
@@ -73,7 +74,7 @@
     <!-- 16:9 Banner - Flush to top navbar, rounded bottom -->
     <div class="banner-wrapper">
       <a href="notes.html" class="floating-back-btn">← Back</a>
-      <img src="DPs/animdp.png" alt="Differential Equations Banner">
+      <img src="DPs/animdp.png" alt="Animations banner">
     </div>
 
     <!-- <div style="height: 2vh;"></div> 
@@ -82,12 +83,64 @@
     </div> -->
 
     <div class="gallery-intro">
-      <h1><span style="display:inline-block; width:15px; height:15px; background-color: #e6a008; border-radius: 50%; margin-right:8px;"></span>Animated Simulations</h1>
+      <h1><span style="display:inline-block; width:15px; height:15px; background-color: var(--yellow-dot); border-radius: 50%; margin-right:8px;"></span>Animated Simulations</h1>
       <p>Interactive models, mathematical animations, and computational dynamics built using HTML/Canvas, Manim and Three.js.</p>
     </div>
 
-    <!-- BOX 1: Interactive HTML Simulation -->
-    <section id="anim-AR1" class="terminal-window" data-title="AR(1) Interactive window">
+    <!-- ===== GIFS (recorded from the Python libraries) =====
+         Copy one <section class="... gif-card"> to add another. Put the file in anime/gifs/. The gif plays by itself. -->
+    <section id="gif-1" class="terminal-window gif-card" data-title="GIF title 1">
+      <div class="terminal-header">
+        <div class="header-left">
+          <span class="shape-green-square"></span>
+          <span class="shape-yellow-circle"></span>
+          <span class="shape-red-arrowhead"></span>
+        </div>
+        <span class="terminal-header-title">bash ~ Simulations/Animations/GIF/1</span>
+      </div>
+      <div class="terminal-body">
+        <!-- the gif plays on its own, no click needed -->
+        <div class="gif-frame">
+          <span class="gif-placeholder">GIF placeholder<small>anime/gifs/gif-1.gif</small></span>
+          <img src="anime/gifs/gif-1.gif" alt="GIF title 1" loading="lazy" onerror="this.classList.add('is-missing')">
+        </div>
+        <div class="doc-headline-row">
+          <span class="doc-link-title"><span class="red-arrow-prompt"></span> GIF title 1</span>
+        </div>
+        <div class="card">
+          A short write-up about this animation goes here: what it shows, and the Python library used to record it.
+        </div>
+      </div>
+    </section>
+
+    <section id="gif-2" class="terminal-window gif-card" data-title="GIF title 2">
+      <div class="terminal-header">
+        <div class="header-left">
+          <span class="shape-green-square"></span>
+          <span class="shape-yellow-circle"></span>
+          <span class="shape-red-arrowhead"></span>
+        </div>
+        <span class="terminal-header-title">bash ~ Simulations/Animations/GIF/2</span>
+      </div>
+      <div class="terminal-body">
+        <!-- the gif plays on its own, no click needed -->
+        <div class="gif-frame">
+          <span class="gif-placeholder">GIF placeholder<small>anime/gifs/gif-2.gif</small></span>
+          <img src="anime/gifs/gif-2.gif" alt="GIF title 2" loading="lazy" onerror="this.classList.add('is-missing')">
+        </div>
+        <div class="doc-headline-row">
+          <span class="doc-link-title"><span class="red-arrow-prompt"></span> GIF title 2</span>
+        </div>
+        <div class="card">
+          A short write-up about this animation goes here: what it shows, and the Python library used to record it.
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== INTERACTIVE ANIMATIONS =====
+         Clicking anywhere on a table launches it (data-launch). The "/." button shows the source. -->
+
+    <section id="anim-AR1" class="terminal-window anim-table" data-title="AR(1) Interactive window" data-launch="https://kalaapks.github.io/time-series/interactive-models/ar1.html">
       <div class="terminal-header">
         <div class="header-left">
           <span class="shape-green-square"></span>
@@ -98,27 +151,19 @@
       </div>
       <div class="terminal-body">
         <div class="doc-headline-row">
-          <span class="doc-link-title">
-            <span class="red-arrow-prompt"></span> AR(1) Interactive window
-          </span>
+          <a href="https://kalaapks.github.io/time-series/interactive-models/ar1.html" target="_blank" rel="noopener" class="doc-link-title"><span class="red-arrow-prompt"></span> AR(1) Interactive window</a>
         </div>
-        
-        <div class="stack-badge">html | js</div>
-
+        <div class="anim-meta-row">
+          <span class="stack-badge">html | js</span>
+          <button type="button" class="code-view-btn" data-title="AR(1) Source Code" data-file="https://kalaapks.github.io/time-series/interactive-models/ar1.html" title="View Source Code">/.</button>
+        </div>
         <div class="card">
           In the AR-model we have the Persistance parameter (φ) that tells us how significant the previous day is to us today. Adjusting φ shows us the various possibilities of how the consecutive values of the AR(1) Time series evolve over time.
-        </div>
-
-        <div class="anim-action-row">
-          <button type="button" class="code-view-btn" data-title="AR(1) Source Code" data-file="https://kalaapks.github.io/time-series/interactive-models/ar1.html" title="View Source Code">/.</button>
-          <a href="https://kalaapks.github.io/time-series/interactive-models/ar1.html" target="_blank" rel="noopener" class="anim-trigger-btn">
-            Begin Interaction ↗
-          </a>
         </div>
       </div>
     </section>
 
-    <section id="anim-MA1" class="terminal-window" data-title="MA(1) Interactive window">
+    <section id="anim-MA1" class="terminal-window anim-table" data-title="MA(1) Interactive window" data-launch="https://kalaapks.github.io/time-series/interactive-models/ma1.html">
       <div class="terminal-header">
         <div class="header-left">
           <span class="shape-green-square"></span>
@@ -129,27 +174,19 @@
       </div>
       <div class="terminal-body">
         <div class="doc-headline-row">
-          <span class="doc-link-title">
-            <span class="red-arrow-prompt"></span> MA(1) Interactive window
-          </span>
+          <a href="https://kalaapks.github.io/time-series/interactive-models/ma1.html" target="_blank" rel="noopener" class="doc-link-title"><span class="red-arrow-prompt"></span> MA(1) Interactive window</a>
         </div>
-        
-        <div class="stack-badge">html | js</div>
-
+        <div class="anim-meta-row">
+          <span class="stack-badge">html | js</span>
+          <button type="button" class="code-view-btn" data-title="MA(1) Source Code" data-file="https://kalaapks.github.io/time-series/interactive-models/ma1.html" title="View Source Code">/.</button>
+        </div>
         <div class="card">
           In the MA-models we take into account previous error with weightage θ along with the current error. At θ = \(0\) we have pure White noise. Slide the θ bar towards \(1\) to see the White noise evolving into a process with tendancy to have same sign for consecutive values and slide it to \(-1\) to see extreme oscillatory tendancies.
-        </div>
-
-        <div class="anim-action-row">
-          <button type="button" class="code-view-btn" data-title="MA(1) Source Code" data-file="https://kalaapks.github.io/time-series/interactive-models/ma1.html" title="View Source Code">/.</button>
-          <a href="https://kalaapks.github.io/time-series/interactive-models/ma1.html" target="_blank" rel="noopener" class="anim-trigger-btn">
-            Begin Interaction ↗
-          </a>
         </div>
       </div>
     </section>
 
-    <section id="anim-AR2" class="terminal-window" data-title="AR(2) Interactive window">
+    <section id="anim-AR2" class="terminal-window anim-table" data-title="AR(2) Interactive window" data-launch="https://kalaapks.github.io/time-series/interactive-models/ar2.html">
       <div class="terminal-header">
         <div class="header-left">
           <span class="shape-green-square"></span>
@@ -160,27 +197,19 @@
       </div>
       <div class="terminal-body">
         <div class="doc-headline-row">
-          <span class="doc-link-title">
-            <span class="red-arrow-prompt"></span> AR(2) Interactive window
-          </span>
+          <a href="https://kalaapks.github.io/time-series/interactive-models/ar2.html" target="_blank" rel="noopener" class="doc-link-title"><span class="red-arrow-prompt"></span> AR(2) Interactive window</a>
         </div>
-        
-        <div class="stack-badge">html | js</div>
-
+        <div class="anim-meta-row">
+          <span class="stack-badge">html | js</span>
+          <button type="button" class="code-view-btn" data-title="AR(2) Source Code" data-file="https://kalaapks.github.io/time-series/interactive-models/ar2.html" title="View Source Code">/.</button>
+        </div>
         <div class="card">
           In the AR(2) model we have values from previous two days affecting us today. To understand the relationship between \(Y_{t-2}\), \(Y_{t-1}\), and \(Y_{t}\) properly we need to plot all three.
         </div>
-
-        <div class="anim-action-row">
-          <button type="button" class="code-view-btn" data-title="AR(2) Source Code" data-file="https://kalaapks.github.io/time-series/interactive-models/ar2.html" title="View Source Code">/.</button>
-          <a href="https://kalaapks.github.io/time-series/interactive-models/ar2.html" target="_blank" rel="noopener" class="anim-trigger-btn">
-            Begin Interaction ↗
-          </a>
-        </div>
       </div>
     </section>
-    
-    <section id="anim-MA2" class="terminal-window" data-title="MA(2) Interactive window">
+
+    <section id="anim-MA2" class="terminal-window anim-table" data-title="MA(2) Interactive window" data-launch="https://kalaapks.github.io/time-series/interactive-models/ma2.html">
       <div class="terminal-header">
         <div class="header-left">
           <span class="shape-green-square"></span>
@@ -191,27 +220,19 @@
       </div>
       <div class="terminal-body">
         <div class="doc-headline-row">
-          <span class="doc-link-title">
-            <span class="red-arrow-prompt"></span> MA(2) Interactive window
-          </span>
+          <a href="https://kalaapks.github.io/time-series/interactive-models/ma2.html" target="_blank" rel="noopener" class="doc-link-title"><span class="red-arrow-prompt"></span> MA(2) Interactive window</a>
         </div>
-        
-        <div class="stack-badge">html | js</div>
-
+        <div class="anim-meta-row">
+          <span class="stack-badge">html | js</span>
+          <button type="button" class="code-view-btn" data-title="MA2 Source Code" data-file="https://kalaapks.github.io/time-series/interactive-models/ma2.html" title="View Source Code">/.</button>
+        </div>
         <div class="card">
           MA(2) models take into two previous errors with weight θ₁ and θ₂. This is also in \(3\)-D like the AR(2) Interactive window but note that the Covariance ellipsoid behave differently for MA and AR processes.
-        </div>
-
-        <div class="anim-action-row">
-          <button type="button" class="code-view-btn" data-title="MA2 Source Code" data-file="https://kalaapks.github.io/time-series/interactive-models/ma2.html" title="View Source Code">/.</button>
-          <a href="https://kalaapks.github.io/time-series/interactive-models/ma2.html" target="_blank" rel="noopener" class="anim-trigger-btn">
-            Begin Interaction ↗
-          </a>
         </div>
       </div>
     </section>
 
-    <section id="anim-ribbons" class="terminal-window" data-title="Ribbons Dynamics">
+    <section id="anim-ribbons" class="terminal-window anim-table" data-title="Ribbons Dynamics" data-launch="anime/ribbons.html">
       <div class="terminal-header">
         <div class="header-left">
           <span class="shape-green-square"></span>
@@ -222,28 +243,20 @@
       </div>
       <div class="terminal-body">
         <div class="doc-headline-row">
-          <span class="doc-link-title">
-            <span class="red-arrow-prompt"></span> Fokker-Planck probability ribbons
-          </span>
+          <a href="anime/ribbons.html" target="_blank" rel="noopener" class="doc-link-title"><span class="red-arrow-prompt"></span> Fokker-Planck probability ribbons</a>
         </div>
-        
-        <div class="stack-badge">html | js</div>
-
+        <div class="anim-meta-row">
+          <span class="stack-badge">html | js</span>
+          <button type="button" class="code-view-btn" data-title="Ribbons Source Code" data-file="anime/ribbons.html" title="View Source Code">/.</button>
+        </div>
         <div class="card">
           Autonomous particle strands propagating across a sinusoidal velocity field rendered in real-time on HTML5 canvas.
-        </div>
-
-        <div class="anim-action-row">
-          <button type="button" class="code-view-btn" data-title="Ribbons Source Code" data-file="anime/ribbons.html" title="View Source Code">/.</button>
-          <a href="anime/ribbons.html" target="_blank" rel="noopener" class="anim-trigger-btn">
-            Launch Simulation ↗
-          </a>
         </div>
       </div>
     </section>
 
-    <!-- BOX 2: Python / Manim Animation -->
-    <!-- <section id="anim-manim" class="terminal-window" data-title="Brownian Motion (Manim)">
+    <!-- DRAFT (uncomment to use)
+    <section id="anim-manim" class="terminal-window anim-table" data-title="Brownian Motion (Manim)" data-media-type="video" data-media-src="anime/brownian.mp4" data-media-title="Brownian Motion Paths (Manim)">
       <div class="terminal-header">
         <div class="header-left">
           <span class="shape-green-square"></span>
@@ -254,28 +267,21 @@
       </div>
       <div class="terminal-body">
         <div class="doc-headline-row">
-          <span class="doc-link-title">
-            <span class="red-arrow-prompt"></span> Brownian Motion Paths
-          </span>
+          <span class="doc-link-title"><span class="red-arrow-prompt"></span> Brownian Motion Paths</span>
         </div>
-        
-        <div class="stack-badge">{python, manim}</div>
-
+        <div class="anim-meta-row">
+          <span class="stack-badge">{python, manim}</span>
+          <button type="button" class="code-view-btn" data-title="Manim Python Script" data-file="anime/brownian.py" title="View Source Code">/.</button>
+        </div>
         <div class="card">
           Filtration trajectories and sample paths for 1D standard Brownian motion with Martingale stopping envelopes.
         </div>
-
-        <div class="anim-action-row">
-          <button type="button" class="code-view-btn" data-title="Manim Python Script" data-file="anime/brownian.py" title="View Source Code">/.</button>
-          <button type="button" class="anim-trigger-btn media-modal-trigger" data-type="video" data-src="anime/brownian.mp4" data-title="Brownian Motion Paths (Manim)">
-            Play Animation ▶
-          </button>
-        </div>
       </div>
-    </section> -->
+    </section>
+    -->
 
-    <!-- BOX 3: Three.js WebGL Project -->
-    <!-- <section id="anim-three" class="terminal-window" data-title="Stochastic Volatility Manifold">
+    <!-- DRAFT (uncomment to use)
+    <section id="anim-three" class="terminal-window anim-table" data-title="Stochastic Volatility Manifold" data-launch="anime/vol_surface.html">
       <div class="terminal-header">
         <div class="header-left">
           <span class="shape-green-square"></span>
@@ -286,28 +292,21 @@
       </div>
       <div class="terminal-body">
         <div class="doc-headline-row">
-          <span class="doc-link-title">
-            <span class="red-arrow-prompt"></span> Volatility Surface Manifold
-          </span>
+          <a href="anime/vol_surface.html" target="_blank" rel="noopener" class="doc-link-title"><span class="red-arrow-prompt"></span> Volatility Surface Manifold</a>
         </div>
-        
-        <div class="stack-badge">{three.js, webgl}</div>
-
+        <div class="anim-meta-row">
+          <span class="stack-badge">{three.js, webgl}</span>
+          <button type="button" class="code-view-btn" data-title="Three.js Shader Code" data-file="anime/vol_surface.js" title="View Source Code">/.</button>
+        </div>
         <div class="card">
           Interactive WebGL parametric mesh depicting implied volatility smile geometries under the Heston model dynamics.
         </div>
-
-        <div class="anim-action-row">
-          <button type="button" class="code-view-btn" data-title="Three.js Shader Code" data-file="anime/vol_surface.js" title="View Source Code">/.</button>
-          <a href="anime/vol_surface.html" target="_blank" rel="noopener" class="anim-trigger-btn">
-            Open WebGL ↗
-          </a>
-        </div>
       </div>
-    </section> -->
+    </section>
+    -->
 
-    <!-- BOX 4: Blender Physics Render -->
-    <!-- <section id="anim-blender" class="terminal-window" data-title="Three-Body Problem">
+    <!-- DRAFT (uncomment to use)
+    <section id="anim-blender" class="terminal-window anim-table" data-title="Three-Body Problem" data-media-type="video" data-media-src="anime/three_body.mp4" data-media-title="3-Body Gravitational Choreography (Cycles)">
       <div class="terminal-header">
         <div class="header-left">
           <span class="shape-green-square"></span>
@@ -318,26 +317,18 @@
       </div>
       <div class="terminal-body">
         <div class="doc-headline-row">
-          <span class="doc-link-title">
-            <span class="red-arrow-prompt"></span> 3-Body Gravitational Choreography
-          </span>
+          <span class="doc-link-title"><span class="red-arrow-prompt"></span> 3-Body Gravitational Choreography</span>
         </div>
-        
-        <div class="stack-badge">{blender, cycles}</div>
-
+        <div class="anim-meta-row">
+          <span class="stack-badge">{blender, cycles}</span>
+          <button type="button" class="code-view-btn" data-title="Blender Python Setup" data-file="anime/three_body.py" title="View Source Code">/.</button>
+        </div>
         <div class="card">
           Symplectic integration of chaotic 3-body gravitational orbits rendered via Blender Cycles ray-tracing.
         </div>
-
-        <div class="anim-action-row">
-          <button type="button" class="code-view-btn" data-title="Blender Python Setup" data-file="anime/three_body.py" title="View Source Code">/.</button>
-          <button type="button" class="anim-trigger-btn media-modal-trigger" data-type="video" data-src="anime/three_body.mp4" data-title="3-Body Gravitational Choreography (Cycles)">
-            Watch Render ▶
-          </button>
-        </div>
       </div>
-    </section> -->
-
+    </section>
+    -->
   </div>
 
   <!-- FLOATING ACTIONS CLUSTER (Jump, Share, ~ Switch) -->
@@ -406,27 +397,45 @@
   </div>
 
   <script>
-    // Theme Engine
-    const themeBtn = document.getElementById('themeBtn');
-    if (localStorage.getItem('site-theme') === 'light') {
-      document.body.classList.add('light-mode');
-    }
-    themeBtn.addEventListener('click', () => {
-      document.body.classList.toggle('light-mode');
-      const isLight = document.body.classList.contains('light-mode');
-      localStorage.setItem('site-theme', isLight ? 'light' : 'dark');
-    });
 
-    // Dropdown Navigation
-    const funDropdown = document.getElementById('funDropdown');
-    const funBtn = document.getElementById('funBtn');
-    funBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      funDropdown.classList.toggle('show');
-    });
-    window.addEventListener('click', () => {
-      if (funDropdown.classList.contains('show')) funDropdown.classList.remove('show');
-    });
+function safeGet(key) {
+  try { return localStorage.getItem(key); } catch (e) { return null; }
+}
+function safeSet(key, value) {
+  try { localStorage.setItem(key, value); } catch (e) { /* storage unavailable */ }
+}
+
+/* True when a key press should be ignored (typing in a field, or a browser shortcut). */
+function shouldIgnoreKey(e) {
+  if (e.ctrlKey || e.metaKey || e.altKey) return true;
+  const t = e.target;
+  return !!(t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT' || t.isContentEditable));
+}
+
+// Theme: light / dark (also the L key)
+const themeBtn = document.getElementById('themeBtn');
+if (safeGet('site-theme') === 'light') {
+  document.body.classList.add('light-mode');
+}
+
+function toggleTheme() {
+  document.body.classList.toggle('light-mode');
+  safeSet('site-theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+}
+themeBtn.addEventListener('click', toggleTheme);
+
+// Dropdown Navigation
+const funDropdown = document.getElementById('funDropdown');
+const funBtn = document.getElementById('funBtn');
+if (funBtn && funDropdown) {
+  funBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    funDropdown.classList.toggle('show');
+  });
+  window.addEventListener('click', () => {
+    if (funDropdown.classList.contains('show')) funDropdown.classList.remove('show');
+  });
+}
 
     // ========================================================
     // 6-SECOND KS HINT TOOLTIP (PAGE-SPECIFIC SESSION STORAGE)
@@ -476,7 +485,13 @@
 
     function renderPreview(sec, idx, title) {
       previewHeaderTitle.textContent = `${idx + 1}. ${title}`;
-      previewBodyContent.innerHTML = sec.querySelector('.terminal-body').innerHTML;
+
+      // The header above already shows the title, so the copy inside the table is dropped.
+      // Everything else stays, including the <img> of a gif card, which keeps playing.
+      const bodyClone = sec.querySelector('.terminal-body').cloneNode(true);
+      bodyClone.querySelectorAll('.doc-headline-row').forEach(n => n.remove());
+      bodyClone.querySelectorAll('[id]').forEach(n => n.removeAttribute('id'));
+      previewBodyContent.replaceChildren(...bodyClone.childNodes);
       previewCardRight.classList.add('visible');
 
       document.querySelectorAll('.contents-item').forEach(el => el.classList.remove('active'));
@@ -540,6 +555,10 @@
     ksBtn.addEventListener('click', () => toggleInspectMode());
     stageOverlay.addEventListener('click', () => toggleInspectMode(false));
 
+    // The bottom "Esc" pill is a switch: tapping it leaves KS mode (same as the Esc key)
+    const previewHint = document.getElementById('previewHint');
+    if (previewHint) previewHint.addEventListener('click', () => toggleInspectMode(false));
+
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         if (isInspectActive) toggleInspectMode(false);
@@ -602,8 +621,8 @@
         else if (R_max - this.r < 45) opacity *= (R_max - this.r) / 45;
 
         srcCtx.fillStyle = document.body.classList.contains('light-mode')
-          ? `rgba(35, 39, 45, ${opacity * 1.5})`
-          : `rgba(63, 185, 80, ${opacity})`;
+          ? `rgba(38, 42, 24, ${opacity * 1.5})`
+          : `rgba(140, 177, 116, ${opacity})`;
         srcCtx.beginPath();
         srcCtx.arc(x, y, 1.25, 0, Math.PI * 2);
         srcCtx.fill();
@@ -780,23 +799,80 @@
       mediaModal.classList.add('open');
     });
 
-    /* ========================================================
-       FEATURE: The background grid control using keyboard G
-       ======================================================== */
-    const gridModes = ['', 'grid-lines', 'grid-graph', 'grid-diag', 'grid-dots-lg', 'grid-off'];
-let gridIdx = gridModes.indexOf(localStorage.getItem('site-grid') || '');
+
+/* ====================================================================
+   BACKGROUND GRIDS: press G or tap the G button in the top bar
+   Rolls through: dots > lines > graph paper > diagonal > large dots >
+   scan lines (grey-brown with dense horizontal lines) > off
+   ==================================================================== */
+const gridModes = ['', 'grid-lines', 'grid-graph', 'grid-diag', 'grid-dots-lg', 'grid-scan', 'grid-off'];
+const gridNames = ['dots', 'lines', 'graph paper', 'diagonal', 'large dots', 'scan lines', 'off'];
+const gridBtn = document.getElementById('gridBtn');
+
+let gridIdx = gridModes.indexOf(safeGet('site-grid') || '');
 if (gridIdx < 0) gridIdx = 0;
 if (gridModes[gridIdx]) document.body.classList.add(gridModes[gridIdx]);
 
-document.addEventListener('keydown', (e) => {
-  if (e.key.toLowerCase() !== 'g' || e.ctrlKey || e.metaKey || e.altKey) return;
-  if (['INPUT', 'TEXTAREA'].includes(e.target.tagName) || e.target.isContentEditable) return;
-  document.body.classList.remove('grid-lines', 'grid-graph', 'grid-diag', 'grid-dots-lg', 'grid-off');
+function updateGridBtnTitle() {
+  if (gridBtn) gridBtn.title = 'Background grid: ' + gridNames[gridIdx] + ' (click or press G for next)';
+}
+updateGridBtnTitle();
+
+function cycleGrid() {
+  document.body.classList.remove(...gridModes.filter(Boolean));
   gridIdx = (gridIdx + 1) % gridModes.length;
   if (gridModes[gridIdx]) document.body.classList.add(gridModes[gridIdx]);
-  localStorage.setItem('site-grid', gridModes[gridIdx]);
+  safeSet('site-grid', gridModes[gridIdx]);
+  updateGridBtnTitle();
+}
+
+if (gridBtn) gridBtn.addEventListener('click', cycleGrid);
+
+
+/* L = light / dark, G = next grid */
+document.addEventListener('keydown', (e) => {
+  if (shouldIgnoreKey(e)) return;
+  const k = e.key.toLowerCase();
+  if (k === 'l') toggleTheme();
+  else if (k === 'g') cycleGrid();
 });
 
+/* ====================================================================
+   Clicking anywhere on an animation table launches it
+   (links, the "/." button and the contents mode are left alone)
+   ==================================================================== */
+document.addEventListener('click', (e) => {
+  const table = e.target.closest('.anim-table');
+  if (!table || document.body.classList.contains('ks-inspect-active')) return;
+  if (e.target.closest('a') || e.target.closest('.code-view-btn')) return;
+
+  const media = table.getAttribute('data-media-src');
+  if (media) {
+    mediaModalTitle.textContent = table.getAttribute('data-media-title') || 'Animation Playback';
+    mediaModalContent.innerHTML = table.getAttribute('data-media-type') === 'image'
+      ? `<img src="${media}" alt="" style="width:100%; height:auto; display:block;">`
+      : `<video controls autoplay loop playsinline style="width:100%; height:auto; display:block;"><source src="${media}" type="video/mp4"></video>`;
+    mediaModal.classList.add('open');
+    return;
+  }
+
+  const url = table.getAttribute('data-launch');
+  if (url) window.open(url, '_blank', 'noopener');
+});
+
+/* ====================================================================
+   Arriving through a link like animations.html#anim-AR1 (the Index on the
+   Simulations page): scroll to that table and flash it.
+   ==================================================================== */
+function highlightFromHash() {
+  if (window.location.hash.length < 2) return;
+  const target = document.getElementById(decodeURIComponent(window.location.hash.slice(1)));
+  if (!target) return;
+  target.scrollIntoView({ block: 'center' });
+  target.classList.add('flash');
+  setTimeout(() => target.classList.remove('flash'), 2200);
+}
+window.addEventListener('load', highlightFromHash);
   </script>
 
 </body>
