@@ -1,58 +1,85 @@
-@font-face {
-      font-family: 'AlgolRevived';
-      src: url('AlgolRevived-Regular.ttf') format('truetype'),
-           url('AlgolRevived-Medium.ttf') format('truetype');
-      font-weight: normal;
-      font-style: normal;
-      font-display: swap;
-    }
+/* ==========================================================================
+   Same palette and fonts as the rest of the site: deep forest green, olive,
+   dark mustard, cream text.  Fonts: IBM Plex Mono (terminal chrome) +
+   Source Serif 4 (prose).
+   ========================================================================== */
 
-    :root {
-      --page-bg-top: #050b14;
-      --page-bg-bottom: #0a192f;
-      --card-bg: #161b22;
-      --terminal-header: #0d1117;
-      --inner-card-bg: #0d1117;
-      --border: #30363d;
-      --text: #c9d1d9;
-      --text-muted: #8b949e;
-      --green: #3fb950;
-      --accent: #58a6ff;
-      --card-shadow: rgba(0, 0, 0, 0.6);
-      --term-bg: #090d13;
-      --term-header: #161b22;
-      --syntax-keyword: #ff7b72;
-      --syntax-string: #a5d6ff;
-      --syntax-comment: #8b949e;
-      --syntax-fn: #d2a8ff;
-      --syntax-num: #79c0ff;
-    }
+:root {
+  --font-mono: 'IBM Plex Mono', 'Courier Prime', 'Fira Code', Consolas, monospace;
+  --font-serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
 
+  --page-bg-top: #121910;
+  --page-bg-bottom: #1b2619;
+  --page-glow: #27341f;
+  --glint: rgba(112, 90, 42, 0.30);
+  --card-bg: #1c241a;
+  --panel-bg: rgba(28, 36, 26, 0.55);
+  --terminal-header: #141a13;
+  --inner-card-bg: #161d15;
+  --border: #35412f;
+  --border-soft: #2b3627;
+  --text: #e2e6d2;
+  --text-strong: #eef0dc;
+  --text-muted: #a2ac90;
+  --green: #8cb174;
+  --green-rgb: 140, 177, 116;
+  --accent: #c9a74a;
+  --accent-rgb: 201, 167, 74;
+  --yellow-dot: #cfa73a;
+  --red: #d8664f;
+  --on-green: #121810;
+  --nav-bg: rgba(16, 22, 15, 0.86);
+  --overlay-bg: rgba(12, 17, 11, 0.72);
+  --overlay-bg-strong: rgba(8, 12, 7, 0.9);
+  --card-shadow: rgba(0, 0, 0, 0.55);
 
-    body.light-mode {
-  --page-bg-top: #e8dbb0;
-  --page-bg-bottom: #d6c48e;
-  --page-glow: #f1e7c4;
-  --card-bg: #efe5c2;
-  --terminal-header: #dccb95;
-  --inner-card-bg: #f6eed3;
-  --border: #b9a56b;
-  --text: #2a2616;
-  --text-muted: #5f5429;
-  --green: #23652f;
-  --accent: #1e6091;
-  --card-shadow: rgba(90, 70, 20, 0.18);
-  --term-bg: #1f242c;
-  --term-header: #161a20;
+  --term-bg: #0b100a;
+  --term-header: #141a13;
+  --code-bg: #0b100a;
+  --syntax-keyword: #e0816b;
+  --syntax-string: #a9c98f;
+  --syntax-comment: #8d9880;
+  --syntax-fn: #d9b96a;
+  --syntax-num: #cdd6a0;
+}
+
+body.light-mode {
+  --page-bg-top: #e4e2be;
+  --page-bg-bottom: #cecc9e;
+  --page-glow: #f1efd2;
+  --glint: rgba(190, 160, 80, 0.25);
+  --card-bg: #ecead1;
+  --panel-bg: rgba(236, 234, 209, 0.6);
+  --terminal-header: #d9d6aa;
+  --inner-card-bg: #f6f4e0;
+  --border: #b3ad78;
+  --border-soft: #c4bf8c;
+  --text: #262a18;
+  --text-strong: #1b1f10;
+  --text-muted: #5a5c35;
+  --green: #3f6b2b;
+  --green-rgb: 63, 107, 43;
+  --accent: #8a6a10;
+  --accent-rgb: 138, 106, 16;
+  --yellow-dot: #b88a12;
+  --red: #b8452f;
+  --on-green: #f1efd6;
+  --nav-bg: rgba(228, 226, 190, 0.88);
+  --overlay-bg: rgba(232, 230, 196, 0.78);
+  --overlay-bg-strong: rgba(232, 230, 196, 0.92);
+  --card-shadow: rgba(70, 65, 25, 0.18);
+
+  --term-bg: #1b1f1a;
+  --term-header: #151913;
+  --code-bg: #1b1f1a;
   background:
     var(--grid-print),
-    /* this gives paper like matt finish in light mode, so next line is optional */
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.28 0 0 0 0 0.1 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse 60% 45% at 6% 0%, var(--glint) 0%, transparent 70%),
     radial-gradient(circle at 50% 15%, var(--page-glow) 0%, var(--page-bg-top) 55%, var(--page-bg-bottom) 100%);
   background-attachment: fixed;
-    }
+}
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
     /* Added for grid, can control the entire grid specifics*/
     body {
@@ -109,7 +136,7 @@
 
     body {
       background: var(--grid-print), 
-                  radial-gradient(circle at 50% 15%, #0f2744 0%, var(--page-bg-top) 50%, var(--page-bg-bottom) 100%);
+                  radial-gradient(circle at 50% 15%, var(--page-glow) 0%, var(--page-bg-top) 50%, var(--page-bg-bottom) 100%);
       background-attachment: fixed;
       color: var(--text);
       font-family: 'AlgolRevived', 'Courier Prime', 'Fira Code', Courier, monospace;
@@ -125,7 +152,7 @@
       position: sticky;
       top: 0;
       z-index: 1000;
-      background: rgba(5, 11, 20, 0.85);
+      background: var(--nav-bg);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
       display: flex;
@@ -136,7 +163,7 @@
     }
 
     body.light-mode .top-nav {
-    background: rgba(232, 219, 176, 0.85);
+    background: var(--nav-bg);
     }
 
     .nav-left { display: flex; align-items: center; gap: 10px; }
@@ -155,7 +182,7 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      box-shadow: 0 0 10px rgba(63, 185, 80, 0.2);
+      box-shadow: 0 0 10px rgba(var(--green-rgb), 0.2);
       transition: all 0.2s ease;
       flex-shrink: 0;
     }
@@ -163,8 +190,8 @@
     .ks-badge:hover, .ks-badge.active {
       transform: scale(1.08);
       background: var(--green);
-      color: #0d1117;
-      box-shadow: 0 0 16px rgba(63, 185, 80, 0.5);
+      color: var(--on-green);
+      box-shadow: 0 0 16px rgba(var(--green-rgb), 0.5);
     }
 
     /* 6-second KS Tooltip with softened ~82% opacity */
@@ -174,8 +201,8 @@
       left: 15px;
       background: rgba(22, 27, 34, 0.88);
       backdrop-filter: blur(6px);
-      border: 1px solid rgba(63, 185, 80, 0.65);
-      color: rgba(63, 185, 80, 0.82);
+      border: 1px solid rgba(var(--green-rgb), 0.65);
+      color: rgba(var(--green-rgb), 0.82);
       font-size: 0.76rem;
       font-weight: 600;
       letter-spacing: 0.3px;
@@ -202,7 +229,7 @@
       left: 14px;
       border-width: 5px;
       border-style: solid;
-      border-color: transparent transparent rgba(63, 185, 80, 0.65) transparent;
+      border-color: transparent transparent rgba(var(--green-rgb), 0.65) transparent;
     }
 
     body.light-mode .ks-hint-tooltip::before {
@@ -261,14 +288,14 @@
     .nav-btn:hover {
       color: var(--green);
       border-color: var(--border);
-      background: rgba(63, 185, 80, 0.08);
+      background: rgba(var(--green-rgb), 0.08);
     }
 
     .nav-btn.active {
       color: var(--green);
-      border-color: rgba(63, 185, 80, 0.4);
-      background: rgba(63, 185, 80, 0.12);
-      box-shadow: 0 0 10px rgba(63, 185, 80, 0.25);
+      border-color: rgba(var(--green-rgb), 0.4);
+      background: rgba(var(--green-rgb), 0.12);
+      box-shadow: 0 0 10px rgba(var(--green-rgb), 0.25);
     }
 
     .dropdown { position: relative; display: inline-block; }
@@ -390,8 +417,8 @@
       display: inline-block;
       width: 7px;
       height: 7px;
-      border-top: 2px solid #ff5f56;
-      border-right: 2px solid #ff5f56;
+      border-top: 2px solid var(--red);
+      border-right: 2px solid var(--red);
       transform: rotate(45deg);
       margin-right: 8px;
       vertical-align: middle;
@@ -407,9 +434,9 @@
       height: 20px;
       border-radius: 4px;
       border: 1px solid var(--border);
-      background: rgba(88, 166, 255, 0.08);
+      background: rgba(var(--accent-rgb), 0.08);
       color: var(--accent);
-      font-family: 'Fira Code', monospace;
+      font-family: var(--font-mono);
       font-size: 0.78rem;
       font-weight: 700;
       cursor: pointer;
@@ -420,9 +447,9 @@
 
     .btn-view-code:hover {
       border-color: var(--green);
-      color: #0d1117;
+      color: var(--on-green);
       background: var(--green);
-      box-shadow: 0 0 10px rgba(63, 185, 80, 0.45);
+      box-shadow: 0 0 10px rgba(var(--green-rgb), 0.45);
       transform: scale(1.1);
     }
 
@@ -488,7 +515,7 @@
     body.wall-mode .sim-card:hover {
       transform: translateY(-4px) scale(1.02);
       border-color: var(--green);
-      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.8), 0 0 15px rgba(63, 185, 80, 0.25);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.8), 0 0 15px rgba(var(--green-rgb), 0.25);
     }
 
     body.wall-mode .sim-media {
@@ -595,7 +622,7 @@
     .home-portal-switch:hover {
       transform: scale(1.1);
       border-color: var(--green);
-      box-shadow: 0 0 18px rgba(63, 185, 80, 0.4);
+      box-shadow: 0 0 18px rgba(var(--green-rgb), 0.4);
     }
 
     /* Clean Borderless Action Buttons */
@@ -708,7 +735,7 @@
       position: fixed;
       inset: 0;
       z-index: 3000;
-      background: rgba(3, 7, 14, 0.86);
+      background: var(--overlay-bg-strong);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       display: none;
@@ -733,7 +760,7 @@
       border-radius: 10px;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.85), 0 0 35px rgba(63, 185, 80, 0.15);
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.85), 0 0 35px rgba(var(--green-rgb), 0.15);
       position: relative;
       overflow: hidden;
       animation: modalScaleIn 0.24s cubic-bezier(0.16, 1, 0.3, 1);
@@ -773,7 +800,7 @@
     }
 
     .lightbox-close-btn:hover {
-      color: #ff5f56;
+      color: var(--red);
       transform: scale(1.15);
     }
 
@@ -820,7 +847,7 @@
       width: 44px;
       height: 44px;
       border-radius: 50%;
-      background: rgba(13, 17, 23, 0.85);
+      background: var(--nav-bg);
       border: 1px solid var(--border);
       color: var(--text);
       font-size: 1.25rem;
@@ -835,9 +862,9 @@
 
     .lightbox-nav-btn:hover {
       background: var(--green);
-      color: #0d1117;
+      color: var(--on-green);
       border-color: var(--green);
-      box-shadow: 0 0 15px rgba(63, 185, 80, 0.5);
+      box-shadow: 0 0 15px rgba(var(--green-rgb), 0.5);
     }
 
     .lightbox-prev-btn { left: 14px; }
@@ -850,7 +877,7 @@
       position: fixed;
       inset: 0;
       z-index: 3100;
-      background: rgba(3, 7, 14, 0.86);
+      background: var(--overlay-bg-strong);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       display: none;
@@ -875,9 +902,9 @@
       border-radius: 8px;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.9), 0 0 25px rgba(88, 166, 255, 0.15);
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.9), 0 0 25px rgba(var(--accent-rgb), 0.15);
       overflow: hidden;
-      font-family: 'Fira Code', 'Courier Prime', monospace;
+      font-family: var(--font-mono);
       animation: modalScaleIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
@@ -904,7 +931,7 @@
       display: inline-block;
     }
 
-    .dot-close { background: #ff5f56; cursor: pointer; }
+    .dot-close { background: var(--red); cursor: pointer; }
     .dot-min { background: #ffbd2e; }
     .dot-max { background: #27c93f; }
 
@@ -961,3 +988,230 @@
       .lightbox-window { width: 96vw; max-height: 94vh; }
       .lightbox-nav-btn { width: 34px; height: 34px; font-size: 1rem; }
     }
+
+/* ==========================================================================
+   Shared additions (same look as the notes pages)
+   ========================================================================== */
+body {
+  background:
+    var(--grid-print),
+    radial-gradient(ellipse 60% 45% at 6% 0%, var(--glint) 0%, transparent 70%),
+    radial-gradient(circle at 50% 15%, var(--page-glow) 0%, var(--page-bg-top) 50%, var(--page-bg-bottom) 100%);
+  background-attachment: fixed;
+  font-family: var(--font-serif);
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+/* The extra grid: muted grey-brown with densely packed horizontal lines.
+   Declared after the light-mode block so it wins over its background. */
+body.grid-scan {
+  --scan-bg: #37342d;
+  --scan-line: rgba(0, 0, 0, 0.42);
+  background:
+    repeating-linear-gradient(to bottom, var(--scan-line) 0, var(--scan-line) 1px, transparent 1px, transparent 3px),
+    var(--scan-bg);
+  background-attachment: fixed;
+}
+
+body.grid-scan.light-mode {
+  --scan-bg: #b3ab98;
+  --scan-line: rgba(0, 0, 0, 0.2);
+}
+
+/* G button: rolls through the background grids (same as pressing G) */
+.grid-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--card-bg);
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(var(--accent-rgb), 0.2);
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.grid-btn:hover {
+  transform: scale(1.08);
+  background: var(--accent);
+  color: var(--on-green);
+  box-shadow: 0 0 16px rgba(var(--accent-rgb), 0.5);
+}
+
+.grid-btn:active { transform: scale(0.96); }
+
+.grid-btn.mode-btn {
+  border-color: var(--green);
+  color: var(--green);
+  box-shadow: 0 0 10px rgba(var(--green-rgb), 0.2);
+}
+
+.grid-btn.mode-btn:hover {
+  background: var(--green);
+  color: var(--on-green);
+  box-shadow: 0 0 16px rgba(var(--green-rgb), 0.5);
+}
+
+/* terminal chrome in mono, prose in serif */
+.ks-badge, .nav-btn, .dropdown-content a, .contact-btn, .site-footer-banner,
+.ks-hint-tooltip, .clean-float-btn::before, .breadcrumb, .terminal-header-title,
+.stack-badge, .preview-hint-pill, .wall-hint, .sim-ref, .sim-card-header,
+.lightbox-topbar-title, .category-tag, .floating-back-btn, .contents-header,
+.contents-index-num, .preview-card-header, .custom-modal-header .title {
+  font-family: var(--font-mono);
+}
+
+@media (max-width: 800px) {
+  .grid-btn { width: 30px; height: 30px; font-size: 0.78rem; }
+}
+
+
+/* ==========================================================================
+   Simulation pages (2D / 3D / Stochastic)
+   ========================================================================== */
+.gallery-intro h1 { color: var(--green); font-weight: 400; }
+.gallery-intro p { color: var(--text-muted); font-size: 1rem; }
+.sim-card-body h3 { font-weight: 600; color: var(--text-strong); }
+.sim-card-body p { color: var(--text-muted); }
+
+/* a plot that was just jumped to (digits + Enter, or an Index link) */
+.sim-card.flash {
+  border-color: var(--green) !important;
+  box-shadow: 0 0 0 2px rgba(var(--green-rgb), 0.55), 0 0 30px rgba(var(--green-rgb), 0.35);
+}
+
+/* ---- KS (wall) mode: the hint is now an "Esc" button on a dark fade ---- */
+.wall-hint {
+  pointer-events: auto;
+  cursor: pointer;
+  background: var(--card-bg);
+  font-size: 0.8rem;
+  bottom: 22px;
+  z-index: 2200;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.wall-hint:hover { background: var(--green); color: var(--on-green); }
+
+.wall-fade {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 130px;
+  background: linear-gradient(to bottom, transparent 0%, var(--page-bg-bottom) 72%);
+  z-index: 2150;
+  pointer-events: none;
+  display: none;
+}
+
+body.wall-mode .wall-fade { display: block; }
+body.wall-mode .container { padding-bottom: 150px; }
+
+/* "go to plot" buffer (digits + Enter) */
+.goto-pill {
+  position: fixed;
+  left: 50%;
+  bottom: 70px;
+  transform: translateX(-50%);
+  background: var(--card-bg);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  padding: 6px 16px;
+  border-radius: 20px;
+  z-index: 3300;
+  box-shadow: 0 4px 20px var(--card-shadow);
+  display: none;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.goto-pill.show { display: block; }
+
+/* ---- Lightbox: nearly the whole page, with a small gap that follows the screen size ---- */
+.media-lightbox-overlay { padding: clamp(8px, 1.6vw, 22px); }
+
+.lightbox-window {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  border-radius: 10px;
+}
+
+.lightbox-topbar { padding: 9px 16px; }
+.lightbox-topbar-actions { display: flex; align-items: center; gap: 14px; }
+
+.btn-view-code.lightbox-code-btn {
+  width: 30px;
+  height: 30px;
+  font-size: 0.92rem;
+  border-radius: 5px;
+}
+
+.lightbox-media-container {
+  flex: 1 1 0;
+  min-height: 0;
+  max-height: none;
+  padding: clamp(8px, 1.4vw, 20px);
+  overflow: hidden;
+}
+
+.lightbox-media-container img,
+.lightbox-media-container svg {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.lightbox-caption-box {
+  max-height: 26vh;
+  overflow-y: auto;
+  padding: 12px 22px;
+}
+
+.lightbox-caption-box h3 { font-size: clamp(0.9rem, 1.25vw, 1.1rem); font-weight: 600; color: var(--text-strong); }
+
+/* ---- Phones: more breathing room, easy scrolling ---- */
+@media (max-width: 600px) {
+  .container { padding: 0 16px; margin-top: 22px; }
+  .gallery-intro { margin-bottom: 30px; }
+  .gallery-intro h1 { font-size: 1.7rem; }
+  .sim-grid { gap: 20px; }
+  .sim-media, .sim-media img, .sim-media svg { min-height: 170px; height: 170px; }
+  .sim-card-body { padding: 14px 16px; }
+  .top-nav { padding: 8px 12px; }
+  .nav-left { gap: 6px; }
+  .ks-badge { width: 34px; height: 34px; font-size: 0.85rem; }
+  .theme-toggle { width: 32px; height: 32px; font-size: 0.9rem; }
+  .nav-btn { font-size: 0.76rem; padding: 4px 6px; }
+  .nav-links { gap: 2px; }
+
+  /* KS mode: two columns, side gaps, room to scroll past the fade */
+  body.wall-mode .container { max-width: 100%; padding: 0 14px 150px 14px; }
+  body.wall-mode .sim-grid { gap: 12px; }
+  body.wall-mode .sim-media, body.wall-mode .sim-media img, body.wall-mode .sim-media svg { min-height: 90px; height: 95px; }
+  .wall-fade { height: 100px; }
+  .wall-hint { font-size: 0.7rem; padding: 4px 14px; bottom: 16px; }
+  .goto-pill { display: none !important; }
+
+  .media-lightbox-overlay { padding: 8px; }
+  .lightbox-topbar { padding: 8px 12px; }
+  .lightbox-nav-btn { width: 34px; height: 34px; font-size: 1rem; }
+  .lightbox-nav-btn.lightbox-prev-btn { left: 8px; }
+  .lightbox-nav-btn.lightbox-next-btn { right: 8px; }
+  .lightbox-caption-box { max-height: 30vh; padding: 10px 14px; }
+}
