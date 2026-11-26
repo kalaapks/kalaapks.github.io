@@ -1,4 +1,117 @@
 /* ========================================================
+   7. GIF SHOWCASE  (rimless gifs + changing write-up)
+   --------------------------------------------------------
+   HOW TO ADD A GIF: add one more { ... } line to GIFS below.
+   5 entries = 5-step loop, 6 entries = 6-step loop, etc.
+
+     src      : path to the gif
+     title    : short title shown on the left
+     text     : 2-3 line write-up (simple HTML such as <a> or <em> is OK)
+     size     : SIZE=s. Gif is shown at (its original dimensions x s).
+                size: 1 = original size, 3 = three times bigger, 0.5 = half.
+                If the result is bigger than the block, it is scaled
+                down proportionally to fit (never cropped).
+     duration : (optional) seconds this slide stays. Default below.
+   ======================================================== */
+(function () {
+  const GIFS = [
+    { src: 'gifs/Spiral12.gif', title: 'Spiral Ornstein–Uhlenbeck Process',                                   text: 'This is plotted using Python library <a href="https://github.com/kalaapks/radonika"> <strong> radonika </strong></a> that I built. <br> The center of the Gaussian pdf traces a smooth logarithmic spiral into the origin while the probability cloud around it simultaneously changes from a Dirac delta into its stationary disk. ', size: 1, duration: 12 },
+    { src: 'gifs/reweight_bm5.gif', title: 'Brownian Paths going through a Radon-Nikodym change of measure',  text: 'This is plotted using Python library <a href="https://github.com/kalaapks/radonika"> <strong> radonika </strong></a> that I built. <br> The changing peak of the pdf shows the change of drift clearly along sp{(1, -1)}. This is happening under something called "Esscher-Tilt"',                                                                                                                size: 2, duration: 5 },
+    // { src: 'gifs/gif3.gif', title: 'Game of Estimation',          text: 'Monte-Carlo rejection sampling estimating the area of a shape, one random point at a time.',                       size: 1, duration: 10 }
+  ];
+
+  const DEFAULT_DURATION = 8;   // seconds per slide when "duration" is not given
+  const FADE_MS = 220;          // fade-out time before the next slide swaps in
+
+  const root    = document.getElementById('gifShowcase');
+  const section = document.getElementById('showcase');
+  if (!root || !section) return;
+
+  const n = GIFS.length;
+  if (!n) { section.style.display = 'none'; return; }
+  if (n === 1) root.classList.add('gs-single');
+
+  const stage   = document.getElementById('gsStage');
+  const img     = document.getElementById('gsImg');
+  const titleEl = document.getElementById('gsTitle');
+  const descEl  = document.getElementById('gsDesc');
+  const prevBtn = document.getElementById('gsPrev');
+  const nextBtn = document.getElementById('gsNext');
+
+  let idx = 0, token = 0, timer = null, visible = false, loaded = false;
+
+  // Natural size x SIZE, shrunk proportionally only if it would overflow the block.
+  function place() {
+    const g = GIFS[idx];
+    const nw = img.naturalWidth, nh = img.naturalHeight;
+    if (!nw || !nh) return;
+    const want = (g.size > 0) ? g.size : 1;
+    const fit  = Math.min(stage.clientWidth / nw, stage.clientHeight / nh);
+    const s = Math.min(want, fit);
+    img.style.width  = (nw * s) + 'px';
+    img.style.height = (nh * s) + 'px';
+  }
+
+  function schedule() {
+    clearTimeout(timer);
+    if (n < 2 || !visible || !loaded) return;
+    const secs = GIFS[idx].duration > 0 ? GIFS[idx].duration : DEFAULT_DURATION;
+    timer = setTimeout(() => show(idx + 1), secs * 1000);
+  }
+
+  function preload(i) {
+    const p = new Image();
+    p.src = GIFS[(i + n) % n].src;
+  }
+
+  function show(i, instant) {
+    const my = ++token;
+    idx = ((i % n) + n) % n;
+    loaded = false;
+    clearTimeout(timer);
+    root.classList.add('gs-out');
+
+    setTimeout(() => {
+      if (my !== token) return;
+      const g = GIFS[idx];
+      titleEl.textContent = g.title || '';
+      descEl.innerHTML = g.text || '';
+
+      const ready = (ok) => {
+        if (my !== token) return;
+        img.style.visibility = ok ? 'visible' : 'hidden';
+        if (ok) place();
+        root.classList.remove('gs-out');
+        loaded = true;
+        schedule();
+        if (n > 1) preload(idx + 1);
+      };
+      img.onload  = () => ready(true);
+      img.onerror = () => ready(false);
+
+      // Removing and re-setting src makes the gif start again from frame 1.
+      img.removeAttribute('src');
+      img.src = g.src;
+      img.alt = g.title || '';
+    }, instant ? 0 : FADE_MS);
+  }
+
+  prevBtn.addEventListener('click', () => show(idx - 1));
+  nextBtn.addEventListener('click', () => show(idx + 1));
+
+  window.addEventListener('resize', place);
+
+  // Only advance while the block is actually on screen.
+  new IntersectionObserver((entries) => {
+    visible = entries[0].isIntersecting;
+    if (visible) schedule(); else clearTimeout(timer);
+  }, { threshold: 0.3 }).observe(root);
+
+  show(0, true);
+})();
+
+
+/* ========================================================
        1. BACKGROUND PROBABILITY DENSITY RIBBONS ANIMATION
        ======================================================== */
     const bgCanvas = document.getElementById('bgCanvas');
