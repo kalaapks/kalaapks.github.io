@@ -1761,3 +1761,135 @@ body.academic-mode .site-footer-banner {
   body.academic-mode .project-title-text { font-size: 1.12rem; }
   body.academic-mode .card { font-size: 0.95rem; }
 }
+
+
+/* ==========================================================================
+   GIF SHOWCASE  (rimless: no border, box, shadow or crop on the gifs)
+   ========================================================================== */
+
+/* 1. Break #showcase out of the 820px .container so it spans up to 1320px */
+.page-section#showcase {
+  width: min(92vw, 1320px);
+  margin-left: 50%;
+  transform: translateX(-50%) translateY(28px);
+}
+
+.page-section#showcase.is-revealed {
+  transform: translateX(-50%) translateY(0);
+}
+
+.gif-showcase {
+  --gs-height: clamp(340px, 62vh, 640px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4%;
+  width: 100%;
+  height: var(--gs-height);
+}
+
+/* Left: nav arrows + title + short write-up */
+.gs-text {
+  flex: 0 0 26%;
+  min-width: 0;
+  align-self: center;
+  min-height: 13rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-end;     /* <-- aligns child blocks to the right */
+  text-align: right;         /* <-- makes the right edge a straight line */
+}
+
+.gs-nav {display: flex; gap: 6px; 
+  margin: 0 -6px 18px 0;     /* <-- flipped negative margin from left to right */
+}
+
+.gs-arrow {
+  background: none;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  padding: 2px 8px;
+  font-family: var(--font-mono);
+  font-size: 1.05rem;
+  line-height: 1;
+  color: var(--text-mutedD);
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+.gs-arrow:hover { color: var(--green); }
+.gs-arrow:focus-visible { color: var(--green); }
+#gsPrev:hover { transform: translateX(-2px); }
+#gsNext:hover { transform: translateX(2px); }
+.gif-showcase.gs-single .gs-nav { visibility: hidden; }
+
+.gs-title {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  font-size: clamp(1.3rem, 2.5vw, 1.85rem);
+  letter-spacing: 0.04em;
+  line-height: 1.25;
+  color: var(--text-strong);
+  margin: 0 0 12px 0;
+}
+
+.gs-desc {
+  font-family: var(--font-serif);
+  font-size: clamp(0.95rem, 1.5vw, 1.08rem);
+  line-height: 1.6;
+  color: var(--text-muted);
+  margin: 0;
+  max-width: 38ch;
+}
+.gs-desc a { color: var(--green); }
+
+/* Right: 70% width. min-width: 0 + max-width/max-height guarantee the GIF never cuts off */
+.gs-stage {
+  flex: 0 0 70%;
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.gs-img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: none;
+  visibility: hidden;            /* shown by JS once loaded: no broken-image icon */
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+/* Smooth swap between slides */
+.gs-title, .gs-desc {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.gif-showcase.gs-out .gs-title,
+.gif-showcase.gs-out .gs-desc { opacity: 0; transform: translateY(8px); transition-duration: 0.2s; }
+.gif-showcase.gs-out .gs-img  { opacity: 0; transition-duration: 0.2s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .gs-title, .gs-desc, .gs-img { transition: none !important; transform: none !important; }
+}
+
+/* Phones / narrow screens: write-up on top, gif below */
+@media (max-width: 760px) {
+  .page-section#showcase {width: 100%; margin-left: 0; transform: translateY(28px);}
+  .page-section#showcase.is-revealed {transform: translateY(0);}
+  .gif-showcase {flex-direction: column; justify-content: flex-start; align-items: stretch; gap: 14px; height: auto;}
+  .gs-text {flex: none; width: 100%; min-height: 0; align-items: flex-start; text-align: left;}
+  .gs-nav {margin: 0 0 18px -6px;}
+  .gs-stage { flex: none; width: 100%; height: 42vh; }
+  .gs-desc { max-width: none; }
+}
